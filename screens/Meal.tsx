@@ -2,18 +2,32 @@ import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
 import React, {useState} from 'react';
 import {StyleSheet} from 'react-native';
 import {RootTabList} from '../App';
-import {Box, Center, HStack, ScrollView, Text, VStack} from 'native-base';
+import {
+  Box,
+  Center,
+  HStack,
+  ScrollView,
+  Text,
+  VStack,
+  Modal,
+  Button,
+} from 'native-base';
 import _ from 'lodash';
 
 type Props = BottomTabScreenProps<RootTabList, 'Meal'>;
 
 export default function Meal({navigation}: Props) {
+  // 식당 리스트 정렬
   const [favoriteMeal, notFavoriteMeal] = _.partition(
     DUMMY_MEAL_INFO,
     item => item.isFavorited,
   ); // 즐겨찾기와 나머지 구분
   favoriteMeal.sort((a, b) => Number(b.isOperating) - Number(a.isOperating)); // 즐겨찾기 중 운영 중인 곳 맨 위로
   notFavoriteMeal.sort((a, b) => Number(b.isOperating) - Number(a.isOperating)); // 즐겨찾기 아닌 식당 중 운영 중인 곳 맨 위로
+
+  // 모달 관련
+  const [selectedMeal, setSelectedMeal] = useState<string | null>(null);
+
   return (
     <VStack>
       <ScrollView>
@@ -59,7 +73,8 @@ export default function Meal({navigation}: Props) {
                     }) => {
                       return (
                         <HStack>
-                          <Center
+                          <Button
+                            onPress={() => setSelectedMeal(name)}
                             width="100px"
                             height="50px"
                             margin={2}
@@ -70,7 +85,7 @@ export default function Meal({navigation}: Props) {
                             <Text color={isOperating ? '#3A1D1D' : 'white'}>
                               {name}
                             </Text>
-                          </Center>
+                          </Button>
                         </HStack>
                       );
                     },
@@ -80,6 +95,22 @@ export default function Meal({navigation}: Props) {
             })}
           </VStack>
         </Center>
+        <Modal // modal 구현
+          isOpen={selectedMeal !== null}
+          onClose={() => setSelectedMeal(null)}>
+          <Modal.Content>
+            <Modal.CloseButton />
+            <Modal.Body>
+              <Text>Text</Text>
+              {/* <Text>매장: {focusedMart.name}</Text>
+                    <Text>위치: {focusedMart.location}</Text>
+                    <Text>평일 운영 시간: {focusedMart.weekday}</Text>
+                    <Text>토요일 운영 시간: {focusedMart.saturday}</Text>
+                    <Text>휴일 운영 시간: {focusedMart.holiday}</Text>
+                    <Text>연락처: {focusedMart.holiday}</Text> */}
+            </Modal.Body>
+          </Modal.Content>
+        </Modal>
       </ScrollView>
     </VStack>
   );
