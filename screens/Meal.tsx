@@ -8,60 +8,48 @@ import _ from 'lodash';
 type Props = BottomTabScreenProps<RootTabList, 'Meal'>;
 
 export default function Meal({navigation}: Props) {
-  // todo
-  //   const favoritedNumbers = DUMMY_MEAL_INFO.map(({isFavorited}) =>
-  //     Number(isFavorited),
-  //   ).reduce((sum, currValue) => sum + currValue);
-  //   const notFavoritedNumbers = DUMMY_MEAL_INFO.length - favoritedNumbers;
+  const [favoriteMeal, notFavoriteMeal] = _.partition(
+    DUMMY_MEAL_INFO,
+    item => item.isFavorited,
+  ); // 즐겨찾기와 나머지 구분
+  favoriteMeal.sort((a, b) => Number(b.isOperating) - Number(a.isOperating)); // 즐겨찾기 중 운영 중인 곳 맨 위로
+  notFavoriteMeal.sort((a, b) => Number(b.isOperating) - Number(a.isOperating)); // 즐겨찾기 아닌 식당 중 운영 중인 곳 맨 위로
   return (
     <VStack>
       <ScrollView>
-        {/* <Text>{DUMMY_MEAL_INFO.length}</Text> */}
         <Center>
-          {DUMMY_MEAL_INFO.filter(item => item.isFavorited)
-            .sort((a, b) => Number(b.isOperating) - Number(a.isOperating))
-            .map(
-              ({name, location, isOperating, isFavorited, operatingTime}) => {
-                return (
-                  <Center
-                    width="90%"
-                    height="120px"
-                    bg="white"
-                    rounded="md"
-                    marginTop={3}
-                    shadow={5}>
-                    <Center
-                      width="100%"
-                      height="40px"
-                      position="absolute"
-                      top="0px"
-                      marginBottom={30}
-                      bg={isOperating ? '#F7E600' : 'black'}
-                      rounded="md"
-                      shadow={2}
-                      key={name}>
-                      <Text color={isOperating ? '#3A1D1D' : 'white'}>
-                        {name}
-                      </Text>
-                    </Center>
-                    <Text>Menu</Text>
-                  </Center>
-                );
-              },
-            )}
+          {favoriteMeal.map(({name, location, isOperating, operatingTime}) => (
+            <Center
+              width="90%"
+              height="120px"
+              bg="white"
+              rounded="md"
+              marginTop={3}
+              shadow={5}>
+              <Center
+                width="100%"
+                height="40px"
+                position="absolute"
+                top="0px"
+                marginBottom={30}
+                bg={isOperating ? '#F7E600' : 'black'}
+                rounded="md"
+                shadow={2}
+                key={name}>
+                <Text color={isOperating ? '#3A1D1D' : 'white'}>{name}</Text>
+              </Center>
+              <Text>Menu</Text>
+            </Center>
+          ))}
         </Center>
 
         <Center marginTop={3}>
           <VStack>
-            {_.chunk(
-              DUMMY_MEAL_INFO.filter(item => !item.isFavorited).sort(
-                (a, b) => Number(b.isOperating) - Number(a.isOperating),
-              ),
-              3,
-            ).map(subMealInfoArray => {
+            {_.chunk(notFavoriteMeal, 3).map(subNotFavoriteMealInfoArray => {
+              // not favorite meal 3줄로 나누기
               return (
                 <HStack>
-                  {subMealInfoArray.map(
+                  {subNotFavoriteMealInfoArray.map(
                     ({
                       name,
                       location,
@@ -91,28 +79,6 @@ export default function Meal({navigation}: Props) {
               );
             })}
           </VStack>
-          {/* {DUMMY_MEAL_INFO.map(
-            ({name, location, isOperating, isFavorited, operatingTime}) => {
-              if (!isFavorited) {
-                return (
-                  <Center
-                    width="100px"
-                    height="50px"
-                    margin={2}
-                    bg={isOperating ? '#F7E600' : 'black'}
-                    rounded="md"
-                    shadow={5}
-                    key={name}>
-                    <Text color={isOperating ? '#3A1D1D' : 'white'}>
-                      {name}
-                    </Text>
-                  </Center>
-                );
-              } else {
-                return;
-              }
-            },
-          )} */}
         </Center>
       </ScrollView>
     </VStack>
