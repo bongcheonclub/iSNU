@@ -22,6 +22,7 @@ type Props = BottomTabScreenProps<RootTabList, 'Cafe'>;
 
 type Cafe = {
   name: string;
+  contact: string;
   location: string;
   size: string;
   items: string;
@@ -101,11 +102,19 @@ export default function Cafe({navigation}: Props) {
             )
             .filter(rows => rows.length > 0)
             .value();
-          const [name, location, size, items, weekday, saturday, holiday] =
-            trTexts;
-          console.log(trTexts);
+          const [
+            nameWithContact,
+            location,
+            size,
+            items,
+            weekday,
+            saturday,
+            holiday,
+          ] = trTexts;
+          const [name, contact] = nameWithContact.split(/\(|\)/);
           return {
             name,
+            contact,
             location,
             size,
             items,
@@ -155,7 +164,7 @@ export default function Cafe({navigation}: Props) {
                     <Text>평일 운영 시간: {focusedCafe.weekday}</Text>
                     <Text>토요일 운영 시간: {focusedCafe.saturday}</Text>
                     <Text>휴일 운영 시간: {focusedCafe.holiday}</Text>
-                    <Text>연락처: {focusedCafe.holiday}</Text>
+                    <Text>연락처: {focusedCafe.contact}</Text>
                   </Modal.Body>
                 </Modal.Content>
               </Modal>
