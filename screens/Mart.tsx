@@ -76,10 +76,10 @@ function checkOperating(mart: Mart): boolean {
 }
 
 export default function Mart({navigation}: Props) {
-  const [detailIndex, setDetailIndex] = useState<number | null>(null);
+  const [focusedIndex, setFocusedIndex] = useState<number | null>(null);
   const [marts, setMarts] = useState<Mart[] | null>(null);
 
-  const focusedMart = detailIndex !== null && marts?.[detailIndex];
+  const focusedMart = focusedIndex !== null && marts?.[focusedIndex];
 
   useEffect(() => {
     axios.get('https://snuco.snu.ac.kr/ko/node/19').then(res => {
@@ -125,7 +125,7 @@ export default function Mart({navigation}: Props) {
                 return (
                   <Center margin={1} rounded="md" shadow={3}>
                     <Button
-                      onPress={() => setDetailIndex(index)}
+                      onPress={() => setFocusedIndex(index)}
                       width="100%"
                       bgColor={bgColor}>
                       <Text color="white">{name}</Text>
@@ -138,8 +138,8 @@ export default function Mart({navigation}: Props) {
           {focusedMart ? (
             <Box>
               <Modal
-                isOpen={detailIndex !== null}
-                onClose={() => setDetailIndex(null)}>
+                isOpen={focusedIndex !== null}
+                onClose={() => setFocusedIndex(null)}>
                 <Modal.Content>
                   <Modal.CloseButton />
                   <Modal.Body>
