@@ -70,7 +70,7 @@ function checkOperating(mart: Cafe): boolean {
     );
     const endedAt = parseTime(endedAtString, 'HH:mm', now);
 
-    if (compareAsc(startAt, now) > 0 && compareAsc(now, endedAt) > 0) {
+    if (compareAsc(startAt, now) < 0 && compareAsc(now, endedAt) < 0) {
       return true;
     } else {
       return false;
