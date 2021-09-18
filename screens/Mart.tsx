@@ -47,7 +47,7 @@ function checkOperating(mart: Mart): boolean {
     }
   })();
 
-  if (operatingTime === '휴뮤') {
+  if (operatingTime === '휴무') {
     return false;
   }
 
