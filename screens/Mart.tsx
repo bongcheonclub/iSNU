@@ -111,7 +111,7 @@ export default function Mart({navigation}: Props) {
         .value();
       setMarts(data);
     });
-  });
+  }, []);
   return (
     <Box>
       {marts ? (

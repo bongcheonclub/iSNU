@@ -117,7 +117,7 @@ export default function Cafe({navigation}: Props) {
         .value();
       setCafes(data);
     });
-  });
+  }, []);
   return (
     <Box>
       {cafes ? (
