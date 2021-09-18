@@ -1,5 +1,5 @@
 import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {StyleSheet} from 'react-native';
 import {RootTabList} from '../App';
 import {
@@ -12,11 +12,21 @@ import {
   Modal,
   Button,
 } from 'native-base';
-import _ from 'lodash';
+import _, {size} from 'lodash';
+import axios from 'axios';
+import {parse} from 'node-html-parser';
 
 type Props = BottomTabScreenProps<RootTabList, 'Meal'>;
 
 export default function Meal({navigation}: Props) {
+  type TodaysMenu = {
+    [name: string]: {
+      breakfast: string;
+      lunch: string;
+      dinner: string;
+      contact: string;
+    };
+  } | null;
   // 식당 리스트 정렬
   const [favoriteMeal, notFavoriteMeal] = _.partition(
     DUMMY_MEAL_INFO,
@@ -27,6 +37,40 @@ export default function Meal({navigation}: Props) {
 
   // 모달 관련
   const [selectedMeal, setSelectedMeal] = useState<string | null>(null);
+  const [menu, setMenu] = useState<TodaysMenu>(null);
+  const exampleDateURL =
+    'https://snuco.snu.ac.kr/ko/foodmenu?field_menu_date_value_1%5Bvalue%5D%5Bdate%5D=&field_menu_date_value%5Bvalue%5D%5Bdate%5D=09%2F23%2F2021';
+  const todayMenuURL = 'https://snuco.snu.ac.kr/ko/foodmenu'; // 정보 받아와서 리스트에 저장, 각 식당의 리스트 인덱스 따로 저장
+  useEffect(() => {
+    axios.get(exampleDateURL).then(res => {
+      const html = res.data;
+      const root = parse(html);
+      const data: TodaysMenu = {};
+      _.chain(root.querySelector('tbody').childNodes)
+        .map(trNode => {
+          const trTexts = _.chain(trNode.childNodes)
+            .map((tdNode, idx) =>
+              tdNode.innerText
+                .split(/\s|\t|\n/)
+                .filter(item => item.length > 0)
+                .join(' '),
+            )
+            .value();
+          return trTexts;
+        })
+        .filter(trTexts => trTexts.length > 0)
+        .forEach((trTexts, idx) => {
+          const [a, nameAndContact, c, breakfast, e, lunch, g, dinner] =
+            trTexts;
+          const splitedNameAndContact = _.split(nameAndContact, '(');
+          const name = splitedNameAndContact[0];
+          const contact = splitedNameAndContact[1].slice(0, -1);
+          data[name] = {breakfast, lunch, dinner, contact};
+        })
+        .value();
+      setMenu(data);
+    });
+  });
 
   return (
     <VStack>
@@ -101,7 +145,7 @@ export default function Meal({navigation}: Props) {
           <Modal.Content>
             <Modal.CloseButton />
             <Modal.Body>
-              <Text>Text</Text>
+              <Text>{JSON.stringify(menu)}</Text>
               {/* <Text>매장: {focusedMart.name}</Text>
                     <Text>위치: {focusedMart.location}</Text>
                     <Text>평일 운영 시간: {focusedMart.weekday}</Text>
