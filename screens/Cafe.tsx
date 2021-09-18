@@ -48,7 +48,7 @@ function checkOperating(mart: Cafe): boolean {
   })();
 
   if (
-    operatingTime.includes('휴뮤') ||
+    operatingTime.includes('휴무') ||
     operatingTime.includes('휴관') ||
     operatingTime.includes('휴점') ||
     operatingTime.includes('폐점')
