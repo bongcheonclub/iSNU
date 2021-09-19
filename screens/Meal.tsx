@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
 import React, {useState, useEffect} from 'react';
 import {StyleSheet} from 'react-native';
@@ -26,21 +27,17 @@ export default function Meal({navigation}: Props) {
       dinner: string;
       contact: string;
     };
-  } | null;
-  // 식당 리스트 정렬
-  const [favoriteMeal, notFavoriteMeal] = _.partition(
-    DUMMY_MEAL_INFO,
-    item => item.isFavorited,
-  ); // 즐겨찾기와 나머지 구분
-  favoriteMeal.sort((a, b) => Number(b.isOperating) - Number(a.isOperating)); // 즐겨찾기 중 운영 중인 곳 맨 위로
-  notFavoriteMeal.sort((a, b) => Number(b.isOperating) - Number(a.isOperating)); // 즐겨찾기 아닌 식당 중 운영 중인 곳 맨 위로
+  };
+  // state 선언
+  const [menu, setMenu] = useState<TodaysMenu | null>(null); // store menu data here
+  const [isFavorite, setIsFavorite] = useState<{} | null>(null); // store favorite or not here
+  const [selectedMeal, setSelectedMeal] = useState<string | null>(null); // store selected meal (modal) here
 
-  // 모달 관련
-  const [selectedMeal, setSelectedMeal] = useState<string | null>(null);
-  const [menu, setMenu] = useState<TodaysMenu>(null);
+  // 식단 정보 크롤링
   const exampleDateURL =
     'https://snuco.snu.ac.kr/ko/foodmenu?field_menu_date_value_1%5Bvalue%5D%5Bdate%5D=&field_menu_date_value%5Bvalue%5D%5Bdate%5D=09%2F23%2F2021';
   const todayMenuURL = 'https://snuco.snu.ac.kr/ko/foodmenu'; // 정보 받아와서 리스트에 저장, 각 식당의 리스트 인덱스 따로 저장
+
   useEffect(() => {
     axios.get(exampleDateURL).then(res => {
       const html = res.data;
@@ -70,20 +67,101 @@ export default function Meal({navigation}: Props) {
         .value();
       setMenu(data);
     });
-  });
+  }, []);
 
+  // 식당 일반 운영정보 크롤링
+
+  // 즐찾, 운영중에 맞게 세팅
+  useEffect(() => {
+    async function setFavoriteStates() {
+      const tempData = await Promise.all(
+        DUMMY_MEAL_INFO.map(async meal => {
+          const trueOrFalse = await getIsFavorite(meal.name);
+          return {[meal.name]: trueOrFalse};
+        }),
+      );
+      const data = Object.assign({}, ...tempData);
+      setIsFavorite(data);
+    }
+    setFavoriteStates();
+  }, []);
+
+  console.log(isFavorite);
+
+  const storeIsFavorite = async (mealName: string | null) => {
+    if (mealName === null) {
+      return;
+    }
+    const key = mealName + 'IsFavorite';
+    try {
+      const value = await AsyncStorage.getItem(key);
+      if (value === 'true') {
+        await AsyncStorage.setItem(key, 'false');
+        const tempData: {[name: string]: boolean} = Object.assign(
+          {},
+          isFavorite,
+        );
+        tempData[mealName] = false;
+        setIsFavorite(tempData);
+      } else {
+        await AsyncStorage.setItem(key, 'true');
+        const tempData: {[name: string]: boolean} = Object.assign(
+          {},
+          isFavorite,
+        );
+        tempData[mealName] = true;
+        setIsFavorite(tempData);
+        // isFavorite[mealName] = true;
+        // setIsFavorite(isFavorite);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const getIsFavorite = async (mealName: string) => {
+    const key = mealName + 'IsFavorite';
+    const value = await AsyncStorage.getItem(key);
+    try {
+      if (value === 'true') {
+        return true;
+      } else if (value === 'false') {
+        return false;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  // 식당 리스트 정렬
+
+  const [favoriteMeal, notFavoriteMeal] = _.partition(
+    DUMMY_MEAL_INFO,
+    item => isFavorite[item.name],
+  ); // 즐겨찾기와 나머지 구분
+
+  console.log(favoriteMeal);
+  console.log(notFavoriteMeal);
+
+  favoriteMeal.sort((a, b) => Number(b.isOperating) - Number(a.isOperating)); // 즐겨찾기 중 운영 중인 곳 맨 위로
+  notFavoriteMeal.sort((a, b) => Number(b.isOperating) - Number(a.isOperating)); // 즐겨찾기 아닌 식당 중 운영 중인 곳 맨 위로
+
+  console.log('rendering');
   return (
     <VStack>
       <ScrollView>
         <Center>
-          {favoriteMeal.map(({name, location, isOperating, operatingTime}) => (
+          {favoriteMeal.map(({name, isOperating}) => (
             <Center
               width="90%"
               height="120px"
               bg="white"
               rounded="md"
               marginTop={3}
-              shadow={5}>
+              shadow={5}
+              key={name}>
               <Center
                 width="100%"
                 height="40px"
@@ -92,9 +170,16 @@ export default function Meal({navigation}: Props) {
                 marginBottom={30}
                 bg={isOperating ? '#F7E600' : 'black'}
                 rounded="md"
-                shadow={2}
-                key={name}>
-                <Text color={isOperating ? '#3A1D1D' : 'white'}>{name}</Text>
+                shadow={2}>
+                <HStack>
+                  <Text color={isOperating ? '#3A1D1D' : 'white'}>{name}</Text>
+                  <Button
+                    onPress={() => {
+                      storeIsFavorite(name);
+                    }}>
+                    즐찾ㄴ
+                  </Button>
+                </HStack>
               </Center>
               <Text>Menu</Text>
             </Center>
@@ -107,33 +192,25 @@ export default function Meal({navigation}: Props) {
               // not favorite meal 3줄로 나누기
               return (
                 <HStack>
-                  {subNotFavoriteMealInfoArray.map(
-                    ({
-                      name,
-                      location,
-                      isOperating,
-                      isFavorited,
-                      operatingTime,
-                    }) => {
-                      return (
-                        <HStack>
-                          <Button
-                            onPress={() => setSelectedMeal(name)}
-                            width="100px"
-                            height="50px"
-                            margin={2}
-                            bg={isOperating ? '#F7E600' : 'black'}
-                            rounded="md"
-                            shadow={5}
-                            key={name}>
-                            <Text color={isOperating ? '#3A1D1D' : 'white'}>
-                              {name}
-                            </Text>
-                          </Button>
-                        </HStack>
-                      );
-                    },
-                  )}
+                  {subNotFavoriteMealInfoArray.map(({name, isOperating}) => {
+                    return (
+                      <HStack>
+                        <Button
+                          onPress={() => setSelectedMeal(name)}
+                          width="100px"
+                          height="50px"
+                          margin={2}
+                          bg={isOperating ? '#F7E600' : 'black'}
+                          rounded="md"
+                          shadow={5}
+                          key={name}>
+                          <Text color={isOperating ? '#3A1D1D' : 'white'}>
+                            {name}
+                          </Text>
+                        </Button>
+                      </HStack>
+                    );
+                  })}
                 </HStack>
               );
             })}
@@ -145,7 +222,20 @@ export default function Meal({navigation}: Props) {
           <Modal.Content>
             <Modal.CloseButton />
             <Modal.Body>
-              <Text>{JSON.stringify(menu)}</Text>
+              {selectedMeal !== null ? (
+                <Text fontSize="3xl">{selectedMeal}</Text>
+              ) : (
+                <Text />
+              )}
+              <Button
+                width="60px"
+                height="40px"
+                padding={2}
+                onPress={() => {
+                  storeIsFavorite(selectedMeal);
+                }}>
+                즐찾ㄱ
+              </Button>
               {/* <Text>매장: {focusedMart.name}</Text>
                     <Text>위치: {focusedMart.location}</Text>
                     <Text>평일 운영 시간: {focusedMart.weekday}</Text>
@@ -160,92 +250,54 @@ export default function Meal({navigation}: Props) {
   );
 }
 
-const style = StyleSheet.create({
-  // todo
-});
+const style = StyleSheet.create({});
 
 const DUMMY_MEAL_INFO: {
   name: string;
-  location: string;
   isOperating: boolean;
-  isFavorited: boolean;
-  operatingTime: string;
 }[] = [
   {
     name: '학생회관식당',
-    location: '학생회관(63동) 1층',
     isOperating: true,
-    isFavorited: false,
-    operatingTime: '운영중 19:30 종료',
   },
   {
     name: '자하연식당',
-    location: '학생회관(63동) 2층',
     isOperating: true,
-    isFavorited: false,
-    operatingTime: '운영중 18:30 종료',
   },
   {
     name: '예술계식당',
-    location: '중도(62동) 3층',
     isOperating: true,
-    isFavorited: false,
-    operatingTime: '운영중 22:00 종료',
   },
   {
     name: '소담마루',
-    location: '중도(62동) 3층',
     isOperating: true,
-    isFavorited: false,
-    operatingTime: '운영중 22:00 종료',
-  },
-  {
-    name: '두레미담',
-    location: '중도(62동) 3층',
-    isOperating: true,
-    isFavorited: false,
-    operatingTime: '운영중 22:00 종료',
   },
   {
     name: '동원관식당',
-    location: '중도(62동) 3층',
     isOperating: false,
-    isFavorited: false,
-    operatingTime: '운영중 22:00 종료',
   },
   {
     name: '기숙사식당',
-    location: '중도(62동) 3층',
     isOperating: true,
-    isFavorited: false,
-    operatingTime: '운영중 22:00 종료',
   },
   {
     name: '공대간이식당',
-    location: '중도(62동) 3층',
     isOperating: false,
-    isFavorited: false,
-    operatingTime: '운영중 22:00 종료',
   },
   {
-    name: '즐찾1',
-    location: '중도(62동) 3층',
+    name: '3식당',
     isOperating: true,
-    isFavorited: true,
-    operatingTime: '운영중 22:00 종료',
   },
   {
-    name: '즐찾2',
-    location: '중도(62동) 3층',
+    name: '302동식당',
     isOperating: false,
-    isFavorited: true,
-    operatingTime: '운영중 22:00 종료',
   },
   {
-    name: '즐찾3',
-    location: '중도(62동) 3층',
+    name: '301동식당',
     isOperating: true,
-    isFavorited: true,
-    operatingTime: '운영중 22:00 종료',
+  },
+  {
+    name: '220동식당',
+    isOperating: true,
   },
 ];
