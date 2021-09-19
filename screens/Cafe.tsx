@@ -11,12 +11,17 @@ import {
   VStack,
   Button,
   Modal,
+  Flex,
+  Divider,
 } from 'native-base';
+import FilledStar from '../icons/filled-star.svg';
+import UnfilledStar from '../icons/unfilled-star.svg';
 import React, {useEffect, useState} from 'react';
 import {StyleSheet} from 'react-native';
 import {RootTabList} from '../App';
 import {compareAsc, getDay, parse as parseTime} from 'date-fns';
 import {compareDesc} from 'date-fns/esm';
+import {colors} from '../ui/colors';
 
 type Props = BottomTabScreenProps<RootTabList, 'Cafe'>;
 
@@ -30,6 +35,8 @@ type Cafe = {
   saturday: string;
   holiday: string;
 };
+
+type CafeWithFlag = Cafe & {isOperating: boolean; favorateRate: number};
 
 function checkOperating(mart: Cafe): boolean {
   const {weekday, saturday, holiday} = mart;
@@ -82,10 +89,30 @@ function checkOperating(mart: Cafe): boolean {
 }
 
 export default function Cafe({navigation}: Props) {
-  const [focusedIndex, setFocusedIndex] = useState<number | null>(null);
+  const [focusedName, setFocusedName] = useState<string | null>(null);
   const [cafes, setCafes] = useState<Cafe[] | null>(null);
+  const [favoriteNames, setFavoriteNames] = useState<string[]>([]);
 
-  const focusedCafe = focusedIndex !== null && cafes?.[focusedIndex];
+  const sortedCafes: CafeWithFlag[] = chain(cafes)
+    .map(cafe => {
+      const isOperating = checkOperating(cafe);
+      const favorateRate =
+        favoriteNames.findIndex(name => name === cafe.name) + 1;
+      return {...cafe, isOperating, favorateRate};
+    })
+    .sortBy(({isOperating, favorateRate}) => {
+      if (favorateRate > 0) {
+        return favorateRate;
+      } else if (isOperating) {
+        return 100;
+      } else {
+        return 200;
+      }
+    })
+    .value();
+
+  const focusedCafe =
+    focusedName !== null && sortedCafes?.find(({name}) => name === focusedName);
 
   useEffect(() => {
     axios.get('https://snuco.snu.ac.kr/ko/node/21').then(res => {
@@ -127,48 +154,124 @@ export default function Cafe({navigation}: Props) {
       setCafes(data);
     });
   }, []);
+
   return (
     <Box>
-      {cafes ? (
+      {sortedCafes ? (
         <Box>
           <ScrollView>
-            <VStack>
-              {cafes.map((mart, index) => {
-                const {name} = mart;
-                const bgColor = checkOperating(mart) ? '#005500' : '#AAAAAA';
+            <VStack padding={8}>
+              {chain(sortedCafes)
+                .chunk(3)
+                .map(cafesInARow =>
+                  cafesInARow.length < 3
+                    ? (cafesInARow.concat(
+                        Array(3 - cafesInARow.length).fill(null),
+                      ) as (CafeWithFlag | null)[])
+                    : cafesInARow,
+                )
+                .map(cafesInARow => {
+                  return (
+                    <Flex height={90} marginY={2} direction="row">
+                      {cafesInARow.map(cafe => {
+                        if (!cafe) {
+                          return <Box marginX={2} flex={1} height="100%" />;
+                        }
+                        const {name, isOperating, favorateRate} = cafe;
 
-                return (
-                  <Center margin={1} rounded="md" shadow={3}>
-                    <Button
-                      onPress={() => setFocusedIndex(index)}
-                      width="100%"
-                      bgColor={bgColor}>
-                      <Text color="white">{name}</Text>
-                    </Button>
-                  </Center>
-                );
-              })}
+                        return (
+                          <Box
+                            marginX={2}
+                            borderRadius={8}
+                            flex={1}
+                            height="100%"
+                            padding={0}
+                            bgColor={
+                              favorateRate > 0
+                                ? colors.bage[100]
+                                : colors.grey[100]
+                            }>
+                            <Button
+                              height="100%"
+                              width="100%"
+                              bgColor="transparent"
+                              onPress={() => setFocusedName(cafe.name)}>
+                              <Text
+                                color={
+                                  favorateRate > 0
+                                    ? colors.bage[200]
+                                    : colors.grey[400]
+                                }>
+                                {name}
+                              </Text>
+                            </Button>
+                            <Box
+                              position="absolute"
+                              top={2}
+                              right={2}
+                              borderRadius={4}
+                              bgColor={isOperating ? colors.green : colors.red}
+                              width={2}
+                              height={2}
+                            />
+                          </Box>
+                        );
+                      })}
+                    </Flex>
+                  );
+                })
+                .value()}
             </VStack>
           </ScrollView>
           {focusedCafe ? (
-            <Box>
-              <Modal
-                isOpen={focusedIndex !== null}
-                onClose={() => setFocusedIndex(null)}>
-                <Modal.Content>
-                  <Modal.CloseButton />
-                  <Modal.Body>
-                    <Text>매장: {focusedCafe.name}</Text>
-                    <Text>위치: {focusedCafe.location}</Text>
-                    <Text>주요 품목: {focusedCafe.items}</Text>
-                    <Text>평일 운영 시간: {focusedCafe.weekday}</Text>
-                    <Text>토요일 운영 시간: {focusedCafe.saturday}</Text>
-                    <Text>휴일 운영 시간: {focusedCafe.holiday}</Text>
-                    <Text>연락처: {focusedCafe.contact}</Text>
-                  </Modal.Body>
-                </Modal.Content>
-              </Modal>
-            </Box>
+            <Modal
+              isOpen={focusedName !== null}
+              onClose={() => setFocusedName(null)}>
+              <Modal.Content>
+                <Modal.Header>
+                  <Flex direction="row">
+                    <Text color={colors.blue}>{focusedCafe.name}</Text>
+                    <Button
+                      bgColor="transparent"
+                      onPress={() => {
+                        setFavoriteNames(prev => {
+                          if (prev.find(name => name === focusedCafe.name)) {
+                            return prev.filter(
+                              name => name !== focusedCafe.name,
+                            );
+                          } else {
+                            return prev.concat(focusedCafe.name);
+                          }
+                        });
+                      }}>
+                      {focusedCafe.favorateRate > 0 ? (
+                        <FilledStar />
+                      ) : (
+                        <UnfilledStar />
+                      )}
+                    </Button>
+                  </Flex>
+                  <Text color={colors.grey[300]}>{focusedCafe.location}</Text>
+                </Modal.Header>
+                <Modal.CloseButton />
+                <Modal.Body>
+                  <Flex direction="row">
+                    <Center flex={1}>평일</Center>
+                    <Center flex={1}>{focusedCafe.weekday}</Center>
+                  </Flex>
+                  <Divider bgColor={colors.black} />
+                  <Flex direction="row">
+                    <Center flex={1}>토요일</Center>
+                    <Center flex={1}>{focusedCafe.saturday}</Center>
+                  </Flex>
+                  <Divider bgColor={colors.black} />
+                  <Flex direction="row">
+                    <Center flex={1}>휴일</Center>
+                    <Center flex={1}>{focusedCafe.holiday}</Center>
+                  </Flex>
+                </Modal.Body>
+              </Modal.Content>
+            </Modal>
           ) : null}
         </Box>
       ) : null}
