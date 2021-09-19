@@ -149,7 +149,7 @@ export default function Mart({navigation}: Props) {
                     <Text>평일 운영 시간: {focusedMart.weekday}</Text>
                     <Text>토요일 운영 시간: {focusedMart.saturday}</Text>
                     <Text>휴일 운영 시간: {focusedMart.holiday}</Text>
-                    <Text>연락처: {focusedMart.holiday}</Text>
+                    <Text>연락처: {focusedMart.contact}</Text>
                   </Modal.Body>
                 </Modal.Content>
               </Modal>
