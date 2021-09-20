@@ -12,10 +12,13 @@ import {
   VStack,
   Modal,
   Button,
+  Divider,
+  Circle,
 } from 'native-base';
 import _, {size, chain, split, partition, chunk, cloneDeep} from 'lodash';
 import axios from 'axios';
 import {parse} from 'node-html-parser';
+import {colors} from '../ui/colors';
 
 function replaceAll(str: string, searchStr: string, replaceStr: string) {
   return str.split(searchStr).join(replaceStr);
@@ -106,9 +109,9 @@ export default function Meal({navigation}: Props) {
         const html = res.data;
         const root = parse(html);
         const data: TodaysMenu = {};
-        chain(root.querySelector('tbody').childNodes)
+        _.chain(root.querySelector('tbody').childNodes)
           .map(trNode => {
-            const trTexts = chain(trNode.childNodes)
+            const trTexts = _.chain(trNode.childNodes)
               .map((tdNode, idx) =>
                 tdNode.innerText
                   .split(/\s|\t|\n/)
@@ -120,11 +123,17 @@ export default function Meal({navigation}: Props) {
           })
           .filter(trTexts => trTexts.length > 0)
           .forEach((trTexts, idx) => {
-            const [a, nameAndContact, c, breakfast, e, lunch, g, dinner] =
-              trTexts;
-            const splitedNameAndContact = split(nameAndContact, '(');
-            const name = splitedNameAndContact[0];
-            const contact = splitedNameAndContact[1].slice(0, -1);
+            const [
+              blank_1,
+              nameAndContact,
+              blank_2,
+              breakfast,
+              blank_3,
+              lunch,
+              blank_4,
+              dinner,
+            ] = trTexts;
+            const [name, contact] = nameAndContact.split(/\(|\)/);
             data[name] = {breakfast, lunch, dinner, contact};
           })
           .value();
@@ -209,44 +218,63 @@ export default function Meal({navigation}: Props) {
   }
 
   console.log('rendering');
+
   return (
     <VStack>
-      <ScrollView>
+      <ScrollView bgColor={colors.white}>
+        <Text fontSize="5xl" fontWeight={800} margin={5} color="#0C146B">
+          식당
+        </Text>
         <Center>
           {favoriteMeal.map(name => (
             <Center
               width="90%"
               height="150px"
-              bg="white"
-              rounded="md"
+              bg="#E9E7CE"
+              rounded={15}
               position="relative"
-              marginTop={3}
-              shadow={5}
+              marginBottom={3}
+              shadow={0}
               key={name}>
-              <VStack position="relative" width="100%" height="100%">
-                <Center
-                  width="100%"
-                  height="40px"
-                  // position="relative"
-                  // top="0px"
+              <Circle
+                size={2.5}
+                bg={colors.green}
+                position="absolute"
+                top={2}
+                right={2}
+              />
+
+              <HStack position="relative" width="100%" height="100%">
+                <Button
+                  onPress={() => setSelectedMeal(name)}
+                  width="38%"
+                  height="100%"
                   marginBottom={0}
-                  bg={true ? '#F7E600' : 'black'} // isOperating
-                  rounded="md"
-                  shadow={2}>
-                  <HStack display="flex" justifyContent="space-between">
-                    <Text
-                      color={true ? '#3A1D1D' : 'white'}
-                      flex={5}
-                      alignSelf="center"
-                      textAlign="center">
-                      {name}
-                    </Text>
-                    <Button onPress={() => switchFavorite(name)} flex={1}>
+                  padding={3}
+                  alignContent="center"
+                  display="flex"
+                  justifyContent="space-between"
+                  bg="#E9E7CE"
+                  rounded={15}>
+                  {/* <HStack display="flex" justifyContent="space-between"> */}
+                  <Text
+                    color="#A17C2F"
+                    fontWeight={800}
+                    fontSize="xl"
+                    margin="auto"
+                    flex={1}
+                    alignSelf="center">
+                    {name}
+                  </Text>
+                  <Text color="#888888" flex={1}>
+                    몇시까지
+                  </Text>
+                  {/* <Button onPress={() => switchFavorite(name)} flex={1}>
                       즐찾ㄴ
-                    </Button>
-                  </HStack>
-                </Center>
-                {name !== null && menu[name] !== undefined ? (
+                    </Button> */}
+                  {/* </HStack> */}
+                </Button>
+                {menu !== null && name !== null && menu[name] !== undefined ? (
                   <ScrollView padding={3}>
                     <Text>
                       {menu[name].breakfast.length > 0
@@ -271,9 +299,11 @@ export default function Meal({navigation}: Props) {
                     </Text>
                   </ScrollView>
                 ) : (
-                  <Text fontSize="xl">휴무</Text>
+                  <Text fontSize="2xl" alignSelf="center" margin="auto">
+                    휴무
+                  </Text>
                 )}
-              </VStack>
+              </HStack>
             </Center>
           ))}
         </Center>
@@ -286,19 +316,30 @@ export default function Meal({navigation}: Props) {
                 <HStack key={subNotFavoriteMealInfoArray[0]}>
                   {subNotFavoriteMealInfoArray.map(name => {
                     return (
-                      <HStack key={name}>
+                      <Box key={name}>
                         <Button
                           onPress={() => setSelectedMeal(name)}
                           width="100px"
-                          height="50px"
+                          height="100px"
                           margin={2}
-                          bg={true ? '#F7E600' : 'black'} // isOperating
-                          rounded="md"
-                          shadow={5}
+                          bg="#F8F8F8" // isOperating
+                          borderColor="#DCDCDC"
+                          borderWidth={1}
+                          rounded={15}
+                          padding={0}
                           key={name}>
-                          <Text color={true ? '#3A1D1D' : 'white'}>{name}</Text>
+                          <Text color="#636363" fontSize="lg" fontWeight={500}>
+                            {name}
+                          </Text>
                         </Button>
-                      </HStack>
+                        <Circle
+                          size={2.5}
+                          bg={colors.green}
+                          position="absolute"
+                          top={4}
+                          right={4}
+                        />
+                      </Box>
                     );
                   })}
                 </HStack>
@@ -314,46 +355,79 @@ export default function Meal({navigation}: Props) {
             <Modal.Body>
               <HStack>
                 {selectedMeal !== null ? (
-                  <Text fontSize="xl">{selectedMeal}</Text>
+                  <Box>
+                    <Text
+                      fontSize="2xl"
+                      marginBottom={2}
+                      color="#0C146B"
+                      fontWeight={700}>
+                      {selectedMeal}
+                    </Text>
+                    <Text color="#929292">어디어디에</Text>
+                  </Box>
                 ) : (
                   <Text />
                 )}
                 <Button
                   width="60px"
                   height="40px"
+                  left={4}
+                  top={-4}
                   padding={2}
                   onPress={() => switchFavorite(String(selectedMeal))}>
                   즐찾ㄱ
                 </Button>
               </HStack>
               {selectedMeal !== null && menu[selectedMeal] !== undefined ? (
-                <>
-                  <Text>
-                    {menu[selectedMeal].breakfast.length > 0
-                      ? '아침: \n' +
-                        replaceAll(
-                          menu[selectedMeal].breakfast,
-                          '0원 ',
-                          '0원\n',
-                        ) +
-                        '\n'
-                      : ''}
-                  </Text>
-                  <Text>
-                    {menu[selectedMeal].lunch.length > 0
-                      ? '점심: \n' +
-                        replaceAll(menu[selectedMeal].lunch, '0원 ', '0원\n') +
-                        '\n'
-                      : ''}
-                  </Text>
-                  <Text>
-                    {menu[selectedMeal].dinner.length > 0
-                      ? '저녁: \n' +
-                        replaceAll(menu[selectedMeal].dinner, '0원 ', '0원\n') +
-                        '\n'
-                      : ''}
-                  </Text>
-                </>
+                <ScrollView>
+                  {menu[selectedMeal].breakfast.length > 0 ? (
+                    <>
+                      <Text>
+                        {'아침: \n' +
+                          replaceAll(
+                            menu[selectedMeal].breakfast,
+                            '0원 ',
+                            '0원\n',
+                          )}
+                      </Text>
+                      <Divider
+                        my={2}
+                        bg="black"
+                        size={1}
+                        marginTop={5}
+                        marginBottom={5}
+                      />
+                    </>
+                  ) : (
+                    <Text />
+                  )}
+
+                  {menu[selectedMeal].lunch.length > 0 ? (
+                    <>
+                      <Text>
+                        {'점심: \n' +
+                          replaceAll(menu[selectedMeal].lunch, '0원 ', '0원\n')}
+                      </Text>
+                      <Divider
+                        my={2}
+                        bg="black"
+                        size={1}
+                        marginTop={5}
+                        marginBottom={5}
+                      />
+                    </>
+                  ) : (
+                    <Text />
+                  )}
+                  {menu[selectedMeal].dinner.length > 0 ? (
+                    <Text>
+                      {'저녁: \n' +
+                        replaceAll(menu[selectedMeal].dinner, '0원 ', '0원\n')}
+                    </Text>
+                  ) : (
+                    <Text />
+                  )}
+                </ScrollView>
               ) : (
                 <Text fontSize="xl">휴무</Text>
               )}
