@@ -18,6 +18,7 @@ import Etcs from './screens/Etcs';
 import Mart from './screens/Mart';
 import Meal from './screens/Meal';
 import Shuttle from './screens/Shuttle';
+import {colors} from './ui/colors';
 
 export type RootTabList = {
   Meal: undefined;
@@ -33,7 +34,14 @@ export default function App() {
   return (
     <NativeBaseProvider>
       <NavigationContainer>
-        <Tab.Navigator initialRouteName={'Mart'}>
+        <Tab.Navigator
+          initialRouteName={'Mart'}
+          screenOptions={{
+            headerStatusBarHeight: 100,
+            headerTitleStyle: {color: colors.blue, fontSize: 40},
+            headerTitleAlign: 'left',
+            headerStyle: {borderBottomWidth: 0},
+          }}>
           <Tab.Screen name="식당" component={Meal} />
           <Tab.Screen
             name="카페"
