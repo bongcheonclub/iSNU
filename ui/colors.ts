@@ -10,4 +10,5 @@ export const colors = {
   bage: {100: '#E9E7CE', 200: '#A17C2F'},
   blue: '#0C146B',
   black: '#000000',
+  white: '#FFFFFF',
 };
