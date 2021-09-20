@@ -87,7 +87,7 @@ export default function Meal({navigation}: Props) {
 
   // state 선언
   const [menu, setMenu] = useState<TodaysMenu | null>(null); // store menu data here
-  const [cafeteria, setCafateria] = useState<Record<string, Cafeteria> | null>(
+  const [cafeteria, setCafeteria] = useState<Record<string, Cafeteria> | null>(
     null,
   );
   const [isFavorite, setIsFavorite] =
@@ -223,7 +223,7 @@ export default function Meal({navigation}: Props) {
         .value();
       const processedData = keyBy(data, 'name');
       console.log(processedData);
-      setCafateria(processedData);
+      setCafeteria(processedData);
     });
   }, []);
 
@@ -392,13 +392,15 @@ export default function Meal({navigation}: Props) {
                 <Box margin={6} marginBottom={1}>
                   <Text
                     fontSize="2xl"
-                    marginBottom={2}
+                    marginBottom={1}
                     color={colors.blue}
                     fontWeight={700}>
                     {selectedMeal}
                   </Text>
-                  <Text color={colors.grey[300]}>어디어디에</Text>
-                  <Text color={colors.black} textAlign="center">
+                  <Text color={colors.grey[300]}>
+                    {cafeteria[selectedMeal].location}
+                  </Text>
+                  <Text color={colors.black} textAlign="center" marginTop={3}>
                     ?월 ??일 ?요일
                   </Text>
                 </Box>
