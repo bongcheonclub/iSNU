@@ -18,6 +18,11 @@ import Etcs from './screens/Etcs';
 import Mart from './screens/Mart';
 import Meal from './screens/Meal';
 import Shuttle from './screens/Shuttle';
+import CafeIcon from './icons/cafe.svg';
+import EtcsIcon from './icons/etcs.svg';
+import MartIcon from './icons/mart.svg';
+import MealIcon from './icons/meal.svg';
+import ShuttleIcon from './icons/shuttle.svg';
 import {colors} from './ui/colors';
 
 export type RootTabList = {
@@ -42,49 +47,40 @@ export default function App() {
             headerTitleAlign: 'left',
             headerStyle: {borderBottomWidth: 0},
           }}>
-          <Tab.Screen name="식당" component={Meal} />
+          <Tab.Screen
+            name="식당"
+            component={Meal}
+            options={{
+              tabBarIcon: () => <MealIcon />,
+            }}
+          />
           <Tab.Screen
             name="카페"
             component={Cafe}
-            // options={{
-            //   tabBarIcon: ({focused, color, size}) => (
-            //     <Icon name="search" size={focused ? '30' : '25'} color="white" />
-            //   ),
-            // }}
+            options={{
+              tabBarIcon: () => <CafeIcon />,
+            }}
           />
           <Tab.Screen
             name="편의점"
             component={Mart}
-            // options={{
-            //   tabBarIcon: ({focused, color, size}) => (
-            //     <Icon name="upload" size={focused ? '30' : '25'} color="white" />
-            //   ),
-            // }}
+            options={{
+              tabBarIcon: () => <MartIcon />,
+            }}
           />
           <Tab.Screen
             name="셔틀"
             component={Shuttle}
-            // options={{
-            //   tabBarIcon: ({focused, color, size}) => (
-            //     <Icon name="shop" size={focused ? '30' : '25'} color="white" />
-            //   ),
-            // }}
+            options={{
+              tabBarIcon: () => <ShuttleIcon />,
+            }}
           />
           <Tab.Screen
             name="기타 편의정보"
             component={Etcs}
-            // options={{
-            //   tabBarIcon: ({focused, color, size}) => (
-            //     <View>
-            //       <Image
-            //         style={
-            //           focused ? style.focusedProfileImage : style.profileImage
-            //         }
-            //         source={ProfileImage}
-            //       />
-            //     </View>
-            //   ),
-            // }}
+            options={{
+              tabBarIcon: () => <EtcsIcon />,
+            }}
           />
         </Tab.Navigator>
       </NavigationContainer>
