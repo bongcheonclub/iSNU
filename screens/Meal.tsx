@@ -44,15 +44,16 @@ type Props = BottomTabScreenProps<RootTabList, 'Meal'>;
 const mealList = [
   '학생회관식당',
   '자하연식당',
+  '3식당',
   '예술계식당',
   '소담마루',
   '동원관식당',
   '기숙사식당',
-  '공대간이식당',
-  '3식당',
+  '아워홈식당',
+  '220동식당',
   '302동식당',
   '301동식당',
-  '220동식당',
+  '공대간이식당',
 ];
 
 function getTodaysDate() {
@@ -108,6 +109,15 @@ export default function Meal({navigation}: Props) {
     saturday: string;
     holiday: string;
   };
+  // type Ourhome = [
+  //   sunday: string;
+  //   monday: string;
+  //   tuesday: string;
+  //   wednesday: string;
+  //   thursday: string;
+  //   friday: string;
+  //   saturday: string;
+  // ];
   const initFavoriteState = {
     학생회관식당: 'false',
     자하연식당: 'false',
@@ -189,6 +199,7 @@ export default function Meal({navigation}: Props) {
           })
           .value();
         setMenu(data);
+        // console.log(data['학생회관식당']);
       });
     }
 
@@ -264,52 +275,85 @@ export default function Meal({navigation}: Props) {
 
   // 아워홈식당 메뉴 크롤링 로직
   useEffect(() => {
-    axios.get('https://snudorm.snu.ac.kr/food-schedule/').then(res => {
-      const html = res.data;
-      const root = parse(html);
-      const data: Cafeteria[] = chain(root.querySelector('tbody').childNodes)
-        .map(trNode => {
-          const trTexts = chain(trNode.childNodes)
-            .filter(tdNode => {
-              return (
-                tdNode !== undefined &&
-                tdNode.classList !== undefined &&
-                ![...tdNode.classList._set].includes('bg')
-              );
-            })
-            .map((tdNode, idx) => {
-              if (tdNode.innerText.length === 0) {
-                return ' ';
-              }
-              return tdNode.innerText;
-            })
-            .value();
-          const [
-            sunday,
-            monday,
-            tuesday,
-            wednesday,
-            thursday,
-            friday,
-            saturday,
-          ] = trTexts;
+    if (
+      menu !== null &&
+      menu['아워홈식당'] === undefined &&
+      cafeteria !== null &&
+      cafeteria['아워홈식당'] === undefined
+    ) {
+      axios.get('https://snudorm.snu.ac.kr/food-schedule/').then(res => {
+        const html = res.data;
+        const root = parse(html);
+        const data = chain(root.querySelector('tbody').childNodes)
+          .map(trNode => {
+            const trTexts = chain(trNode.childNodes)
+              .filter(tdNode => {
+                return (
+                  tdNode !== undefined &&
+                  tdNode.classList !== undefined &&
+                  ![...tdNode.classList._set].includes('bg')
+                );
+              })
+              .map((tdNode, idx) => {
+                if (tdNode.innerText.length === 0) {
+                  return ' ';
+                }
+                return tdNode.innerText;
+              })
+              .value();
+            const [
+              sunday,
+              monday,
+              tuesday,
+              wednesday,
+              thursday,
+              friday,
+              saturday,
+            ] = trTexts;
 
-          return {
-            sunday,
-            monday,
-            tuesday,
-            wednesday,
-            thursday,
-            friday,
-            saturday,
-          };
-        })
-        .filter(item => item.monday !== undefined)
-        .value();
-      console.log('data: ' + JSON.stringify(data[0])); // data[0], data[1]은 {요일:아침메뉴} 객체, 234점심, 567저녁, 8910은 919식당
-      // setsomewhere(processedData);
-    });
-  }, []);
+            return [
+              sunday,
+              monday,
+              tuesday,
+              wednesday,
+              thursday,
+              friday,
+              saturday,
+            ];
+          })
+          .filter(item => item[1] !== undefined)
+          .value();
+        // console.log('data: ' + JSON.stringify(data[0][day])); // data[0], data[1]은 [day:아침메뉴] 객체, 234점심, 567저녁, 8910은 919식당
+        const breakfast = data[0][day] + data[1][day];
+        const lunch = data[2][day] + data[3][day] + data[4][day];
+        const dinner = data[5][day] + data[6][day] + data[7][day];
+        const contact = 'unknwon';
+        const todaysMenu: TodaysMenu = {
+          아워홈식당: {breakfast, lunch, dinner, contact},
+        };
+        const menuIncludeOurhome = Object.assign(menu, todaysMenu);
+        setMenu(menuIncludeOurhome);
+        const ourhomeCafeteria = {
+          name: '아워홈식당',
+          contact: 'unknown',
+          location: '901동',
+          floors: '1층',
+          scale: 'unknown',
+          customer: '학생',
+          weekday: 'not yet',
+          saturday: 'not yet',
+          holiday: 'not yet',
+        };
+        const cafeteriaIncludeOurhome = Object.assign(cafeteria, {
+          아워홈식당: ourhomeCafeteria,
+        });
+        setCafeteria(cafeteriaIncludeOurhome);
+        console.log('ourhome done');
+        // setsomewhere(processedData);
+        // target = '아워홈식당': {breakfast, lunch, dinner, contact:'unknown'}
+      });
+    }
+  }, [cafeteria, day, menu]);
 
   // 식당 리스트 정렬, 즐겨찾기와 나머지 구분
   const [favoriteMeal, notFavoriteMeal] = partition(
