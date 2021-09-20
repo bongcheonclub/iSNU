@@ -159,7 +159,7 @@ export default function Cafe({navigation}: Props) {
     <Box>
       {sortedCafes ? (
         <Box>
-          <ScrollView>
+          <ScrollView bgColor={colors.white}>
             <VStack padding={8}>
               {chain(sortedCafes)
                 .chunk(3)
@@ -186,6 +186,10 @@ export default function Cafe({navigation}: Props) {
                             flex={1}
                             height="100%"
                             padding={0}
+                            borderColor={
+                              favorateRate > 0 ? undefined : colors.grey[200]
+                            }
+                            border={1}
                             bgColor={
                               favorateRate > 0
                                 ? colors.bage[100]
