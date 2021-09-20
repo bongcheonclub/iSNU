@@ -15,10 +15,20 @@ import {
   Divider,
   Circle,
 } from 'native-base';
-import _, {size, chain, split, partition, chunk, cloneDeep} from 'lodash';
+import _, {
+  size,
+  chain,
+  split,
+  partition,
+  chunk,
+  cloneDeep,
+  keyBy,
+  floor,
+} from 'lodash';
 import axios from 'axios';
 import {parse} from 'node-html-parser';
 import {colors} from '../ui/colors';
+import {ItemClick} from 'native-base/lib/typescript/components/composites/Typeahead/useTypeahead/types';
 
 function replaceAll(str: string, searchStr: string, replaceStr: string) {
   return str.split(searchStr).join(replaceStr);
@@ -40,7 +50,8 @@ const mealList = [
 ];
 
 type Cafeteria = {
-  nameAndContact: string;
+  name: string;
+  contact: string;
   location: string;
   floors: string;
   scale: string;
@@ -76,6 +87,9 @@ export default function Meal({navigation}: Props) {
 
   // state 선언
   const [menu, setMenu] = useState<TodaysMenu | null>(null); // store menu data here
+  const [cafeteria, setCafateria] = useState<Record<string, Cafeteria> | null>(
+    null,
+  );
   const [isFavorite, setIsFavorite] =
     useState<Record<string, string>>(initFavoriteState); // store favorite or not here
   const [selectedMeal, setSelectedMeal] = useState<string | null>(null); // store selected meal (modal) here
@@ -162,35 +176,56 @@ export default function Meal({navigation}: Props) {
                 .filter(item => item.length > 0)
                 .join(' '),
             )
+            .reverse()
             .filter(rows => rows.length > 0)
             .value();
           const [
-            nameAndContact,
-            location,
-            floors,
-            scale,
-            customer,
-            weekday,
-            saturday,
             holiday,
+            saturday,
+            weekday,
+            customer,
+            scale,
+            floors,
+            location,
+            nameAndContact,
           ] = trTexts;
+          const [name, contact] = (() => {
+            if (nameAndContact === undefined) {
+              return ['undefined', 'undefined'];
+            } else {
+              return nameAndContact.split(/\(|\)/);
+            }
+          })();
           return {
-            nameAndContact,
-            location,
-            floors,
+            holiday,
+            saturday,
+            weekday,
             customer,
             scale,
-            weekday,
-            saturday,
-            holiday,
+            floors: floors || '2',
+            location,
+            name: name.trim(),
+            contact,
           };
         })
+        .map((item, idx, array) => {
+          if (array[idx].location === undefined) {
+            array[idx].location = array[idx - 1].location;
+          }
+          if (array[idx].name === 'undefined') {
+            array[idx].name = array[idx - 1].name + ' ' + array[idx].floors;
+          }
+          if (array[idx].contact === 'undefined') {
+            array[idx].contact = array[idx - 1].contact;
+          }
+          return item;
+        })
         .value();
-      // setMarts(data);
-      // console.log('1: ', data[18]);
-      // console.log('2: ', data[1]);
+      const processedData = keyBy(data, 'name');
+      console.log(processedData);
+      setCafateria(processedData);
     });
-  });
+  }, []);
 
   // 식당 리스트 정렬, 즐겨찾기와 나머지 구분
   const [favoriteMeal, notFavoriteMeal] = partition(
@@ -364,7 +399,7 @@ export default function Meal({navigation}: Props) {
                   </Text>
                   <Text color={colors.grey[300]}>어디어디에</Text>
                   <Text color={colors.black} textAlign="center">
-                    ?월 ??일
+                    ?월 ??일 ?요일
                   </Text>
                 </Box>
               ) : (
