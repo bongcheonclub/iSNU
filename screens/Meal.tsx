@@ -156,7 +156,7 @@ export default function Meal({navigation}: Props) {
   // 식단 정보(url) 가져오기
   useEffect(() => {
     function fetchMenu() {
-      axios.get(todayMenuURL).then(res => {
+      axios.get(exampleDateURL).then(res => {
         const html = res.data;
         const root = parse(html);
         const data: TodaysMenu = {};
@@ -262,6 +262,55 @@ export default function Meal({navigation}: Props) {
     });
   }, []);
 
+  // 아워홈식당 메뉴 크롤링 로직
+  useEffect(() => {
+    axios.get('https://snudorm.snu.ac.kr/food-schedule/').then(res => {
+      const html = res.data;
+      const root = parse(html);
+      const data: Cafeteria[] = chain(root.querySelector('tbody').childNodes)
+        .map(trNode => {
+          const trTexts = chain(trNode.childNodes)
+            .filter(tdNode => {
+              return (
+                tdNode !== undefined &&
+                tdNode.classList !== undefined &&
+                ![...tdNode.classList._set].includes('bg')
+              );
+            })
+            .map((tdNode, idx) => {
+              if (tdNode.innerText.length === 0) {
+                return ' ';
+              }
+              return tdNode.innerText;
+            })
+            .value();
+          const [
+            sunday,
+            monday,
+            tuesday,
+            wednesday,
+            thursday,
+            friday,
+            saturday,
+          ] = trTexts;
+
+          return {
+            sunday,
+            monday,
+            tuesday,
+            wednesday,
+            thursday,
+            friday,
+            saturday,
+          };
+        })
+        .filter(item => item.monday !== undefined)
+        .value();
+      console.log('data: ' + JSON.stringify(data[0])); // data[0], data[1]은 {요일:아침메뉴} 객체, 234점심, 567저녁, 8910은 919식당
+      // setsomewhere(processedData);
+    });
+  }, []);
+
   // 식당 리스트 정렬, 즐겨찾기와 나머지 구분
   const [favoriteMeal, notFavoriteMeal] = partition(
     mealList,
@@ -340,7 +389,7 @@ export default function Meal({navigation}: Props) {
                   </Text>
                 </Button>
                 {menu !== null && name !== null && menu[name] !== undefined ? (
-                  <ScrollView padding={1}>
+                  <ScrollView padding={1} bounces={false}>
                     <Text>
                       {menu[name].breakfast.length > 0
                         ? '아침: \n' +
@@ -451,7 +500,7 @@ export default function Meal({navigation}: Props) {
                 즐찾
               </Button>
               {selectedMeal !== null && menu[selectedMeal] !== undefined ? (
-                <ScrollView margin={6}>
+                <ScrollView margin={6} maxHeight="400px" bounces={false}>
                   {menu[selectedMeal].breakfast.length > 0 ? (
                     <>
                       <Text>
