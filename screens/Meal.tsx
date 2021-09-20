@@ -83,7 +83,6 @@ function getTodaysDate() {
       return '토';
     }
   })();
-  console.log(koreanDay + '요일');
   return [month, date, koreanDay, day];
 }
 
@@ -144,7 +143,6 @@ export default function Meal({navigation}: Props) {
         }),
       );
       const data = Object.assign({}, ...tempData);
-      // console.log('res', data);
       setIsFavorite(data);
       return data;
     }
@@ -158,7 +156,7 @@ export default function Meal({navigation}: Props) {
   // 식단 정보(url) 가져오기
   useEffect(() => {
     function fetchMenu() {
-      axios.get(exampleDateURL).then(res => {
+      axios.get(todayMenuURL).then(res => {
         const html = res.data;
         const root = parse(html);
         const data: TodaysMenu = {};
@@ -260,7 +258,6 @@ export default function Meal({navigation}: Props) {
         })
         .value();
       const processedData = keyBy(data, 'name');
-      console.log(processedData);
       setCafeteria(processedData);
     });
   }, []);
@@ -276,13 +273,11 @@ export default function Meal({navigation}: Props) {
     const tempState = cloneDeep(isFavorite);
     const key = name + 'IsFavorite';
     if (tempState[name] === 'true') {
-      // console.log('true to false');
       await AsyncStorage.setItem(key, 'false').then(() => {
         tempState[name] = 'false';
         setIsFavorite(tempState);
       });
     } else if (tempState[name] === 'false') {
-      // console.log('false to true');
       await AsyncStorage.setItem(key, 'true').then(() => {
         tempState[name] = 'true';
         setIsFavorite(tempState);
@@ -506,7 +501,9 @@ export default function Meal({navigation}: Props) {
                   )}
                 </ScrollView>
               ) : (
-                <Text fontSize="xl">휴무</Text>
+                <Text fontSize="2xl" textAlign="center" margin={10}>
+                  휴무
+                </Text>
               )}
             </Modal.Body>
           </Modal.Content>
