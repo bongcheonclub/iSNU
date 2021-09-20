@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
 import React, {useState, useEffect} from 'react';
-import {StyleSheet} from 'react-native';
+import {StyleSheet, useWindowDimensions} from 'react-native';
 import {RootTabList} from '../App';
 import {
   Box,
@@ -51,6 +51,7 @@ type Cafeteria = {
 };
 
 export default function Meal({navigation}: Props) {
+  const window = useWindowDimensions();
   type TodaysMenu = {
     [name: string]: {
       breakfast: string;
@@ -222,18 +223,23 @@ export default function Meal({navigation}: Props) {
   return (
     <VStack>
       <ScrollView bgColor={colors.white}>
-        <Text fontSize="5xl" fontWeight={800} margin={5} color="#0C146B">
+        <Text
+          fontSize="5xl"
+          fontWeight={800}
+          margin={4}
+          marginLeft={(window.width - 332) / 2}
+          color={colors.blue}>
           식당
         </Text>
         <Center>
           {favoriteMeal.map(name => (
             <Center
-              width="90%"
-              height="150px"
+              width={332}
+              height="120px"
               bg="#E9E7CE"
               rounded={15}
               position="relative"
-              marginBottom={3}
+              marginBottom={4}
               shadow={0}
               key={name}>
               <Circle
@@ -250,32 +256,23 @@ export default function Meal({navigation}: Props) {
                   width="38%"
                   height="100%"
                   marginBottom={0}
-                  padding={3}
-                  alignContent="center"
-                  display="flex"
-                  justifyContent="space-between"
+                  padding={1}
                   bg="#E9E7CE"
                   rounded={15}>
-                  {/* <HStack display="flex" justifyContent="space-between"> */}
                   <Text
-                    color="#A17C2F"
+                    color={colors.bage[200]}
                     fontWeight={800}
                     fontSize="xl"
-                    margin="auto"
-                    flex={1}
-                    alignSelf="center">
+                    marginBottom={4}
+                    textAlign="center">
                     {name}
                   </Text>
-                  <Text color="#888888" flex={1}>
+                  <Text color={colors.grey[400]} textAlign="center">
                     몇시까지
                   </Text>
-                  {/* <Button onPress={() => switchFavorite(name)} flex={1}>
-                      즐찾ㄴ
-                    </Button> */}
-                  {/* </HStack> */}
                 </Button>
                 {menu !== null && name !== null && menu[name] !== undefined ? (
-                  <ScrollView padding={3}>
+                  <ScrollView padding={1}>
                     <Text>
                       {menu[name].breakfast.length > 0
                         ? '아침: \n' +
@@ -308,7 +305,7 @@ export default function Meal({navigation}: Props) {
           ))}
         </Center>
 
-        <Center marginTop={3}>
+        <Center marginTop={0}>
           <VStack>
             {chunk(notFavoriteMeal, 3).map(subNotFavoriteMealInfoArray => {
               // not favorite meal 3줄로 나누기
@@ -322,13 +319,16 @@ export default function Meal({navigation}: Props) {
                           width="100px"
                           height="100px"
                           margin={2}
-                          bg="#F8F8F8" // isOperating
-                          borderColor="#DCDCDC"
+                          bg={colors.grey[100]} // isOperating
+                          borderColor={colors.grey[200]}
                           borderWidth={1}
                           rounded={15}
                           padding={0}
                           key={name}>
-                          <Text color="#636363" fontSize="lg" fontWeight={500}>
+                          <Text
+                            color={colors.grey[400]}
+                            fontSize="lg"
+                            fontWeight={500}>
                             {name}
                           </Text>
                         </Button>
@@ -350,36 +350,38 @@ export default function Meal({navigation}: Props) {
         <Modal // modal 구현
           isOpen={selectedMeal !== null}
           onClose={() => setSelectedMeal(null)}>
-          <Modal.Content>
+          <Modal.Content padding={0}>
             <Modal.CloseButton />
             <Modal.Body>
-              <HStack>
-                {selectedMeal !== null ? (
-                  <Box>
-                    <Text
-                      fontSize="2xl"
-                      marginBottom={2}
-                      color="#0C146B"
-                      fontWeight={700}>
-                      {selectedMeal}
-                    </Text>
-                    <Text color="#929292">어디어디에</Text>
-                  </Box>
-                ) : (
-                  <Text />
-                )}
-                <Button
-                  width="60px"
-                  height="40px"
-                  left={4}
-                  top={-4}
-                  padding={2}
-                  onPress={() => switchFavorite(String(selectedMeal))}>
-                  즐찾ㄱ
-                </Button>
-              </HStack>
+              {selectedMeal !== null ? (
+                <Box margin={6} marginBottom={1}>
+                  <Text
+                    fontSize="2xl"
+                    marginBottom={2}
+                    color={colors.blue}
+                    fontWeight={700}>
+                    {selectedMeal}
+                  </Text>
+                  <Text color={colors.grey[300]}>어디어디에</Text>
+                  <Text color={colors.black} textAlign="center">
+                    ?월 ??일
+                  </Text>
+                </Box>
+              ) : (
+                <Text />
+              )}
+              <Button
+                width="60px"
+                height="40px"
+                position="absolute"
+                right="60px"
+                top="14px"
+                padding={2}
+                onPress={() => switchFavorite(String(selectedMeal))}>
+                즐찾
+              </Button>
               {selectedMeal !== null && menu[selectedMeal] !== undefined ? (
-                <ScrollView>
+                <ScrollView margin={6}>
                   {menu[selectedMeal].breakfast.length > 0 ? (
                     <>
                       <Text>
