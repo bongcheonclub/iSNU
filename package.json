@@ -16,7 +16,7 @@
     "@react-navigation/native": "^6.0.2",
     "@react-navigation/stack": "^6.0.7",
     "axios": "^0.21.4",
-    "date-fns": "^2.23.0",
+    "date-fns": "^2.24.0",
     "lodash": "^4.17.21",
     "native-base": "^3.1.0",
     "node-html-parser": "^4.1.4",

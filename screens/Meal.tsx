@@ -28,7 +28,13 @@ import _, {
 import axios from 'axios';
 import {parse} from 'node-html-parser';
 import {colors} from '../ui/colors';
-import {ItemClick} from 'native-base/lib/typescript/components/composites/Typeahead/useTypeahead/types';
+import {
+  compareAsc,
+  getDate,
+  getDay,
+  getMonth,
+  parse as parseTime,
+} from 'date-fns';
 
 function replaceAll(str: string, searchStr: string, replaceStr: string) {
   return str.split(searchStr).join(replaceStr);
@@ -49,19 +55,40 @@ const mealList = [
   '220동식당',
 ];
 
-type Cafeteria = {
-  name: string;
-  contact: string;
-  location: string;
-  floors: string;
-  scale: string;
-  customer: string;
-  weekday: string;
-  saturday: string;
-  holiday: string;
-};
+function getTodaysDate() {
+  const now = new Date();
+  const month = getMonth(now);
+  const date = getDate(now);
+  const day = getDay(now);
+  const koreanDay = (() => {
+    if (day === 0) {
+      return '일';
+    }
+    if (day === 1) {
+      return '월';
+    }
+    if (day === 2) {
+      return '화';
+    }
+    if (day === 3) {
+      return '수';
+    }
+    if (day === 4) {
+      return '목';
+    }
+    if (day === 5) {
+      return '금';
+    }
+    if (day === 6) {
+      return '토';
+    }
+  })();
+  console.log(koreanDay + '요일');
+  return [month, date, koreanDay, day];
+}
 
 export default function Meal({navigation}: Props) {
+  const [month, date, koreanDay, day] = getTodaysDate();
   const window = useWindowDimensions();
   type TodaysMenu = {
     [name: string]: {
@@ -70,6 +97,17 @@ export default function Meal({navigation}: Props) {
       dinner: string;
       contact: string;
     };
+  };
+  type Cafeteria = {
+    name: string;
+    contact: string;
+    location: string;
+    floors: string;
+    scale: string;
+    customer: string;
+    weekday: string;
+    saturday: string;
+    holiday: string;
   };
   const initFavoriteState = {
     학생회관식당: 'false',
@@ -401,7 +439,7 @@ export default function Meal({navigation}: Props) {
                     {cafeteria[selectedMeal].location}
                   </Text>
                   <Text color={colors.black} textAlign="center" marginTop={3}>
-                    ?월 ??일 ?요일
+                    {month}월 {date}일 {koreanDay}요일
                   </Text>
                 </Box>
               ) : (
