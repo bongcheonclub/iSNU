@@ -22,10 +22,11 @@ import {RootTabList} from '../App';
 import {compareAsc, getDay, parse as parseTime} from 'date-fns';
 import {compareDesc} from 'date-fns/esm';
 import {colors} from '../ui/colors';
+import Grid from '../components/Grid';
 
 type Props = BottomTabScreenProps<RootTabList, 'Cafe'>;
 
-type Cafe = {
+export type Cafe = {
   name: string;
   contact: string;
   location: string;
@@ -155,130 +156,5 @@ export default function Cafe({navigation}: Props) {
     });
   }, []);
 
-  return (
-    <Box>
-      {sortedCafes ? (
-        <Box>
-          <ScrollView bgColor={colors.white}>
-            <VStack padding={8}>
-              {chain(sortedCafes)
-                .chunk(3)
-                .map(cafesInARow =>
-                  cafesInARow.length < 3
-                    ? (cafesInARow.concat(
-                        Array(3 - cafesInARow.length).fill(null),
-                      ) as (CafeWithFlag | null)[])
-                    : cafesInARow,
-                )
-                .map(cafesInARow => {
-                  return (
-                    <Flex height={90} marginY={2} flexDirection="row">
-                      {cafesInARow.map(cafe => {
-                        if (!cafe) {
-                          return <Box marginX={2} flex={1} height="100%" />;
-                        }
-                        const {name, isOperating, favorateRate} = cafe;
-
-                        return (
-                          <Box
-                            marginX={2}
-                            borderRadius={8}
-                            flex={1}
-                            height="100%"
-                            padding={0}
-                            borderColor={
-                              favorateRate > 0 ? undefined : colors.grey[200]
-                            }
-                            borderWidth={1}
-                            bgColor={
-                              favorateRate > 0
-                                ? colors.bage[100]
-                                : colors.grey[100]
-                            }>
-                            <Button
-                              height="100%"
-                              width="100%"
-                              bgColor="transparent"
-                              onPress={() => setFocusedName(cafe.name)}>
-                              <Text
-                                color={
-                                  favorateRate > 0
-                                    ? colors.bage[200]
-                                    : colors.grey[400]
-                                }>
-                                {name}
-                              </Text>
-                            </Button>
-                            <Box
-                              position="absolute"
-                              top={2}
-                              right={2}
-                              borderRadius={4}
-                              bgColor={isOperating ? colors.green : colors.red}
-                              width={2}
-                              height={2}
-                            />
-                          </Box>
-                        );
-                      })}
-                    </Flex>
-                  );
-                })
-                .value()}
-            </VStack>
-          </ScrollView>
-          {focusedCafe ? (
-            <Modal
-              isOpen={focusedName !== null}
-              onClose={() => setFocusedName(null)}>
-              <Modal.Content>
-                <Modal.Header>
-                  <Flex flexDirection="row">
-                    <Text color={colors.blue}>{focusedCafe.name}</Text>
-                    <Button
-                      bgColor="transparent"
-                      onPress={() => {
-                        setFavoriteNames(prev => {
-                          if (prev.find(name => name === focusedCafe.name)) {
-                            return prev.filter(
-                              name => name !== focusedCafe.name,
-                            );
-                          } else {
-                            return prev.concat(focusedCafe.name);
-                          }
-                        });
-                      }}>
-                      {focusedCafe.favorateRate > 0 ? (
-                        <FilledStar />
-                      ) : (
-                        <UnfilledStar />
-                      )}
-                    </Button>
-                  </Flex>
-                  <Text color={colors.grey[300]}>{focusedCafe.location}</Text>
-                </Modal.Header>
-                <Modal.CloseButton />
-                <Modal.Body>
-                  <Flex flexDirection="row">
-                    <Center flex={1}>평일</Center>
-                    <Center flex={1}>{focusedCafe.weekday}</Center>
-                  </Flex>
-                  <Divider bgColor={colors.black} width="100%" />
-                  <Flex flexDirection="row">
-                    <Center flex={1}>토요일</Center>
-                    <Center flex={1}>{focusedCafe.saturday}</Center>
-                  </Flex>
-                  <Divider bgColor={colors.black} width="100%" />
-                  <Flex flexDirection="row">
-                    <Center flex={1}>휴일</Center>
-                    <Center flex={1}>{focusedCafe.holiday}</Center>
-                  </Flex>
-                </Modal.Body>
-              </Modal.Content>
-            </Modal>
-          ) : null}
-        </Box>
-      ) : null}
-    </Box>
-  );
+  return cafes && <Grid items={cafes} checkOperating={checkOperating} />;
 }
