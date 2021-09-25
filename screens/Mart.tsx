@@ -17,10 +17,11 @@ import {StyleSheet} from 'react-native';
 import {RootTabList} from '../App';
 import {compareAsc, getDay, parse as parseTime} from 'date-fns';
 import {compareDesc} from 'date-fns/esm';
+import Grid from '../components/Grid';
 
 type Props = BottomTabScreenProps<RootTabList, 'Mart'>;
 
-type Mart = {
+export type Mart = {
   name: string;
   location: string;
   items: string;
@@ -112,51 +113,5 @@ export default function Mart({navigation}: Props) {
       setMarts(data);
     });
   }, []);
-  return (
-    <Box>
-      {marts ? (
-        <Box>
-          <ScrollView>
-            <VStack>
-              {marts.map((mart, index) => {
-                const {name} = mart;
-                const bgColor = checkOperating(mart) ? '#005500' : '#AAAAAA';
-
-                return (
-                  <Center margin={1} rounded="md" shadow={3}>
-                    <Button
-                      onPress={() => setFocusedIndex(index)}
-                      width="100%"
-                      bgColor={bgColor}>
-                      <Text color="white">{name}</Text>
-                    </Button>
-                  </Center>
-                );
-              })}
-            </VStack>
-          </ScrollView>
-          {focusedMart ? (
-            <Box>
-              <Modal
-                isOpen={focusedIndex !== null}
-                onClose={() => setFocusedIndex(null)}>
-                <Modal.Content>
-                  <Modal.CloseButton />
-                  <Modal.Body>
-                    <Text>매장: {focusedMart.name}</Text>
-                    <Text>위치: {focusedMart.location}</Text>
-                    <Text>주요 품목: {focusedMart.items}</Text>
-                    <Text>평일 운영 시간: {focusedMart.weekday}</Text>
-                    <Text>토요일 운영 시간: {focusedMart.saturday}</Text>
-                    <Text>휴일 운영 시간: {focusedMart.holiday}</Text>
-                    <Text>연락처: {focusedMart.contact}</Text>
-                  </Modal.Body>
-                </Modal.Content>
-              </Modal>
-            </Box>
-          ) : null}
-        </Box>
-      ) : null}
-    </Box>
-  );
+  return marts && <Grid items={marts} checkOperating={checkOperating} />;
 }
