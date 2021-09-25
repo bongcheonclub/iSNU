@@ -543,7 +543,7 @@ export default function Meal({navigation}: Props) {
                       <Divider
                         my={2}
                         bg="black"
-                        size={1}
+                        width="100%"
                         marginTop={5}
                         marginBottom={5}
                       />
@@ -553,27 +553,31 @@ export default function Meal({navigation}: Props) {
                   )}
 
                   {menu[selectedMeal].lunch.length > 0 ? (
-                    <>
-                      <Text>
-                        {'점심: \n' +
-                          replaceAll(menu[selectedMeal].lunch, '0원 ', '0원\n')}
-                      </Text>
-                      <Divider
-                        my={2}
-                        bg="black"
-                        size={1}
-                        marginTop={5}
-                        marginBottom={5}
-                      />
-                    </>
+                    <Text>
+                      {'점심: \n' +
+                        replaceAll(menu[selectedMeal].lunch, '0원 ', '0원\n')}
+                    </Text>
                   ) : (
                     <Text />
                   )}
                   {menu[selectedMeal].dinner.length > 0 ? (
-                    <Text>
-                      {'저녁: \n' +
-                        replaceAll(menu[selectedMeal].dinner, '0원 ', '0원\n')}
-                    </Text>
+                    <>
+                      <Divider
+                        my={2}
+                        bg="black"
+                        width="100%"
+                        marginTop={5}
+                        marginBottom={5}
+                      />
+                      <Text>
+                        {'저녁: \n' +
+                          replaceAll(
+                            menu[selectedMeal].dinner,
+                            '0원 ',
+                            '0원\n',
+                          )}
+                      </Text>
+                    </>
                   ) : (
                     <Text />
                   )}
