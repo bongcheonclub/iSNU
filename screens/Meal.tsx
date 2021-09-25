@@ -39,6 +39,7 @@ import {
 } from 'date-fns';
 import FilledStar from '../icons/filled-star.svg';
 import UnfilledStar from '../icons/unfilled-star.svg';
+import et from 'date-fns/esm/locale/et/index.js';
 
 function replaceAll(str: string, searchStr: string, replaceStr: string) {
   return str.split(searchStr).join(replaceStr);
@@ -99,19 +100,6 @@ export default function Meal({navigation}: Props) {
     saturday: string;
     holiday: string;
   };
-  const initFavoriteState = {
-    학생회관식당: 'false',
-    자하연식당: 'false',
-    예술계식당: 'false',
-    소담마루: 'false',
-    동원관식당: 'false',
-    기숙사식당: 'false',
-    공대간이식당: 'false',
-    '3식당': 'false',
-    '302동식당': 'false',
-    '301동식당': 'false',
-    '220동식당': 'false',
-  };
 
   // state 선언
   const [menu, setMenu] = useState<TodaysMenu | null>(null); // store menu data here
@@ -119,24 +107,21 @@ export default function Meal({navigation}: Props) {
   const [cafeteria, setCafeteria] = useState<Record<string, Cafeteria> | null>(
     null,
   );
-  const [isFavorite, setIsFavorite] =
-    useState<Record<string, string>>(initFavoriteState); // store favorite or not here
+  const [favoriteList, setFavoriteList] = useState([]);
+  const [notFavoriteList, setNotFavoriteList] = useState([]);
   const [selectedMeal, setSelectedMeal] = useState<string | null>(null); // store selected meal (modal) here
 
   // 즐겨찾기 여부(storage) 가져오기
   useEffect(() => {
     async function makeFavoriteInitStates() {
-      const tempData = await Promise.all(
-        mealList.map(async mealName => {
-          const key = mealName + 'IsFavorite';
-          const val = await AsyncStorage.getItem(key);
-          const value = val !== null ? val : 'false';
-          return [mealName, value];
-        }),
+      const key = 'favoriteMealList';
+      const getList = await AsyncStorage.getItem(key);
+      const getFavoriteList = getList ? JSON.parse(getList) : [];
+      const getNotFavoriteList = mealList.filter(
+        mealName => !getFavoriteList.includes(mealName),
       );
-      const data = fromPairs(tempData);
-      setIsFavorite(data);
-      return data;
+      setFavoriteList(getFavoriteList);
+      setNotFavoriteList(getNotFavoriteList);
     }
     makeFavoriteInitStates();
   }, [mealList]);
@@ -181,7 +166,6 @@ export default function Meal({navigation}: Props) {
           })
           .value();
         setMenu(data);
-        // console.log(data['학생회관식당']);
       });
     }
 
@@ -263,7 +247,6 @@ export default function Meal({navigation}: Props) {
         .map(item => {
           return item.name;
         });
-      console.log(refinedMealList.length);
       setCafeteria(processedData);
       setMealList(refinedMealList);
     });
@@ -319,7 +302,7 @@ export default function Meal({navigation}: Props) {
           })
           .filter(item => item[1] !== undefined)
           .value();
-        // console.log('data: ' + JSON.stringify(data[0][day])); // data[0], data[1]은 [day:아침메뉴] 객체, 234점심, 567저녁, 8910은 919식당
+        // data[0], data[1]은 [day:아침메뉴] 객체, 234점심, 567저녁, 8910은 919식당
         const breakfast = data[0][day] + data[1][day];
         const lunch = data[2][day] + data[3][day] + data[4][day];
         const dinner = data[5][day] + data[6][day] + data[7][day];
@@ -350,28 +333,33 @@ export default function Meal({navigation}: Props) {
     }
   }, [cafeteria, day, menu]);
 
-  // 식당 리스트 정렬, 즐겨찾기와 나머지 구분
-  const [favoriteMeal, notFavoriteMeal] = partition(
-    mealList,
-    item => isFavorite[item] === 'true',
-  );
-
   // 즐겨찾기 설정 해제 함수
-  async function switchFavorite(name: string) {
-    const tempState = cloneDeep(isFavorite);
-    const key = name + 'IsFavorite';
-    if (tempState[name] === 'true') {
-      await AsyncStorage.setItem(key, 'false').then(() => {
-        tempState[name] = 'false';
-        setIsFavorite(tempState);
-      });
-    } else if (tempState[name] === 'false') {
-      await AsyncStorage.setItem(key, 'true').then(() => {
-        tempState[name] = 'true';
-        setIsFavorite(tempState);
-      });
-    }
-    return tempState;
+  async function editFavoriteList(name: string) {
+    const key = 'favoriteMealList';
+    const storedFavoriteMealList = await AsyncStorage.getItem(key).then(
+      storedFavoriteMealListString => {
+        if (
+          storedFavoriteMealListString === undefined ||
+          storedFavoriteMealListString === null
+        ) {
+          return [];
+        } else {
+          return JSON.parse(storedFavoriteMealListString);
+        }
+      },
+    );
+    const newFavoriteList = (await storedFavoriteMealList.includes(name))
+      ? storedFavoriteMealList.filter(item => item !== name)
+      : storedFavoriteMealList.concat(name);
+    const newNotFavoriteList = mealList.filter(
+      item => !newFavoriteList.includes(item),
+    );
+    await AsyncStorage.setItem(key, JSON.stringify(newFavoriteList)).then(
+      () => {
+        setFavoriteList(newFavoriteList);
+        setNotFavoriteList(newNotFavoriteList);
+      },
+    );
   }
 
   console.log('rendering');
@@ -380,7 +368,7 @@ export default function Meal({navigation}: Props) {
     <VStack>
       <ScrollView bgColor={colors.white}>
         <Center marginTop={5}>
-          {favoriteMeal.map(name => (
+          {favoriteList.map(name => (
             <Center
               width={332}
               height="120px"
@@ -455,11 +443,11 @@ export default function Meal({navigation}: Props) {
 
         <Center marginTop={0}>
           <VStack>
-            {chunk(notFavoriteMeal, 3).map(subNotFavoriteMealInfoArray => {
+            {chunk(notFavoriteList, 3).map(subNotFavoriteListInfoArray => {
               // not favorite meal 3줄로 나누기
               return (
-                <HStack key={subNotFavoriteMealInfoArray[0]}>
-                  {subNotFavoriteMealInfoArray.map(name => {
+                <HStack key={subNotFavoriteListInfoArray[0]}>
+                  {subNotFavoriteListInfoArray.map(name => {
                     return (
                       <Box key={name}>
                         <Button
@@ -515,8 +503,8 @@ export default function Meal({navigation}: Props) {
                       bgColor="transparent"
                       left={-4}
                       top={-3}
-                      onPress={() => switchFavorite(String(selectedMeal))}>
-                      {isFavorite[selectedMeal] === 'true' ? (
+                      onPress={() => editFavoriteList(String(selectedMeal))}>
+                      {favoriteList.includes(selectedMeal) ? (
                         <FilledStar />
                       ) : (
                         <UnfilledStar />
