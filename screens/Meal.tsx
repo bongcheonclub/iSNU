@@ -148,7 +148,7 @@ export default function Meal({navigation}: Props) {
         mealList.map(async mealName => {
           const key = mealName + 'IsFavorite';
           const val = await AsyncStorage.getItem(key);
-          const value = val != null ? val : 'false';
+          const value = val !== null ? val : 'false';
           return {[mealName]: value};
         }),
       );
