@@ -172,7 +172,7 @@ export default function Cafe({navigation}: Props) {
                 )
                 .map(cafesInARow => {
                   return (
-                    <Flex height={90} marginY={2} direction="row">
+                    <Flex height={90} marginY={2} flexDirection="row">
                       {cafesInARow.map(cafe => {
                         if (!cafe) {
                           return <Box marginX={2} flex={1} height="100%" />;
@@ -189,7 +189,7 @@ export default function Cafe({navigation}: Props) {
                             borderColor={
                               favorateRate > 0 ? undefined : colors.grey[200]
                             }
-                            border={1}
+                            borderWidth={1}
                             bgColor={
                               favorateRate > 0
                                 ? colors.bage[100]
@@ -233,7 +233,7 @@ export default function Cafe({navigation}: Props) {
               onClose={() => setFocusedName(null)}>
               <Modal.Content>
                 <Modal.Header>
-                  <Flex direction="row">
+                  <Flex flexDirection="row">
                     <Text color={colors.blue}>{focusedCafe.name}</Text>
                     <Button
                       bgColor="transparent"
@@ -259,17 +259,17 @@ export default function Cafe({navigation}: Props) {
                 </Modal.Header>
                 <Modal.CloseButton />
                 <Modal.Body>
-                  <Flex direction="row">
+                  <Flex flexDirection="row">
                     <Center flex={1}>평일</Center>
                     <Center flex={1}>{focusedCafe.weekday}</Center>
                   </Flex>
                   <Divider bgColor={colors.black} />
-                  <Flex direction="row">
+                  <Flex flexDirection="row">
                     <Center flex={1}>토요일</Center>
                     <Center flex={1}>{focusedCafe.saturday}</Center>
                   </Flex>
                   <Divider bgColor={colors.black} />
-                  <Flex direction="row">
+                  <Flex flexDirection="row">
                     <Center flex={1}>휴일</Center>
                     <Center flex={1}>{focusedCafe.holiday}</Center>
                   </Flex>
