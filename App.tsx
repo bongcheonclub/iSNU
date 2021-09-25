@@ -76,7 +76,7 @@ export default function App() {
             }}
           />
           <Tab.Screen
-            name="기타 편의정보"
+            name="기타"
             component={Etcs}
             options={{
               tabBarIcon: () => <EtcsIcon />,
