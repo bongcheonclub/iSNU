@@ -366,7 +366,7 @@ export default function Meal({navigation}: Props) {
 
   return (
     <VStack>
-      <ScrollView bgColor={colors.white}>
+      <ScrollView bgColor={colors.white} height="100%">
         <Center marginTop={5}>
           {favoriteList.map(name => (
             <Center
