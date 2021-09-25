@@ -37,6 +37,8 @@ import {
   getMonth,
   parse as parseTime,
 } from 'date-fns';
+import FilledStar from '../icons/filled-star.svg';
+import UnfilledStar from '../icons/unfilled-star.svg';
 
 function replaceAll(str: string, searchStr: string, replaceStr: string) {
   return str.split(searchStr).join(replaceStr);
@@ -501,15 +503,26 @@ export default function Meal({navigation}: Props) {
             <Modal.Body>
               {selectedMeal !== null ? (
                 <Box margin={6} marginBottom={1}>
-                  <Text
-                    fontSize="2xl"
-                    left={-15}
-                    top={-15}
-                    marginBottom={1}
-                    color={colors.blue}
-                    fontWeight={700}>
-                    {selectedMeal}
-                  </Text>
+                  <HStack left={-15} top={-15}>
+                    <Text
+                      fontSize="2xl"
+                      marginBottom={1}
+                      color={colors.blue}
+                      fontWeight={700}>
+                      {selectedMeal}
+                    </Text>
+                    <Button
+                      bgColor="transparent"
+                      left={-4}
+                      top={-3}
+                      onPress={() => switchFavorite(String(selectedMeal))}>
+                      {isFavorite[selectedMeal] === 'true' ? (
+                        <FilledStar />
+                      ) : (
+                        <UnfilledStar />
+                      )}
+                    </Button>
+                  </HStack>
                   <Text color={colors.grey[300]} left={-15} top={-20}>
                     {cafeteria[selectedMeal].location}
                   </Text>
@@ -520,16 +533,6 @@ export default function Meal({navigation}: Props) {
               ) : (
                 <Text />
               )}
-              <Button
-                width="60px"
-                height="40px"
-                position="absolute"
-                right="60px"
-                top="14px"
-                padding={2}
-                onPress={() => switchFavorite(String(selectedMeal))}>
-                즐찾
-              </Button>
               {selectedMeal !== null && menu[selectedMeal] !== undefined ? (
                 <ScrollView
                   margin={5}
