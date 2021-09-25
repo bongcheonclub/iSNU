@@ -151,7 +151,6 @@ export default function Meal({navigation}: Props) {
             data[name] = {breakfast, lunch, dinner, contact};
           })
           .value();
-        console.log('setting menu');
         setMenu(data);
       });
     }
@@ -228,9 +227,7 @@ export default function Meal({navigation}: Props) {
             return item.name;
           })
           .concat('아워홈식당');
-        console.log('setting cafeteria');
         setCafeteria(processedData);
-        console.log('setting meallist');
         setMealList(refinedMealList);
 
         async function makeFavoriteInitStates(initialMealList: string[]) {
@@ -241,9 +238,7 @@ export default function Meal({navigation}: Props) {
           const getNotFavoriteList = initialMealList.filter(
             mealName => !getFavoriteList.includes(mealName),
           );
-          console.log('setting favo list');
           setFavoriteList(getFavoriteList);
-          console.log('setting not favo list');
           setNotFavoriteList(getNotFavoriteList);
         }
         makeFavoriteInitStates(refinedMealList);
@@ -258,14 +253,12 @@ export default function Meal({navigation}: Props) {
 
   // 아워홈식당 메뉴 크롤링 로직
   useEffect(() => {
-    console.log('ourhome try');
     if (
       menu !== null &&
       menu['아워홈식당'] === undefined &&
       cafeteria !== null &&
       cafeteria['아워홈식당'] === undefined
     ) {
-      console.log('ourhome start');
       axios.get('https://snudorm.snu.ac.kr/food-schedule/').then(res => {
         const html = res.data;
         const root = parse(html);
@@ -317,7 +310,6 @@ export default function Meal({navigation}: Props) {
           아워홈식당: {breakfast, lunch, dinner, contact},
         };
         const menuIncludeOurhome = {...menu, ...todaysMenu};
-        console.log('setting menu include ourhome');
         setMenu(menuIncludeOurhome);
         const ourhomeCafeteria = {
           name: '아워홈식당',
@@ -334,9 +326,7 @@ export default function Meal({navigation}: Props) {
           ...cafeteria,
           아워홈식당: ourhomeCafeteria,
         };
-        console.log('setting cafeteria include ourhome');
         setCafeteria(cafeteriaIncludeOurhome);
-        console.log('ourhome done');
       });
     }
   }, [cafeteria, day, menu]);
