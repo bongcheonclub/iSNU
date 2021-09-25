@@ -66,7 +66,7 @@ const Grid = <T extends AvailableItem>(props: Props<T>) => {
     null;
 
   return (
-    <Box>
+    <Box height="100%" bgColor={colors.white}>
       {sortedItems ? (
         <Box>
           <ScrollView bgColor={colors.white}>
