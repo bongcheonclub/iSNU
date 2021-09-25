@@ -24,6 +24,7 @@ import {
   cloneDeep,
   keyBy,
   floor,
+  fromPairs,
 } from 'lodash';
 import axios from 'axios';
 import {parse} from 'node-html-parser';
@@ -149,10 +150,10 @@ export default function Meal({navigation}: Props) {
           const key = mealName + 'IsFavorite';
           const val = await AsyncStorage.getItem(key);
           const value = val !== null ? val : 'false';
-          return {[mealName]: value};
+          return [mealName, value];
         }),
       );
-      const data = Object.assign({}, ...tempData);
+      const data = fromPairs(tempData);
       setIsFavorite(data);
       return data;
     }
