@@ -263,12 +263,12 @@ export default function Cafe({navigation}: Props) {
                     <Center flex={1}>평일</Center>
                     <Center flex={1}>{focusedCafe.weekday}</Center>
                   </Flex>
-                  <Divider bgColor={colors.black} />
+                  <Divider bgColor={colors.black} width="100%" />
                   <Flex flexDirection="row">
                     <Center flex={1}>토요일</Center>
                     <Center flex={1}>{focusedCafe.saturday}</Center>
                   </Flex>
-                  <Divider bgColor={colors.black} />
+                  <Divider bgColor={colors.black} width="100%" />
                   <Flex flexDirection="row">
                     <Center flex={1}>휴일</Center>
                     <Center flex={1}>{focusedCafe.holiday}</Center>
