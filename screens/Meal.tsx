@@ -43,21 +43,6 @@ function replaceAll(str: string, searchStr: string, replaceStr: string) {
 }
 
 type Props = BottomTabScreenProps<RootTabList, 'Meal'>;
-// type MealList = string[];
-// const mealList = [
-//   '학생회관식당',
-//   '자하연식당',
-//   '3식당',
-//   '예술계식당',
-//   '소담마루',
-//   '동원관식당',
-//   '기숙사식당',
-//   '아워홈식당',
-//   '220동식당',
-//   '302동식당',
-//   '301동식당',
-//   '공대간이식당',
-// ];
 
 function getTodaysDate() {
   const now = new Date();
@@ -112,15 +97,6 @@ export default function Meal({navigation}: Props) {
     saturday: string;
     holiday: string;
   };
-  // type Ourhome = [
-  //   sunday: string;
-  //   monday: string;
-  //   tuesday: string;
-  //   wednesday: string;
-  //   thursday: string;
-  //   friday: string;
-  //   saturday: string;
-  // ];
   const initFavoriteState = {
     학생회관식당: 'false',
     자하연식당: 'false',
@@ -272,10 +248,7 @@ export default function Meal({navigation}: Props) {
           return item;
         })
         .value();
-      // console.log(data[2]);
-      // console.log(data[3]);
       const processedData = keyBy(data, 'name');
-      // console.log(processedData);
       const refinedMealList = data
         .filter(item => {
           // 학관 지하 등 필터링
@@ -289,7 +262,6 @@ export default function Meal({navigation}: Props) {
           return item.name;
         });
       console.log(refinedMealList.length);
-      // console.log(keys(processedData));
       setCafeteria(processedData);
       setMealList(refinedMealList);
     });
@@ -353,7 +325,7 @@ export default function Meal({navigation}: Props) {
         const todaysMenu: TodaysMenu = {
           아워홈식당: {breakfast, lunch, dinner, contact},
         };
-        const menuIncludeOurhome = Object.assign(menu, todaysMenu);
+        const menuIncludeOurhome = {...menu, ...todaysMenu};
         setMenu(menuIncludeOurhome);
         const ourhomeCafeteria = {
           name: '아워홈식당',
@@ -366,13 +338,12 @@ export default function Meal({navigation}: Props) {
           saturday: 'not yet',
           holiday: 'not yet',
         };
-        const cafeteriaIncludeOurhome = Object.assign(cafeteria, {
+        const cafeteriaIncludeOurhome = {
+          ...cafeteria,
           아워홈식당: ourhomeCafeteria,
-        });
+        };
         setCafeteria(cafeteriaIncludeOurhome);
         console.log('ourhome done');
-        // setsomewhere(processedData);
-        // target = '아워홈식당': {breakfast, lunch, dinner, contact:'unknown'}
       });
     }
   }, [cafeteria, day, menu]);
@@ -406,15 +377,7 @@ export default function Meal({navigation}: Props) {
   return (
     <VStack>
       <ScrollView bgColor={colors.white}>
-        <Text
-          fontSize="5xl"
-          fontWeight={800}
-          margin={4}
-          marginLeft={(window.width - 332) / 2}
-          color={colors.blue}>
-          식당
-        </Text>
-        <Center>
+        <Center marginTop={5}>
           {favoriteMeal.map(name => (
             <Center
               width={332}
@@ -533,7 +496,7 @@ export default function Meal({navigation}: Props) {
         <Modal // modal 구현
           isOpen={selectedMeal !== null}
           onClose={() => setSelectedMeal(null)}>
-          <Modal.Content padding={0}>
+          <Modal.Content padding={0} width="90%">
             <Modal.CloseButton />
             <Modal.Body>
               {selectedMeal !== null ? (
