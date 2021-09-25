@@ -514,7 +514,7 @@ export default function Meal({navigation}: Props) {
                     {cafeteria[selectedMeal].location}
                   </Text>
                   <Text color={colors.black} textAlign="center" marginTop={3}>
-                    {month}월 {date}일 {koreanDay}요일
+                    {month}월 {date}일 ({koreanDay})
                   </Text>
                 </Box>
               ) : (
