@@ -46,7 +46,7 @@ type Props = BottomTabScreenProps<RootTabList, 'Meal'>;
 
 function getTodaysDate() {
   const now = new Date();
-  const month = getMonth(now);
+  const month = getMonth(now) + 1;
   const date = getDate(now);
   const day = getDay(now);
   const koreanDay = (() => {
@@ -503,12 +503,14 @@ export default function Meal({navigation}: Props) {
                 <Box margin={6} marginBottom={1}>
                   <Text
                     fontSize="2xl"
+                    left={-15}
+                    top={-15}
                     marginBottom={1}
                     color={colors.blue}
                     fontWeight={700}>
                     {selectedMeal}
                   </Text>
-                  <Text color={colors.grey[300]}>
+                  <Text color={colors.grey[300]} left={-15} top={-20}>
                     {cafeteria[selectedMeal].location}
                   </Text>
                   <Text color={colors.black} textAlign="center" marginTop={3}>
@@ -529,17 +531,37 @@ export default function Meal({navigation}: Props) {
                 즐찾
               </Button>
               {selectedMeal !== null && menu[selectedMeal] !== undefined ? (
-                <ScrollView margin={6} maxHeight="400px" bounces={false}>
+                <ScrollView
+                  margin={5}
+                  marginLeft={1}
+                  marginRight={1}
+                  maxHeight="400px"
+                  bounces={false}>
                   {menu[selectedMeal].breakfast.length > 0 ? (
                     <>
-                      <Text>
-                        {'아침: \n' +
-                          replaceAll(
+                      <HStack>
+                        <VStack width="25%" justifyContent="space-between">
+                          <Text
+                            textAlign="center"
+                            fontSize="lg"
+                            fontWeight={600}>
+                            아침
+                          </Text>
+                          <Text
+                            textAlign="center"
+                            fontSize={10}
+                            color={colors.grey[300]}>
+                            00:00 ~ 00:00
+                          </Text>
+                        </VStack>
+                        <Text textAlign="center" width="75%">
+                          {replaceAll(
                             menu[selectedMeal].breakfast,
                             '0원 ',
                             '0원\n',
                           )}
-                      </Text>
+                        </Text>
+                      </HStack>
                       <Divider
                         my={2}
                         bg="black"
@@ -553,10 +575,22 @@ export default function Meal({navigation}: Props) {
                   )}
 
                   {menu[selectedMeal].lunch.length > 0 ? (
-                    <Text>
-                      {'점심: \n' +
-                        replaceAll(menu[selectedMeal].lunch, '0원 ', '0원\n')}
-                    </Text>
+                    <HStack>
+                      <VStack width="25%">
+                        <Text textAlign="center" fontSize="lg" fontWeight={600}>
+                          점심
+                        </Text>
+                        <Text
+                          textAlign="center"
+                          fontSize={10}
+                          color={colors.grey[300]}>
+                          00:00 ~ 00:00
+                        </Text>
+                      </VStack>
+                      <Text textAlign="center" width="75%">
+                        {replaceAll(menu[selectedMeal].lunch, '0원 ', '0원\n')}
+                      </Text>
+                    </HStack>
                   ) : (
                     <Text />
                   )}
@@ -569,14 +603,29 @@ export default function Meal({navigation}: Props) {
                         marginTop={5}
                         marginBottom={5}
                       />
-                      <Text>
-                        {'저녁: \n' +
-                          replaceAll(
+                      <HStack>
+                        <VStack width="25%">
+                          <Text
+                            textAlign="center"
+                            fontSize="lg"
+                            fontWeight={600}>
+                            저녁
+                          </Text>
+                          <Text
+                            textAlign="center"
+                            fontSize={10}
+                            color={colors.grey[300]}>
+                            00:00 ~ 00:00
+                          </Text>
+                        </VStack>
+                        <Text textAlign="center" width="75%">
+                          {replaceAll(
                             menu[selectedMeal].dinner,
                             '0원 ',
                             '0원\n',
                           )}
-                      </Text>
+                        </Text>
+                      </HStack>
                     </>
                   ) : (
                     <Text />
