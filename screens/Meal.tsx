@@ -441,7 +441,7 @@ export default function Meal({navigation}: Props) {
           ))}
         </Center>
 
-        <Center marginTop={0}>
+        <Center marginTop={0} marginBottom={12}>
           <VStack>
             {chunk(notFavoriteList, 3).map(subNotFavoriteListInfoArray => {
               // not favorite meal 3줄로 나누기
