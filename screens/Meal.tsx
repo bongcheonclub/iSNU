@@ -107,32 +107,18 @@ export default function Meal({navigation}: Props) {
   const [cafeteria, setCafeteria] = useState<Record<string, Cafeteria> | null>(
     null,
   );
-  const [favoriteList, setFavoriteList] = useState([]);
-  const [notFavoriteList, setNotFavoriteList] = useState([]);
+  const [favoriteList, setFavoriteList] = useState<string[]>([]);
+  const [notFavoriteList, setNotFavoriteList] = useState<string[]>([]);
   const [selectedMeal, setSelectedMeal] = useState<string | null>(null); // store selected meal (modal) here
-
-  // 즐겨찾기 여부(storage) 가져오기
-  useEffect(() => {
-    async function makeFavoriteInitStates() {
-      const key = 'favoriteMealList';
-      const getList = await AsyncStorage.getItem(key);
-      const getFavoriteList = getList ? JSON.parse(getList) : [];
-      const getNotFavoriteList = mealList.filter(
-        mealName => !getFavoriteList.includes(mealName),
-      );
-      setFavoriteList(getFavoriteList);
-      setNotFavoriteList(getNotFavoriteList);
-    }
-    makeFavoriteInitStates();
-  }, [mealList]);
 
   const exampleDateURL =
     'https://snuco.snu.ac.kr/ko/foodmenu?field_menu_date_value_1%5Bvalue%5D%5Bdate%5D=&field_menu_date_value%5Bvalue%5D%5Bdate%5D=09%2F23%2F2021';
   const todayMenuURL = 'https://snuco.snu.ac.kr/ko/foodmenu'; // 정보 받아와서 리스트에 저장, 각 식당의 리스트 인덱스 따로 저장
 
-  // 식단 정보(url) 가져오기
+  // 식단 정보(menu) 및 식당 운영 정보(info) 가져오기, 즐겨찾기 리스트 가져오기
   useEffect(() => {
     function fetchMenu() {
+      // 식단 정보 가져오는 함수
       axios.get(exampleDateURL).then(res => {
         const html = res.data;
         const root = parse(html);
@@ -165,101 +151,121 @@ export default function Meal({navigation}: Props) {
             data[name] = {breakfast, lunch, dinner, contact};
           })
           .value();
+        console.log('setting menu');
         setMenu(data);
       });
     }
+    function fetchInfo() {
+      // 식당 일반 운영정보 가져오는 함수
+      axios.get('https://snuco.snu.ac.kr/ko/node/20').then(res => {
+        const html = res.data;
+        const root = parse(html);
+        const data: Cafeteria[] = chain(root.querySelector('tbody').childNodes)
+          .map(trNode => {
+            const trTexts = chain(trNode.childNodes)
+              .map(tdNode =>
+                tdNode.innerText
+                  .split(/\s|\t|\n/)
+                  .filter(item => item.length > 0)
+                  .join(' '),
+              )
+              .reverse()
+              .filter(rows => rows.length > 0)
+              .value();
+            const [
+              holiday,
+              saturday,
+              weekday,
+              customer,
+              scale,
+              floors,
+              location,
+              nameAndContact,
+            ] = trTexts;
+            const [name, contact] = (() => {
+              if (nameAndContact === undefined) {
+                return ['undefined', 'undefined'];
+              } else {
+                return nameAndContact.split(/\(|\)/);
+              }
+            })();
+            return {
+              holiday,
+              saturday,
+              weekday,
+              customer,
+              scale,
+              floors: floors || '2',
+              location,
+              name: name.trim(),
+              contact,
+            };
+          })
+          .map((item, idx, array) => {
+            if (array[idx].location === undefined) {
+              array[idx].location = array[idx - 1].location;
+            }
+            if (array[idx].name === 'undefined') {
+              array[idx].name = array[idx - 1].name + ' ' + array[idx].floors;
+            }
+            if (array[idx].contact === 'undefined') {
+              array[idx].contact = array[idx - 1].contact;
+            }
+            return item;
+          })
+          .value();
+        const processedData = keyBy(data, 'name');
+        const refinedMealList = data
+          .filter(item => {
+            // 학관 지하 등 필터링
+            return (
+              !item.name.includes(' ') &&
+              !item.name.includes('라운지오') &&
+              !item.name.includes('두레미담')
+            );
+          })
+          .map(item => {
+            return item.name;
+          })
+          .concat('아워홈식당');
+        console.log('setting cafeteria');
+        setCafeteria(processedData);
+        console.log('setting meallist');
+        setMealList(refinedMealList);
 
+        async function makeFavoriteInitStates(initialMealList: string[]) {
+          // 즐겨찾기 가져오는 함수
+          const key = 'favoriteMealList';
+          const getList = await AsyncStorage.getItem(key);
+          const getFavoriteList = getList ? JSON.parse(getList) : [];
+          const getNotFavoriteList = initialMealList.filter(
+            mealName => !getFavoriteList.includes(mealName),
+          );
+          console.log('setting favo list');
+          setFavoriteList(getFavoriteList);
+          console.log('setting not favo list');
+          setNotFavoriteList(getNotFavoriteList);
+        }
+        makeFavoriteInitStates(refinedMealList);
+      });
+    }
     fetchMenu();
+    fetchInfo();
   }, []);
 
   // 식당 메뉴 정보 정제
   // to do
 
-  // 식당 일반 운영정보 크롤링
-  useEffect(() => {
-    axios.get('https://snuco.snu.ac.kr/ko/node/20').then(res => {
-      const html = res.data;
-      const root = parse(html);
-      const data: Cafeteria[] = chain(root.querySelector('tbody').childNodes)
-        .map(trNode => {
-          const trTexts = chain(trNode.childNodes)
-            .map(tdNode =>
-              tdNode.innerText
-                .split(/\s|\t|\n/)
-                .filter(item => item.length > 0)
-                .join(' '),
-            )
-            .reverse()
-            .filter(rows => rows.length > 0)
-            .value();
-          const [
-            holiday,
-            saturday,
-            weekday,
-            customer,
-            scale,
-            floors,
-            location,
-            nameAndContact,
-          ] = trTexts;
-          const [name, contact] = (() => {
-            if (nameAndContact === undefined) {
-              return ['undefined', 'undefined'];
-            } else {
-              return nameAndContact.split(/\(|\)/);
-            }
-          })();
-          return {
-            holiday,
-            saturday,
-            weekday,
-            customer,
-            scale,
-            floors: floors || '2',
-            location,
-            name: name.trim(),
-            contact,
-          };
-        })
-        .map((item, idx, array) => {
-          if (array[idx].location === undefined) {
-            array[idx].location = array[idx - 1].location;
-          }
-          if (array[idx].name === 'undefined') {
-            array[idx].name = array[idx - 1].name + ' ' + array[idx].floors;
-          }
-          if (array[idx].contact === 'undefined') {
-            array[idx].contact = array[idx - 1].contact;
-          }
-          return item;
-        })
-        .value();
-      const processedData = keyBy(data, 'name');
-      const refinedMealList = data
-        .filter(item => {
-          // 학관 지하 등 필터링
-          return (
-            !item.name.includes(' ') &&
-            !item.name.includes('라운지오') &&
-            !item.name.includes('두레미담')
-          );
-        })
-        .map(item => {
-          return item.name;
-        });
-      setCafeteria(processedData);
-      setMealList(refinedMealList);
-    });
-  }, []);
-
   // 아워홈식당 메뉴 크롤링 로직
   useEffect(() => {
+    console.log('ourhome try');
     if (
       menu !== null &&
       menu['아워홈식당'] === undefined &&
       cafeteria !== null &&
       cafeteria['아워홈식당'] === undefined
     ) {
+      console.log('ourhome start');
       axios.get('https://snudorm.snu.ac.kr/food-schedule/').then(res => {
         const html = res.data;
         const root = parse(html);
@@ -311,6 +317,7 @@ export default function Meal({navigation}: Props) {
           아워홈식당: {breakfast, lunch, dinner, contact},
         };
         const menuIncludeOurhome = {...menu, ...todaysMenu};
+        console.log('setting menu include ourhome');
         setMenu(menuIncludeOurhome);
         const ourhomeCafeteria = {
           name: '아워홈식당',
@@ -327,6 +334,7 @@ export default function Meal({navigation}: Props) {
           ...cafeteria,
           아워홈식당: ourhomeCafeteria,
         };
+        console.log('setting cafeteria include ourhome');
         setCafeteria(cafeteriaIncludeOurhome);
         console.log('ourhome done');
       });
@@ -349,7 +357,7 @@ export default function Meal({navigation}: Props) {
       },
     );
     const newFavoriteList = (await storedFavoriteMealList.includes(name))
-      ? storedFavoriteMealList.filter(item => item !== name)
+      ? storedFavoriteMealList.filter((item: string) => item !== name)
       : storedFavoriteMealList.concat(name);
     const newNotFavoriteList = mealList.filter(
       item => !newFavoriteList.includes(item),
