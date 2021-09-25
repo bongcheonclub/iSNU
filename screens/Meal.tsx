@@ -15,7 +15,7 @@ import {
   Divider,
   Circle,
 } from 'native-base';
-import _, {
+import {
   size,
   chain,
   split,
@@ -170,9 +170,9 @@ export default function Meal({navigation}: Props) {
         const html = res.data;
         const root = parse(html);
         const data: TodaysMenu = {};
-        _.chain(root.querySelector('tbody').childNodes)
+        chain(root.querySelector('tbody').childNodes)
           .map(trNode => {
-            const trTexts = _.chain(trNode.childNodes)
+            const trTexts = chain(trNode.childNodes)
               .map((tdNode, idx) =>
                 tdNode.innerText
                   .split(/\s|\t|\n/)
