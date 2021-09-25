@@ -25,6 +25,7 @@ import {
   keyBy,
   floor,
   fromPairs,
+  keys,
 } from 'lodash';
 import axios from 'axios';
 import {parse} from 'node-html-parser';
@@ -42,20 +43,21 @@ function replaceAll(str: string, searchStr: string, replaceStr: string) {
 }
 
 type Props = BottomTabScreenProps<RootTabList, 'Meal'>;
-const mealList = [
-  '학생회관식당',
-  '자하연식당',
-  '3식당',
-  '예술계식당',
-  '소담마루',
-  '동원관식당',
-  '기숙사식당',
-  '아워홈식당',
-  '220동식당',
-  '302동식당',
-  '301동식당',
-  '공대간이식당',
-];
+// type MealList = string[];
+// const mealList = [
+//   '학생회관식당',
+//   '자하연식당',
+//   '3식당',
+//   '예술계식당',
+//   '소담마루',
+//   '동원관식당',
+//   '기숙사식당',
+//   '아워홈식당',
+//   '220동식당',
+//   '302동식당',
+//   '301동식당',
+//   '공대간이식당',
+// ];
 
 function getTodaysDate() {
   const now = new Date();
@@ -135,6 +137,7 @@ export default function Meal({navigation}: Props) {
 
   // state 선언
   const [menu, setMenu] = useState<TodaysMenu | null>(null); // store menu data here
+  const [mealList, setMealList] = useState<string[] | null>(null); // store menu data here
   const [cafeteria, setCafeteria] = useState<Record<string, Cafeteria> | null>(
     null,
   );
@@ -158,7 +161,7 @@ export default function Meal({navigation}: Props) {
       return data;
     }
     makeFavoriteInitStates();
-  }, []);
+  }, [mealList]);
 
   const exampleDateURL =
     'https://snuco.snu.ac.kr/ko/foodmenu?field_menu_date_value_1%5Bvalue%5D%5Bdate%5D=&field_menu_date_value%5Bvalue%5D%5Bdate%5D=09%2F23%2F2021';
@@ -269,8 +272,26 @@ export default function Meal({navigation}: Props) {
           return item;
         })
         .value();
+      // console.log(data[2]);
+      // console.log(data[3]);
       const processedData = keyBy(data, 'name');
+      // console.log(processedData);
+      const refinedMealList = data
+        .filter(item => {
+          // 학관 지하 등 필터링
+          return (
+            !item.name.includes(' ') &&
+            !item.name.includes('라운지오') &&
+            !item.name.includes('두레미담')
+          );
+        })
+        .map(item => {
+          return item.name;
+        });
+      console.log(refinedMealList.length);
+      // console.log(keys(processedData));
       setCafeteria(processedData);
+      setMealList(refinedMealList);
     });
   }, []);
 
