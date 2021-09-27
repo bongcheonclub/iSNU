@@ -79,7 +79,15 @@ export default function Etcs({navigation}: Props) {
             <Modal.Content>
               <Modal.CloseButton />
               <Modal.Body>
-                <Text>서점임</Text>
+                <Text>교보문고</Text>
+                <Text>위치 학생회관 1층</Text>
+                <Divider />
+                <Text>
+                  운영시간 평일 08:30 ~ 19:00 토요일 10:00 ~ 17:00 (일요일,
+                  공휴일 휴무)
+                </Text>
+                <Divider />
+                <Text>연락처 02-880-8581</Text>
               </Modal.Body>
             </Modal.Content>
           </Modal>
@@ -95,6 +103,40 @@ export default function Etcs({navigation}: Props) {
                 height="100%"
                 width="100%"
                 source={{uri: 'https://lib.snu.ac.kr/hours'}}
+              />
+            </Modal.Content>
+          </Modal>
+          <Modal
+            isOpen={focusedEtc === 'PHC'}
+            onClose={() => setFocusedEtc(null)}
+            size="full"
+            animation="ease-in"
+            height="100%">
+            <Modal.Content height="100%">
+              <Modal.CloseButton />
+              <WebView
+                height="100%"
+                width="100%"
+                source={{
+                  uri: 'https://m.health4u.snu.ac.kr/medicalTreatment/PracticeSchedule/_/view.do',
+                }}
+              />
+            </Modal.Content>
+          </Modal>
+          <Modal
+            isOpen={focusedEtc === 'Dorm'}
+            onClose={() => setFocusedEtc(null)}
+            size="full"
+            animation="ease-in"
+            height="100%">
+            <Modal.Content height="100%">
+              <Modal.CloseButton />
+              <WebView
+                height="100%"
+                width="100%"
+                source={{
+                  uri: 'https://snudorm.snu.ac.kr/%ec%83%9d%ed%99%9c%ec%95%88%eb%82%b4/%ed%8e%b8%ec%9d%98%ec%8b%9c%ec%84%a4/%ec%9d%8c%ec%8b%9d/',
+                }}
               />
             </Modal.Content>
           </Modal>
@@ -176,6 +218,7 @@ export default function Etcs({navigation}: Props) {
           </Center>
           <Center margin={2.5}>
             <Button
+              onPress={() => setFocusedEtc('PHC')}
               rounded="10px"
               width="315px"
               height="72px"
@@ -193,6 +236,7 @@ export default function Etcs({navigation}: Props) {
           </Center>
           <Center margin={2.5}>
             <Button
+              onPress={() => setFocusedEtc('Dorm')}
               rounded="10px"
               width="315px"
               height="72px"
