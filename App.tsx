@@ -31,7 +31,10 @@ import {chain, map} from 'lodash';
 import {parse} from 'node-html-parser';
 
 async function initializeData() {
-  const res = await axios.get('https://snuco.snu.ac.kr/ko/node/21');
+  const [res, martRes] = await Promise.all([
+    axios.get('https://snuco.snu.ac.kr/ko/node/21'),
+    axios.get('https://snuco.snu.ac.kr/ko/node/19'),
+  ]);
   const html = res.data;
   const root = parse(html);
   const cafes = chain(root.querySelector('tbody').childNodes)
@@ -67,7 +70,6 @@ async function initializeData() {
       };
     })
     .value();
-  const martRes = await axios.get('https://snuco.snu.ac.kr/ko/node/19');
   const martHtml = martRes.data;
   const martRoot = parse(martHtml);
   const marts = chain(martRoot.querySelector('tbody').childNodes)
