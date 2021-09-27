@@ -119,44 +119,40 @@ export default function Meal({navigation}: Props) {
   useEffect(() => {
     function fetchMenu() {
       // 식단 정보 가져오는 함수
-      axios
-        .get(
-          'https://snuco.snu.ac.kr/ko/foodmenu?field_menu_date_value_1%5Bvalue%5D%5Bdate%5D=&field_menu_date_value%5Bvalue%5D%5Bdate%5D=04%2F15%2F2021',
-        )
-        .then(res => {
-          const html = res.data;
-          const root = parse(html);
-          const data: TodaysMenu = {};
-          chain(root.querySelector('tbody').childNodes)
-            .map(trNode => {
-              const trTexts = chain(trNode.childNodes)
-                .map((tdNode, idx) =>
-                  tdNode.innerText
-                    .split(/\s|\t|\n/)
-                    .filter(item => item.length > 0)
-                    .join(' '),
-                )
-                .value();
-              return trTexts;
-            })
-            .filter(trTexts => trTexts.length > 0)
-            .forEach((trTexts, idx) => {
-              const [
-                blank_1,
-                nameAndContact,
-                blank_2,
-                breakfast,
-                blank_3,
-                lunch,
-                blank_4,
-                dinner,
-              ] = trTexts;
-              const [name, contact] = nameAndContact.split(/\(|\)/);
-              data[name] = {breakfast, lunch, dinner, contact};
-            })
-            .value();
-          setMenu(data);
-        });
+      axios.get(todayMenuURL).then(res => {
+        const html = res.data;
+        const root = parse(html);
+        const data: TodaysMenu = {};
+        chain(root.querySelector('tbody').childNodes)
+          .map(trNode => {
+            const trTexts = chain(trNode.childNodes)
+              .map((tdNode, idx) =>
+                tdNode.innerText
+                  .split(/\s|\t|\n/)
+                  .filter(item => item.length > 0)
+                  .join(' '),
+              )
+              .value();
+            return trTexts;
+          })
+          .filter(trTexts => trTexts.length > 0)
+          .forEach((trTexts, idx) => {
+            const [
+              blank_1,
+              nameAndContact,
+              blank_2,
+              breakfast,
+              blank_3,
+              lunch,
+              blank_4,
+              dinner,
+            ] = trTexts;
+            const [name, contact] = nameAndContact.split(/\(|\)/);
+            data[name] = {breakfast, lunch, dinner, contact};
+          })
+          .value();
+        setMenu(data);
+      });
     }
     function fetchInfo() {
       // 식당 일반 운영정보 가져오는 함수
@@ -446,13 +442,16 @@ export default function Meal({navigation}: Props) {
           }
           const [menuName, price] = menuAndPrice[0].includes('플러스메뉴')
             ? [
-                (menuAndPrice[0] + '\n' + menuAndPrice[1]).replace(
+                (menuAndPrice[0] + '\n' + menuAndPrice[1]).replaceAll(
                   '&amp;',
                   '&\n',
                 ),
                 menuAndPrice[2] + '원',
               ]
-            : [menuAndPrice[0].replace('&amp;', '&\n'), menuAndPrice[1] + '원'];
+            : [
+                menuAndPrice[0].replaceAll('&amp;', '&\n'),
+                menuAndPrice[1] + '원',
+              ];
           return (
             <HStack
               alignItems="center"
@@ -541,6 +540,19 @@ export default function Meal({navigation}: Props) {
       return (
         <Text textAlign="center" width="70%" fontSize="lg">
           {string}
+        </Text>
+      );
+    }
+
+    if (cafeteriaName.includes('공대간이') || cafeteriaName.includes('301')) {
+      return (
+        <Text textAlign="center" width="100%" fontSize="md">
+          {string
+            .replaceAll('00원', '00원\n')
+            .replaceAll('소반', '\n소반')
+            .replaceAll('&amp;', '&\n')
+            .replaceAll('&lt;', '\n<')
+            .replaceAll('&gt;', '>\n')}
         </Text>
       );
     }
