@@ -39,6 +39,7 @@ const Grid = <T extends AvailableItem>(props: Props<T>) => {
   const syncFavoritesToStorage = (favorites: string[]) => {
     AsyncStorage.setItem(favoriteStorageKey, JSON.stringify(favorites));
   };
+
   const [focusedName, setFocusedItem] = useState<string | null>(null);
   const [favoriteNames, setFavoriteNames] =
     useState<string[]>(initialFavoriteNames);

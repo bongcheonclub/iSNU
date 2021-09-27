@@ -21,6 +21,7 @@ import React, {useEffect, useState} from 'react';
 import {colors} from '../ui/colors';
 import {Shuttle} from '../screens/Shuttle';
 import {ItemClick} from 'native-base/lib/typescript/components/composites/Typeahead/useTypeahead/types';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type AvailableItem = Shuttle;
 
@@ -30,6 +31,8 @@ type Props<T extends AvailableItem> = {
     isOperating: boolean;
     operating: T['operatings'][number] | null;
   };
+  initialFavoriteNames: string[];
+  favoriteStorageKey: string;
 };
 
 type ItemWithFlag<T> = T & {
@@ -39,9 +42,14 @@ type ItemWithFlag<T> = T & {
 };
 
 const List = <T extends AvailableItem>(props: Props<T>) => {
-  const {items, checkOperating} = props;
+  const {items, checkOperating, initialFavoriteNames, favoriteStorageKey} =
+    props;
+  const syncFavoritesToStorage = (favorites: string[]) => {
+    AsyncStorage.setItem(favoriteStorageKey, JSON.stringify(favorites));
+  };
   const [focusedName, setFocusedItem] = useState<string | null>(null);
-  const [favoriteNames, setFavoriteNames] = useState<string[]>([]);
+  const [favoriteNames, setFavoriteNames] =
+    useState<string[]>(initialFavoriteNames);
 
   const sortedItems: ItemWithFlag<T>[] = chain(items)
     .map(item => {
@@ -151,11 +159,15 @@ const List = <T extends AvailableItem>(props: Props<T>) => {
                       onPress={() => {
                         setFavoriteNames(prev => {
                           if (prev.find(name => name === focusedItem.name)) {
-                            return prev.filter(
+                            const next = prev.filter(
                               name => name !== focusedItem.name,
                             );
+                            syncFavoritesToStorage(next);
+                            return next;
                           } else {
-                            return prev.concat(focusedItem.name);
+                            const next = prev.concat(focusedItem.name);
+                            syncFavoritesToStorage(next);
+                            return next;
                           }
                         });
                       }}>

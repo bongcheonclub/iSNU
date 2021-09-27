@@ -3,7 +3,7 @@ import React, {useEffect, useState} from 'react';
 import {compareAsc, getDay, parse as parseTime} from 'date-fns';
 import Grid from '../components/Grid';
 import {ParamListBase} from '@react-navigation/routers';
-import {CAFE_FAVORITE_STORAGE_KEY} from '../App';
+import {FAVORITE_STORAGE_KEY} from '../App';
 
 type Props = BottomTabScreenProps<ParamListBase, '카페'> & {
   cafes: Cafe[];
@@ -77,7 +77,7 @@ export default function Cafe({navigation, cafes, initialFavoriteNames}: Props) {
       items={cafes}
       checkOperating={checkOperating}
       initialFavoriteNames={initialFavoriteNames}
-      favoriteStorageKey={CAFE_FAVORITE_STORAGE_KEY}
+      favoriteStorageKey={FAVORITE_STORAGE_KEY.cafe}
     />
   );
 }
