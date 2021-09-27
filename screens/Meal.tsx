@@ -8,6 +8,7 @@ import {
   Center,
   HStack,
   ScrollView,
+  View,
   Text,
   VStack,
   Modal,
@@ -621,6 +622,39 @@ export default function Meal({navigation}: Props) {
       });
   }
 
+  function showFavoriteMenu(cafeteriaName, whichMenu) {
+    const string = menu[cafeteriaName][whichMenu];
+    return string
+      .split('원 ')
+      .map(text => {
+        return text.split(' ');
+      })
+      .map(menuAndPrice => {
+        if (menuAndPrice[0].includes('※')) {
+          return;
+        }
+        const [menuName, price] = [
+          menuAndPrice[0].replace('&amp;', '&\n'),
+          menuAndPrice[1] + '원',
+        ];
+        return (
+          <HStack
+            alignItems="center"
+            // justifyContent="center"
+            paddingTop="2px"
+            paddingBottom="2px"
+            key={menuName}>
+            <Text textAlign="center" width="60%" fontSize="md">
+              {menuName}
+            </Text>
+            <Text textAlign="right" width="40%" fontSize="md" paddingRight={4}>
+              {price}
+            </Text>
+          </HStack>
+        );
+      });
+  }
+
   console.log('rendering');
 
   return (
@@ -645,58 +679,49 @@ export default function Meal({navigation}: Props) {
                 right={2}
               />
 
-              <HStack position="relative" width="100%" height="100%">
-                <Button
-                  onPress={() => setSelectedMeal(name)}
-                  colorScheme="yellow"
-                  width="38%"
+              <Button
+                backgroundColor="transparent"
+                padding={0}
+                onPress={() => setSelectedMeal(name)}>
+                <HStack
+                  position="relative"
+                  width="100%"
                   height="100%"
-                  marginBottom={0}
-                  padding={1}
-                  bg="#E9E7CE"
-                  rounded={15}>
-                  <Text
-                    color={colors.bage[200]}
-                    fontWeight={800}
-                    fontSize="xl"
-                    marginBottom={4}
-                    textAlign="center">
-                    {name}
-                  </Text>
-                  <Text color={colors.grey[400]} textAlign="center">
-                    몇시까지
-                  </Text>
-                </Button>
-                {menu !== null && name !== null && menu[name] !== undefined ? (
-                  <ScrollView padding={1} bounces={false}>
-                    <Text>
-                      {menu[name].breakfast.length > 0
-                        ? '아침: \n' +
-                          replaceAll(menu[name].breakfast, '0원 ', '0원\n') +
-                          '\n'
-                        : ''}
+                  padding={0}>
+                  <Center
+                    width="30%"
+                    height="100%"
+                    marginBottom={0}
+                    padding={1}
+                    bg="#E9E7CE"
+                    rounded={15}>
+                    <Text
+                      color={colors.bage[200]}
+                      fontWeight={800}
+                      fontSize="xl"
+                      marginBottom={4}
+                      textAlign="center">
+                      {name}
                     </Text>
-                    <Text>
-                      {menu[name].lunch.length > 0
-                        ? '점심: \n' +
-                          replaceAll(menu[name].lunch, '0원 ', '0원\n') +
-                          '\n'
-                        : ''}
+                    {
+                      <Text color={colors.grey[400]} textAlign="center">
+                        몇시까지
+                      </Text>
+                    }
+                  </Center>
+                  {menu !== null &&
+                  name !== null &&
+                  menu[name] !== undefined ? (
+                    <Center width="70%" padding={0}>
+                      {showFavoriteMenu(name, 'lunch')}
+                    </Center>
+                  ) : (
+                    <Text fontSize="2xl" alignSelf="center" margin="auto">
+                      휴무
                     </Text>
-                    <Text>
-                      {menu[name].dinner.length > 0
-                        ? '저녁: \n' +
-                          replaceAll(menu[name].dinner, '0원 ', '0원\n') +
-                          '\n'
-                        : ''}
-                    </Text>
-                  </ScrollView>
-                ) : (
-                  <Text fontSize="2xl" alignSelf="center" margin="auto">
-                    휴무
-                  </Text>
-                )}
-              </HStack>
+                  )}
+                </HStack>
+              </Button>
             </Center>
           ))}
         </Center>
