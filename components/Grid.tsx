@@ -1,7 +1,4 @@
-import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
-import axios from 'axios';
 import {chain, map} from 'lodash';
-import {parse} from 'node-html-parser';
 import {
   Box,
   Center,
@@ -17,12 +14,10 @@ import {
 import FilledStar from '../icons/filled-star.svg';
 import UnfilledStar from '../icons/unfilled-star.svg';
 import React, {useEffect, useState} from 'react';
-import {StyleSheet} from 'react-native';
-import {compareAsc, getDay, parse as parseTime} from 'date-fns';
-import {compareDesc} from 'date-fns/esm';
 import {colors} from '../ui/colors';
 import {Cafe} from '../screens/Cafe';
 import {Mart} from '../screens/Mart';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type AvailableItem = Cafe | Mart;
 
@@ -30,6 +25,7 @@ type Props<T> = {
   items: T[];
   checkOperating: (item: T) => boolean;
   initialFavoriteNames: string[];
+  favoriteStorageKey: string;
 };
 
 type ItemWithFlag<T> = T & {
@@ -38,9 +34,14 @@ type ItemWithFlag<T> = T & {
 };
 
 const Grid = <T extends AvailableItem>(props: Props<T>) => {
-  const {items, checkOperating, initialFavoriteNames} = props;
+  const {items, checkOperating, initialFavoriteNames, favoriteStorageKey} =
+    props;
+  const syncFavoritesToStorage = (favorites: string[]) => {
+    AsyncStorage.setItem(favoriteStorageKey, JSON.stringify(favorites));
+  };
   const [focusedName, setFocusedItem] = useState<string | null>(null);
-  const [favoriteNames, setFavoriteNames] = useState<string[]>([]);
+  const [favoriteNames, setFavoriteNames] =
+    useState<string[]>(initialFavoriteNames);
 
   const sortedItems: ItemWithFlag<T>[] = chain(items)
     .map(item => {
@@ -162,11 +163,15 @@ const Grid = <T extends AvailableItem>(props: Props<T>) => {
                       onPress={() => {
                         setFavoriteNames(prev => {
                           if (prev.find(name => name === focusedItem.name)) {
-                            return prev.filter(
+                            const next = prev.filter(
                               name => name !== focusedItem.name,
                             );
+                            syncFavoritesToStorage(next);
+                            return next;
                           } else {
-                            return prev.concat(focusedItem.name);
+                            const next = prev.concat(focusedItem.name);
+                            syncFavoritesToStorage(next);
+                            return next;
                           }
                         });
                       }}>

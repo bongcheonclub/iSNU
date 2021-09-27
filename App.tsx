@@ -29,12 +29,27 @@ import SplashScreen from 'react-native-splash-screen';
 import axios from 'axios';
 import {chain, map} from 'lodash';
 import {parse} from 'node-html-parser';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+export const CAFE_FAVORITE_STORAGE_KEY = 'favoriteCafeList';
+export const MART_FAVORITE_STORAGE_KEY = 'favoriteMartList';
 
 async function initializeData() {
-  const [res, martRes] = await Promise.all([
+  const [res, martRes, favoriteCafeList, favoriteMartList] = await Promise.all([
     axios.get('https://snuco.snu.ac.kr/ko/node/21'),
     axios.get('https://snuco.snu.ac.kr/ko/node/19'),
+    AsyncStorage.getItem(CAFE_FAVORITE_STORAGE_KEY),
+    AsyncStorage.getItem(MART_FAVORITE_STORAGE_KEY),
   ]);
+
+  const initialFavoriteCafes = favoriteCafeList
+    ? JSON.parse(favoriteCafeList)
+    : [];
+
+  const initialFavoriteMarts = favoriteMartList
+    ? JSON.parse(favoriteMartList)
+    : [];
+
   const html = res.data;
   const root = parse(html);
   const cafes = chain(root.querySelector('tbody').childNodes)
@@ -97,7 +112,7 @@ async function initializeData() {
     })
     .value();
 
-  return {cafes, marts};
+  return {cafes, marts, initialFavoriteCafes, initialFavoriteMarts};
 }
 
 const Tab = createBottomTabNavigator();
@@ -106,6 +121,8 @@ export default function App() {
   const [data, setData] = useState<{
     marts: MartType[];
     cafes: CafeType[];
+    initialFavoriteCafes: string[];
+    initialFavoriteMarts: string[];
   } | null>(null);
   useEffect(() => {
     initializeData().then(initializedData => {
@@ -138,7 +155,11 @@ export default function App() {
                 tabBarIcon: () => <CafeIcon />,
               }}>
               {props => (
-                <Cafe {...props} cafes={data.cafes} initialFavoriteNames={[]} />
+                <Cafe
+                  {...props}
+                  cafes={data.cafes}
+                  initialFavoriteNames={data.initialFavoriteCafes}
+                />
               )}
             </Tab.Screen>
             <Tab.Screen
@@ -147,7 +168,11 @@ export default function App() {
                 tabBarIcon: () => <MartIcon />,
               }}>
               {props => (
-                <Mart {...props} marts={data.marts} initialFavoriteNames={[]} />
+                <Mart
+                  {...props}
+                  marts={data.marts}
+                  initialFavoriteNames={data.initialFavoriteMarts}
+                />
               )}
             </Tab.Screen>
             <Tab.Screen
