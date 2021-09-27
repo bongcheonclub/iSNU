@@ -82,7 +82,11 @@ const Grid = <T extends AvailableItem>(props: Props<T>) => {
                 )
                 .map(itemsInARow => {
                   return (
-                    <Flex height={90} marginY={2} flexDirection="row">
+                    <Flex
+                      key={itemsInARow[0]?.name}
+                      height={90}
+                      marginY={2}
+                      flexDirection="row">
                       {itemsInARow.map(item => {
                         if (!item) {
                           return <Box marginX={2} flex={1} height="100%" />;
@@ -91,6 +95,7 @@ const Grid = <T extends AvailableItem>(props: Props<T>) => {
 
                         return (
                           <Box
+                            key={name}
                             marginX={2}
                             borderRadius={8}
                             flex={1}

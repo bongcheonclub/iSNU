@@ -85,6 +85,7 @@ const List = <T extends AvailableItem>(props: Props<T>) => {
                   const {name, isOperating, favorateRate, interval} = item;
                   return (
                     <Box
+                      key={name}
                       marginY={2}
                       borderRadius={8}
                       flex={1}
