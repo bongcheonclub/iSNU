@@ -1,25 +1,13 @@
 import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
-import axios from 'axios';
-import {chain, map} from 'lodash';
-import {parse} from 'node-html-parser';
-import {
-  Box,
-  Center,
-  HStack,
-  ScrollView,
-  Text,
-  VStack,
-  Button,
-  Modal,
-} from 'native-base';
 import React, {useEffect, useState} from 'react';
-import {StyleSheet} from 'react-native';
-import {RootTabList} from '../App';
 import {compareAsc, getDay, parse as parseTime} from 'date-fns';
-import {compareDesc} from 'date-fns/esm';
 import Grid from '../components/Grid';
+import {ParamListBase} from '@react-navigation/native';
 
-type Props = BottomTabScreenProps<RootTabList, 'Mart'>;
+type Props = BottomTabScreenProps<ParamListBase, '편의점'> & {
+  marts: Mart[];
+  initialFavoriteNames: string[];
+};
 
 export type Mart = {
   name: string;
@@ -76,39 +64,14 @@ function checkOperating(mart: Mart): boolean {
   return true;
 }
 
-export default function Mart({navigation}: Props) {
-  const [marts, setMarts] = useState<Mart[] | null>(null);
-
-  useEffect(() => {
-    axios.get('https://snuco.snu.ac.kr/ko/node/19').then(res => {
-      const html = res.data;
-      const root = parse(html);
-      const data: Mart[] = chain(root.querySelector('tbody').childNodes)
-        .map(trNode => {
-          const trTexts = chain(trNode.childNodes)
-            .map(tdNode =>
-              tdNode.innerText
-                .split(/\s|\t|\n/)
-                .filter(item => item.length > 0)
-                .join(' '),
-            )
-            .filter(rows => rows.length > 0)
-            .value();
-          const [name, location, items, weekday, saturday, holiday, contact] =
-            trTexts;
-          return {
-            name,
-            location,
-            items,
-            weekday,
-            saturday,
-            holiday,
-            contact,
-          };
-        })
-        .value();
-      setMarts(data);
-    });
-  }, []);
-  return marts && <Grid items={marts} checkOperating={checkOperating} />;
+export default function Mart({navigation, marts, initialFavoriteNames}: Props) {
+  return (
+    marts && (
+      <Grid
+        items={marts}
+        checkOperating={checkOperating}
+        initialFavoriteNames={initialFavoriteNames}
+      />
+    )
+  );
 }

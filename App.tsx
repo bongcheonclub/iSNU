@@ -11,9 +11,10 @@
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {NavigationContainer} from '@react-navigation/native';
 import {NativeBaseProvider} from 'native-base';
-import React from 'react';
-import {StyleSheet} from 'react-native';
+import React, {useEffect, useState} from 'react';
 import Cafe from './screens/Cafe';
+import type {Cafe as CafeType} from './screens/Cafe';
+import type {Mart as MartType} from './screens/Mart';
 import Etcs from './screens/Etcs';
 import Mart from './screens/Mart';
 import Meal from './screens/Meal';
@@ -24,68 +25,146 @@ import MartIcon from './icons/mart.svg';
 import MealIcon from './icons/meal.svg';
 import ShuttleIcon from './icons/shuttle.svg';
 import {colors} from './ui/colors';
+import SplashScreen from 'react-native-splash-screen';
+import axios from 'axios';
+import {chain, map} from 'lodash';
+import {parse} from 'node-html-parser';
 
-export type RootTabList = {
-  Meal: undefined;
-  Mart: undefined;
-  Cafe: undefined;
-  Shuttle: undefined;
-  Etcs: undefined;
-};
+async function initializeData() {
+  const res = await axios.get('https://snuco.snu.ac.kr/ko/node/21');
+  const html = res.data;
+  const root = parse(html);
+  const cafes = chain(root.querySelector('tbody').childNodes)
+    .map(trNode => {
+      const trTexts = chain(trNode.childNodes)
+        .map(tdNode =>
+          tdNode.innerText
+            .split(/\s|\t|\n/)
+            .filter(item => item.length > 0)
+            .join(' '),
+        )
+        .filter(rows => rows.length > 0)
+        .value();
+      const [
+        nameWithContact,
+        location,
+        size,
+        items,
+        weekday,
+        saturday,
+        holiday,
+      ] = trTexts;
+      const [name, contact] = nameWithContact.split(/\(|\)/);
+      return {
+        name,
+        contact,
+        location,
+        size,
+        items,
+        weekday,
+        saturday,
+        holiday,
+      };
+    })
+    .value();
+  const martRes = await axios.get('https://snuco.snu.ac.kr/ko/node/19');
+  const martHtml = martRes.data;
+  const martRoot = parse(martHtml);
+  const marts = chain(martRoot.querySelector('tbody').childNodes)
+    .map(trNode => {
+      const trTexts = chain(trNode.childNodes)
+        .map(tdNode =>
+          tdNode.innerText
+            .split(/\s|\t|\n/)
+            .filter(item => item.length > 0)
+            .join(' '),
+        )
+        .filter(rows => rows.length > 0)
+        .value();
+      const [name, location, items, weekday, saturday, holiday, contact] =
+        trTexts;
+      return {
+        name,
+        location,
+        items,
+        weekday,
+        saturday,
+        holiday,
+        contact,
+      };
+    })
+    .value();
+
+  return {cafes, marts};
+}
 
 const Tab = createBottomTabNavigator();
 
 export default function App() {
+  const [data, setData] = useState<{
+    marts: MartType[];
+    cafes: CafeType[];
+  } | null>(null);
+  useEffect(() => {
+    initializeData().then(initializedData => {
+      setData(initializedData);
+      SplashScreen.hide();
+    });
+  }, []);
   return (
     <NativeBaseProvider>
-      <NavigationContainer>
-        <Tab.Navigator
-          initialRouteName={'Mart'}
-          screenOptions={{
-            headerStatusBarHeight: 100,
-            headerTitleStyle: {color: colors.blue, fontSize: 40},
-            headerTitleAlign: 'left',
-            headerStyle: {borderBottomWidth: 0},
-          }}>
-          <Tab.Screen
-            name="식당"
-            component={Meal}
-            options={{
-              tabBarIcon: () => <MealIcon />,
-            }}
-          />
-          <Tab.Screen
-            name="카페"
-            component={Cafe}
-            options={{
-              tabBarIcon: () => <CafeIcon />,
-            }}
-          />
-          <Tab.Screen
-            name="편의점"
-            component={Mart}
-            options={{
-              tabBarIcon: () => <MartIcon />,
-            }}
-          />
-          <Tab.Screen
-            name="셔틀"
-            component={Shuttle}
-            options={{
-              tabBarIcon: () => <ShuttleIcon />,
-            }}
-          />
-          <Tab.Screen
-            name="기타"
-            component={Etcs}
-            options={{
-              tabBarIcon: () => <EtcsIcon />,
-            }}
-          />
-        </Tab.Navigator>
-      </NavigationContainer>
+      {data ? (
+        <NavigationContainer>
+          <Tab.Navigator
+            initialRouteName={'Mart'}
+            screenOptions={{
+              headerStatusBarHeight: 100,
+              headerTitleStyle: {color: colors.blue, fontSize: 40},
+              headerTitleAlign: 'left',
+              headerStyle: {borderBottomWidth: 0},
+            }}>
+            <Tab.Screen
+              name="식당"
+              component={Meal}
+              options={{
+                tabBarIcon: () => <MealIcon />,
+              }}
+            />
+            <Tab.Screen
+              name="카페"
+              options={{
+                tabBarIcon: () => <CafeIcon />,
+              }}>
+              {props => (
+                <Cafe {...props} cafes={data.cafes} initialFavoriteNames={[]} />
+              )}
+            </Tab.Screen>
+            <Tab.Screen
+              name="편의점"
+              options={{
+                tabBarIcon: () => <MartIcon />,
+              }}>
+              {props => (
+                <Mart {...props} marts={data.marts} initialFavoriteNames={[]} />
+              )}
+            </Tab.Screen>
+            <Tab.Screen
+              name="셔틀"
+              component={Shuttle}
+              options={{
+                tabBarIcon: () => <ShuttleIcon />,
+              }}
+            />
+            <Tab.Screen
+              name="기타"
+              component={Etcs}
+              options={{
+                tabBarIcon: () => <EtcsIcon />,
+              }}
+            />
+          </Tab.Navigator>
+        </NavigationContainer>
+      ) : null}
     </NativeBaseProvider>
   );
 }
-
-const style = StyleSheet.create({});

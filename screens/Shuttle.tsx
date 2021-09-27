@@ -14,11 +14,11 @@ import {
 } from 'native-base';
 import React, {useEffect, useState} from 'react';
 import {StyleSheet} from 'react-native';
-import {RootTabList} from '../App';
 import {compareAsc, getDay, parse as parseTime, subDays} from 'date-fns';
 import List from '../components/List';
+import {ParamListBase} from '@react-navigation/native';
 
-type Props = BottomTabScreenProps<RootTabList, 'Shuttle'>;
+type Props = BottomTabScreenProps<ParamListBase, '셔틀'>;
 
 export type Shuttle = {
   name: string;
