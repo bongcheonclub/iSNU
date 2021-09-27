@@ -90,30 +90,7 @@ function checkOperating(mart: Cafe): boolean {
 }
 
 export default function Cafe({navigation}: Props) {
-  const [focusedName, setFocusedName] = useState<string | null>(null);
   const [cafes, setCafes] = useState<Cafe[] | null>(null);
-  const [favoriteNames, setFavoriteNames] = useState<string[]>([]);
-
-  const sortedCafes: CafeWithFlag[] = chain(cafes)
-    .map(cafe => {
-      const isOperating = checkOperating(cafe);
-      const favorateRate =
-        favoriteNames.findIndex(name => name === cafe.name) + 1;
-      return {...cafe, isOperating, favorateRate};
-    })
-    .sortBy(({isOperating, favorateRate}) => {
-      if (favorateRate > 0) {
-        return favorateRate;
-      } else if (isOperating) {
-        return 100;
-      } else {
-        return 200;
-      }
-    })
-    .value();
-
-  const focusedCafe =
-    focusedName !== null && sortedCafes?.find(({name}) => name === focusedName);
 
   useEffect(() => {
     axios.get('https://snuco.snu.ac.kr/ko/node/21').then(res => {

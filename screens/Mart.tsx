@@ -77,10 +77,7 @@ function checkOperating(mart: Mart): boolean {
 }
 
 export default function Mart({navigation}: Props) {
-  const [focusedIndex, setFocusedIndex] = useState<number | null>(null);
   const [marts, setMarts] = useState<Mart[] | null>(null);
-
-  const focusedMart = focusedIndex !== null && marts?.[focusedIndex];
 
   useEffect(() => {
     axios.get('https://snuco.snu.ac.kr/ko/node/19').then(res => {
