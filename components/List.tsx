@@ -118,7 +118,7 @@ const List = <T extends AvailableItem>(props: Props<T>) => {
                                   ? colors.bage[200]
                                   : colors.grey[400]
                               }>
-                              {`배차간격: ${interval}`}
+                              {interval ? `배차간격: ${interval}` : '미운행중'}
                             </Text>
                           </Row>
                         </Center>
