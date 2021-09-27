@@ -427,6 +427,15 @@ export default function Meal({navigation}: Props) {
         });
     }
 
+    if (cafeteriaName.includes('소담마루')) {
+      console.log(string);
+      return (
+        <Text textAlign="center" width="70%" fontSize="lg">
+          {string}
+        </Text>
+      );
+    }
+
     return string
       .split('원 ')
       .map(text => {
@@ -580,145 +589,150 @@ export default function Meal({navigation}: Props) {
             })}
           </VStack>
         </Center>
-        <Modal // modal 구현
-          isOpen={selectedMeal !== null}
-          onClose={() => setSelectedMeal(null)}>
-          <Modal.Content padding={0} width="90%">
-            <Modal.CloseButton />
-            <Modal.Body>
-              {selectedMeal !== null ? (
-                <Box margin={6} marginBottom={1}>
-                  <HStack left={-15} top={-15}>
-                    <Text
-                      fontSize="2xl"
-                      marginBottom={1}
-                      color={colors.blue}
-                      fontWeight={700}>
-                      {selectedMeal}
-                    </Text>
-                    <Button
-                      bgColor="transparent"
-                      left={-4}
-                      top={-3}
-                      onPress={() => editFavoriteList(String(selectedMeal))}>
-                      {favoriteList.includes(selectedMeal) ? (
-                        <FilledStar />
-                      ) : (
-                        <UnfilledStar />
-                      )}
-                    </Button>
-                  </HStack>
-                  <Text color={colors.grey[300]} left={-15} top={-20}>
-                    {cafeteria[selectedMeal].location}
-                  </Text>
-                  <Text color={colors.black} textAlign="center" marginTop={3}>
-                    {month}월 {date}일 ({koreanDay})
-                  </Text>
-                </Box>
-              ) : (
-                <Text />
-              )}
-              {selectedMeal !== null && menu[selectedMeal] !== undefined ? (
-                <ScrollView
-                  margin={5}
-                  marginLeft={1}
-                  marginRight={1}
-                  maxHeight="400px"
-                  bounces={false}>
-                  {menu[selectedMeal].breakfast.length > 0 ? (
-                    <>
-                      <HStack>
-                        <VStack width="25%" justifyContent="space-between">
-                          <Text
-                            textAlign="center"
-                            fontSize="lg"
-                            fontWeight={600}>
-                            아침
-                          </Text>
-                          <Text
-                            textAlign="center"
-                            fontSize={10}
-                            color={colors.grey[300]}>
-                            00:00 ~ 00:00
-                          </Text>
-                        </VStack>
-                        <VStack width="75%">
-                          {showMenu(selectedMeal, 'breakfast')}
-                        </VStack>
-                      </HStack>
-                      <Divider
-                        my={2}
-                        bg="black"
-                        width="100%"
-                        marginTop={5}
-                        marginBottom={5}
-                      />
-                    </>
-                  ) : (
-                    <Text />
-                  )}
-
-                  {menu[selectedMeal].lunch.length > 0 ? (
-                    <HStack>
-                      <VStack width="25%" justifyContent="center">
-                        <Text textAlign="center" fontSize="xl" fontWeight={600}>
-                          점심
-                        </Text>
-                        <Text
-                          textAlign="center"
-                          fontSize={11}
-                          color={colors.grey[300]}>
-                          00:00 ~ 00:00
-                        </Text>
-                      </VStack>
-                      <VStack width="75%">
-                        {showMenu(selectedMeal, 'lunch')}
-                      </VStack>
+        {selectedMeal !== null ? (
+          <Modal // modal 구현
+            isOpen={selectedMeal !== null}
+            onClose={() => setSelectedMeal(null)}>
+            <Modal.Content padding={0} width="90%">
+              <Modal.CloseButton />
+              <Modal.Body>
+                {selectedMeal !== null ? (
+                  <Box margin={6} marginBottom={1}>
+                    <HStack left={-15} top={-15}>
+                      <Text
+                        fontSize="2xl"
+                        marginBottom={1}
+                        color={colors.blue}
+                        fontWeight={700}>
+                        {selectedMeal}
+                      </Text>
+                      <Button
+                        bgColor="transparent"
+                        left={-4}
+                        top={-3}
+                        onPress={() => editFavoriteList(String(selectedMeal))}>
+                        {favoriteList.includes(selectedMeal) ? (
+                          <FilledStar />
+                        ) : (
+                          <UnfilledStar />
+                        )}
+                      </Button>
                     </HStack>
-                  ) : (
-                    <Text />
-                  )}
-                  {menu[selectedMeal].dinner.length > 0 ? (
-                    <>
-                      <Divider
-                        my={2}
-                        bg="black"
-                        width="100%"
-                        marginTop={5}
-                        marginBottom={5}
-                      />
+                    <Text color={colors.grey[300]} left={-15} top={-20}>
+                      {cafeteria[selectedMeal].location}
+                    </Text>
+                    <Text color={colors.black} textAlign="center" marginTop={3}>
+                      {month}월 {date}일 ({koreanDay})
+                    </Text>
+                  </Box>
+                ) : (
+                  <Text />
+                )}
+                {selectedMeal !== null && menu[selectedMeal] !== undefined ? (
+                  <ScrollView
+                    margin={5}
+                    marginLeft={1}
+                    marginRight={1}
+                    maxHeight="400px"
+                    bounces={false}>
+                    {menu[selectedMeal].breakfast.length > 0 ? (
+                      <>
+                        <HStack>
+                          <VStack width="25%" justifyContent="space-between">
+                            <Text
+                              textAlign="center"
+                              fontSize="lg"
+                              fontWeight={600}>
+                              아침
+                            </Text>
+                            <Text
+                              textAlign="center"
+                              fontSize={10}
+                              color={colors.grey[300]}>
+                              00:00 ~ 00:00
+                            </Text>
+                          </VStack>
+                          <VStack width="75%">
+                            {showMenu(selectedMeal, 'breakfast')}
+                          </VStack>
+                        </HStack>
+                        <Divider
+                          my={2}
+                          bg="black"
+                          width="100%"
+                          marginTop={5}
+                          marginBottom={5}
+                        />
+                      </>
+                    ) : (
+                      <Text />
+                    )}
+
+                    {menu[selectedMeal].lunch.length > 0 ? (
                       <HStack>
-                        <VStack width="25%">
+                        <VStack width="25%" justifyContent="center">
                           <Text
                             textAlign="center"
-                            fontSize="lg"
+                            fontSize="xl"
                             fontWeight={600}>
-                            저녁
+                            점심
                           </Text>
                           <Text
                             textAlign="center"
-                            fontSize={10}
+                            fontSize={11}
                             color={colors.grey[300]}>
                             00:00 ~ 00:00
                           </Text>
                         </VStack>
                         <VStack width="75%">
-                          {showMenu(selectedMeal, 'dinner')}
+                          {showMenu(selectedMeal, 'lunch')}
                         </VStack>
                       </HStack>
-                    </>
-                  ) : (
-                    <Text />
-                  )}
-                </ScrollView>
-              ) : (
-                <Text fontSize="2xl" textAlign="center" margin={10}>
-                  휴무
-                </Text>
-              )}
-            </Modal.Body>
-          </Modal.Content>
-        </Modal>
+                    ) : (
+                      <Text />
+                    )}
+                    {menu[selectedMeal].dinner.length > 0 ? (
+                      <>
+                        <Divider
+                          my={2}
+                          bg="black"
+                          width="100%"
+                          marginTop={5}
+                          marginBottom={5}
+                        />
+                        <HStack>
+                          <VStack width="25%">
+                            <Text
+                              textAlign="center"
+                              fontSize="lg"
+                              fontWeight={600}>
+                              저녁
+                            </Text>
+                            <Text
+                              textAlign="center"
+                              fontSize={10}
+                              color={colors.grey[300]}>
+                              00:00 ~ 00:00
+                            </Text>
+                          </VStack>
+                          <VStack width="75%">
+                            {showMenu(selectedMeal, 'dinner')}
+                          </VStack>
+                        </HStack>
+                      </>
+                    ) : (
+                      <Text />
+                    )}
+                  </ScrollView>
+                ) : (
+                  <Text />
+                )}
+              </Modal.Body>
+            </Modal.Content>
+          </Modal>
+        ) : (
+          <Box />
+        )}
       </ScrollView>
     </VStack>
   );
