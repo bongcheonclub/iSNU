@@ -184,7 +184,6 @@ function checkOperating(suttle: Shuttle): {
     if (compareAsc(startAt, now) < 0 && compareAsc(now, endedAt) < 0) {
       return true;
     } else {
-      console.log(startAt, now, endedAt);
       return false;
     }
   });
