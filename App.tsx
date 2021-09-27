@@ -31,15 +31,22 @@ import {chain, map} from 'lodash';
 import {parse} from 'node-html-parser';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export const CAFE_FAVORITE_STORAGE_KEY = 'favoriteCafeList';
-export const MART_FAVORITE_STORAGE_KEY = 'favoriteMartList';
+export const FAVORITE_STORAGE_KEY = {
+  cafe: 'favoriteCafeList',
+  mart: 'favoriteMartList',
+  shuttle: 'favoriteShuttleList',
+};
 
 async function initializeData() {
-  const [res, martRes, favoriteCafeList, favoriteMartList] = await Promise.all([
-    axios.get('https://snuco.snu.ac.kr/ko/node/21'),
-    axios.get('https://snuco.snu.ac.kr/ko/node/19'),
-    AsyncStorage.getItem(CAFE_FAVORITE_STORAGE_KEY),
-    AsyncStorage.getItem(MART_FAVORITE_STORAGE_KEY),
+  const [
+    [res, martRes],
+    [favoriteCafeList, favoriteMartList, favoriteShuttleList],
+  ] = await Promise.all([
+    Promise.all([
+      axios.get('https://snuco.snu.ac.kr/ko/node/21'),
+      axios.get('https://snuco.snu.ac.kr/ko/node/19'),
+    ]),
+    Promise.all(map(FAVORITE_STORAGE_KEY, key => AsyncStorage.getItem(key))),
   ]);
 
   const initialFavoriteCafes = favoriteCafeList
@@ -50,6 +57,9 @@ async function initializeData() {
     ? JSON.parse(favoriteMartList)
     : [];
 
+  const initialFavoriteShuttles = favoriteShuttleList
+    ? JSON.parse(favoriteShuttleList)
+    : [];
   const html = res.data;
   const root = parse(html);
   const cafes = chain(root.querySelector('tbody').childNodes)
@@ -112,7 +122,13 @@ async function initializeData() {
     })
     .value();
 
-  return {cafes, marts, initialFavoriteCafes, initialFavoriteMarts};
+  return {
+    cafes,
+    marts,
+    initialFavoriteCafes,
+    initialFavoriteMarts,
+    initialFavoriteShuttles,
+  };
 }
 
 const Tab = createBottomTabNavigator();
@@ -123,6 +139,7 @@ export default function App() {
     cafes: CafeType[];
     initialFavoriteCafes: string[];
     initialFavoriteMarts: string[];
+    initialFavoriteShuttles: string[];
   } | null>(null);
   useEffect(() => {
     initializeData().then(initializedData => {
@@ -177,11 +194,16 @@ export default function App() {
             </Tab.Screen>
             <Tab.Screen
               name="셔틀"
-              component={Shuttle}
               options={{
                 tabBarIcon: () => <ShuttleIcon />,
-              }}
-            />
+              }}>
+              {props => (
+                <Shuttle
+                  {...props}
+                  initialFavoriteNames={data.initialFavoriteShuttles}
+                />
+              )}
+            </Tab.Screen>
             <Tab.Screen
               name="기타"
               component={Etcs}

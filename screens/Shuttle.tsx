@@ -1,24 +1,14 @@
 import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
-import axios from 'axios';
 import {chain, find, map} from 'lodash';
-import {parse} from 'node-html-parser';
-import {
-  Box,
-  Center,
-  HStack,
-  ScrollView,
-  Text,
-  VStack,
-  Button,
-  Modal,
-} from 'native-base';
 import React, {useEffect, useState} from 'react';
-import {StyleSheet} from 'react-native';
 import {compareAsc, getDay, parse as parseTime, subDays} from 'date-fns';
 import List from '../components/List';
 import {ParamListBase} from '@react-navigation/native';
+import {FAVORITE_STORAGE_KEY} from '../App';
 
-type Props = BottomTabScreenProps<ParamListBase, '셔틀'>;
+type Props = BottomTabScreenProps<ParamListBase, '셔틀'> & {
+  initialFavoriteNames: string[];
+};
 
 export type Shuttle = {
   name: string;
@@ -195,6 +185,13 @@ function checkOperating(suttle: Shuttle): {
   }
 }
 
-export default function Shuttle({navigation}: Props) {
-  return <List items={SHUTTLES} checkOperating={checkOperating} />;
+export default function Shuttle({navigation, initialFavoriteNames}: Props) {
+  return (
+    <List
+      items={SHUTTLES}
+      checkOperating={checkOperating}
+      initialFavoriteNames={initialFavoriteNames}
+      favoriteStorageKey={FAVORITE_STORAGE_KEY.shuttle}
+    />
+  );
 }
