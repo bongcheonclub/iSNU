@@ -18,7 +18,6 @@ import FilledStar from '../icons/filled-star.svg';
 import UnfilledStar from '../icons/unfilled-star.svg';
 import React, {useEffect, useState} from 'react';
 import {StyleSheet} from 'react-native';
-import {RootTabList} from '../App';
 import {compareAsc, getDay, parse as parseTime} from 'date-fns';
 import {compareDesc} from 'date-fns/esm';
 import {colors} from '../ui/colors';
@@ -30,6 +29,7 @@ type AvailableItem = Cafe | Mart;
 type Props<T> = {
   items: T[];
   checkOperating: (item: T) => boolean;
+  initialFavoriteNames: string[];
 };
 
 type ItemWithFlag<T> = T & {
@@ -38,7 +38,7 @@ type ItemWithFlag<T> = T & {
 };
 
 const Grid = <T extends AvailableItem>(props: Props<T>) => {
-  const {items, checkOperating} = props;
+  const {items, checkOperating, initialFavoriteNames} = props;
   const [focusedName, setFocusedItem] = useState<string | null>(null);
   const [favoriteNames, setFavoriteNames] = useState<string[]>([]);
 
@@ -87,9 +87,16 @@ const Grid = <T extends AvailableItem>(props: Props<T>) => {
                       height={90}
                       marginY={2}
                       flexDirection="row">
-                      {itemsInARow.map(item => {
+                      {itemsInARow.map((item, index) => {
                         if (!item) {
-                          return <Box marginX={2} flex={1} height="100%" />;
+                          return (
+                            <Box
+                              key={'hi' + index}
+                              marginX={2}
+                              flex={1}
+                              height="100%"
+                            />
+                          );
                         }
                         const {name, isOperating, favorateRate} = item;
 

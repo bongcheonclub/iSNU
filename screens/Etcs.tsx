@@ -10,13 +10,12 @@ import {
   Divider,
 } from 'native-base';
 import {WebView} from 'react-native-webview';
-import {color} from 'native-base/lib/typescript/theme/styled-system';
 import React, {useState} from 'react';
 import {Keyboard, StyleSheet, Dimensions} from 'react-native';
-import {RootTabList} from '../App';
 import {colors} from '../ui/colors';
+import {ParamListBase} from '@react-navigation/native';
 
-type Props = BottomTabScreenProps<RootTabList, 'Etcs'>;
+type Props = BottomTabScreenProps<ParamListBase, '기타'>;
 
 export default function Etcs({navigation}: Props) {
   const [focusedEtc, setFocusedEtc] = useState<string | null>(null);

@@ -40,12 +40,13 @@ import {
 import FilledStar from '../icons/filled-star.svg';
 import UnfilledStar from '../icons/unfilled-star.svg';
 import et from 'date-fns/esm/locale/et/index.js';
+import {ParamListBase} from '@react-navigation/native';
 
 function replaceAll(str: string, searchStr: string, replaceStr: string) {
   return str.split(searchStr).join(replaceStr);
 }
 
-type Props = BottomTabScreenProps<RootTabList, 'Meal'>;
+type Props = BottomTabScreenProps<ParamListBase, '식당'>;
 
 function getTodaysDate() {
   const now = new Date();
