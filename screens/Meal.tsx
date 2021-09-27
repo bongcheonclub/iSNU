@@ -342,9 +342,9 @@ export default function Meal({navigation}: Props) {
           floors: '1층',
           scale: 'unknown',
           customer: '학생',
-          weekday: 'not yet',
-          saturday: 'not yet',
-          holiday: 'not yet',
+          weekday: '08:00-09:30 11:30-13:30 17:30-19:30',
+          saturday: '08:00-09:30 11:30-13:30 17:30-19:30',
+          holiday: '08:00-09:30 11:30-13:30 17:30-19:30',
         };
         const cafeteriaIncludeOurhome = {
           ...cafeteria,
@@ -529,7 +529,6 @@ export default function Meal({navigation}: Props) {
     }
 
     if (cafeteriaName.includes('대학원')) {
-      console.log(string);
       return string
         .match(/[A-Z]/gi)
         .map((priceSymbol, priceIndex) => {
@@ -622,39 +621,191 @@ export default function Meal({navigation}: Props) {
       });
   }
 
-  function showFavoriteMenu(cafeteriaName, whichMenu) {
-    const string = menu[cafeteriaName][whichMenu];
-    return string
-      .split('원 ')
-      .map(text => {
-        return text.split(' ');
-      })
-      .map(menuAndPrice => {
-        if (menuAndPrice[0].includes('※')) {
-          return;
-        }
-        const [menuName, price] = [
-          menuAndPrice[0].replace('&amp;', '&\n'),
-          menuAndPrice[1] + '원',
-        ];
-        return (
-          <HStack
-            alignItems="center"
-            // justifyContent="center"
-            paddingTop="2px"
-            paddingBottom="2px"
-            key={menuName}>
-            <Text textAlign="center" width="60%" fontSize="md">
-              {menuName}
-            </Text>
-            <Text textAlign="right" width="40%" fontSize="md" paddingRight={4}>
-              {price}
-            </Text>
-          </HStack>
-        );
-      });
+  function showFavoriteMenu(cafeteriaName) {
+    if (checkStatus === null) {
+      return <Text>Loading</Text>;
+    }
+    const [status, nextTime] = [
+      checkStatus[cafeteriaName].status,
+      checkStatus[cafeteriaName].nextTime,
+    ];
+    if (status === 'breakfast' || status === 'lunch' || status === 'dinner') {
+      const string = menu[cafeteriaName][status];
+      return string
+        .split('원 ')
+        .map(text => {
+          return text.split(' ');
+        })
+        .map(menuAndPrice => {
+          if (menuAndPrice[0].includes('※')) {
+            return;
+          }
+          const [menuName, price] = [
+            menuAndPrice[0].replace('&amp;', '&\n'),
+            menuAndPrice[1] + '원',
+          ];
+          return (
+            <HStack
+              alignItems="center"
+              paddingTop="2px"
+              paddingBottom="2px"
+              key={menuName}>
+              <Text
+                textAlign="center"
+                width="60%"
+                fontSize="md"
+                fontWeight={600}
+                color="#59584E">
+                {menuName}
+              </Text>
+              <Text
+                textAlign="right"
+                width="40%"
+                fontSize="md"
+                paddingRight={4}
+                color="#8B7A55">
+                {price}
+              </Text>
+            </HStack>
+          );
+        });
+    } else {
+      return (
+        <Text color="#888888" fontSize="lg">
+          {nextTime} 운영 예정
+        </Text>
+      );
+    }
   }
 
+  const [checkStatus, setCheckStatus] = useState(null);
+  useEffect(() => {
+    if (
+      menu !== null &&
+      menu['대학원기숙사'] !== undefined &&
+      cafeteria !== null &&
+      cafeteria['대학원기숙사'] !== undefined
+    ) {
+      const temp = mealList
+        .map(cafeteriaName => {
+          return {
+            name: cafeteriaName,
+            status: checkOperating(cafeteriaName)[0],
+            nextTime: checkOperating(cafeteriaName)[1],
+          };
+        })
+        .map(item => item);
+      const data = keyBy(temp, 'name');
+      setCheckStatus(data);
+    }
+    function checkOperating(cafeteriaName) {
+      if (cafeteria[cafeteriaName] === undefined) {
+        return ['end', '추후'];
+      }
+      const now = new Date('Tue Sep 28 2021 12:34:15 GMT+0900');
+      const today = (() => {
+        switch (day) {
+          case 0: // sunday
+            return 'holiday';
+          case 6: // saturday
+            return 'saturday';
+          default:
+            return 'weekday';
+        }
+      })();
+      const rawData = cafeteria[cafeteriaName][today];
+      if (rawData === '휴관' || rawData === '휴점 중') {
+        return ['end', '추후'];
+      }
+      const additionalInfo = rawData
+        .split(' ')
+        .filter(item => item[0] === '(')[0];
+      const normalInfo = rawData
+        .split(' ')
+        .filter(
+          item => item[0] !== '(' && item[-1] !== ')' && item.includes('0'),
+        )
+        .join('-')
+        .split('-');
+      normalInfo.unshift('00:00');
+      if (normalInfo.length === 7) {
+        const results = [
+          'beforeBreakfast',
+          'breakfast',
+          'beforeLunch',
+          'lunch',
+          'beforeDinner',
+          'dinner',
+        ];
+        return results
+          .map((result, idx) => {
+            const [startAtString, endedAtString] = [
+              normalInfo[idx],
+              normalInfo[idx + 1],
+            ];
+            const startAt = parseTime(startAtString, 'HH:mm', now);
+            const endedAt = parseTime(endedAtString, 'HH:mm', now);
+            if (compareAsc(startAt, now) < 0 && compareAsc(now, endedAt) < 0) {
+              return [result, normalInfo[idx + 1]];
+            } else if (idx === 6) {
+              return ['end', normalInfo[0]];
+            }
+          })
+          .filter(item => item !== undefined)[0];
+      } else if (normalInfo.length === 5) {
+        const results = ['beforeLunch', 'lunch', 'beforeDinner', 'dinner'];
+        return results
+          .map((result, idx) => {
+            const [startAtString, endedAtString] = [
+              normalInfo[idx],
+              normalInfo[idx + 1],
+            ];
+            const startAt = parseTime(startAtString, 'HH:mm', now);
+            const endedAt = parseTime(endedAtString, 'HH:mm', now);
+            if (compareAsc(startAt, now) < 0 && compareAsc(now, endedAt) < 0) {
+              return [result, normalInfo[idx + 1]];
+            } else if (idx === 4) {
+              return ['end', normalInfo[0]];
+            }
+          })
+          .filter(item => item !== undefined)[0];
+      } else if (normalInfo.length === 3) {
+        const results = ['beforeLunch', 'lunch'];
+        return results
+          .map((result, idx) => {
+            const [startAtString, endedAtString] = [
+              normalInfo[idx],
+              normalInfo[idx + 1],
+            ];
+            const startAt = parseTime(startAtString, 'HH:mm', now);
+            const endedAt = parseTime(endedAtString, 'HH:mm', now);
+            if (compareAsc(startAt, now) < 0 && compareAsc(now, endedAt) < 0) {
+              return [result, normalInfo[idx + 1]];
+            } else if (idx === 2) {
+              return ['end', normalInfo[0]];
+            }
+          })
+          .filter(item => item !== undefined)[0];
+      } else {
+        return ['end', '추후'];
+      }
+    }
+  }, [menu, cafeteria, mealList, day]);
+
+  function isOperating(name) {
+    if (checkStatus === null) {
+      return false;
+    }
+    if (
+      checkStatus[name].status === 'breakfast' ||
+      checkStatus[name].status === 'lunch' ||
+      checkStatus[name].status === 'dinner'
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  }
   console.log('rendering');
 
   return (
@@ -663,10 +814,10 @@ export default function Meal({navigation}: Props) {
         <Center marginTop={5}>
           {favoriteList.map(name => (
             <Center
-              width={332}
-              height="120px"
-              bg="#E9E7CE"
-              rounded={15}
+              width="332px"
+              height={isOperating(name) ? '124px' : '80px'}
+              bg={isOperating(name) ? '#E9E7CE' : '#E2E2E2'}
+              rounded={10}
               position="relative"
               marginBottom={4}
               shadow={0}
@@ -693,31 +844,39 @@ export default function Meal({navigation}: Props) {
                     height="100%"
                     marginBottom={0}
                     padding={1}
-                    bg="#E9E7CE"
+                    bg="transparent"
                     rounded={15}>
                     <Text
                       color={colors.bage[200]}
                       fontWeight={800}
                       fontSize="xl"
-                      marginBottom={4}
                       textAlign="center">
                       {name}
                     </Text>
-                    {
-                      <Text color={colors.grey[400]} textAlign="center">
-                        몇시까지
+                    {isOperating(name) ? (
+                      <Text
+                        color={colors.grey[400]}
+                        textAlign="center"
+                        marginTop={4}>
+                        ~{checkStatus[name].nextTime}
                       </Text>
-                    }
+                    ) : (
+                      <Box height="0px" />
+                    )}
                   </Center>
                   {menu !== null &&
                   name !== null &&
                   menu[name] !== undefined ? (
                     <Center width="70%" padding={0}>
-                      {showFavoriteMenu(name, 'lunch')}
+                      {showFavoriteMenu(name)}
                     </Center>
                   ) : (
-                    <Text fontSize="2xl" alignSelf="center" margin="auto">
-                      휴무
+                    <Text
+                      color="#888888"
+                      fontSize="lg"
+                      alignSelf="center"
+                      margin="auto">
+                      추후 운영 예정
                     </Text>
                   )}
                 </HStack>
@@ -743,7 +902,7 @@ export default function Meal({navigation}: Props) {
                           bg={colors.grey[100]} // isOperating
                           borderColor={colors.grey[200]}
                           borderWidth={1}
-                          rounded={15}
+                          rounded={10}
                           padding={0}
                           key={name}>
                           <Text
