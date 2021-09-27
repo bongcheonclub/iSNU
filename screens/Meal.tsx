@@ -119,7 +119,7 @@ export default function Meal({navigation}: Props) {
   useEffect(() => {
     function fetchMenu() {
       // 식단 정보 가져오는 함수
-      axios.get(exampleDateURL).then(res => {
+      axios.get(todayMenuURL).then(res => {
         const html = res.data;
         const root = parse(html);
         const data: TodaysMenu = {};
@@ -395,7 +395,6 @@ export default function Meal({navigation}: Props) {
     }
 
     if (cafeteriaName.includes('예술계')) {
-      console.log(string);
       return string
         .split('▶')[0]
         .split('원 ')
@@ -427,8 +426,49 @@ export default function Meal({navigation}: Props) {
         });
     }
 
-    if (cafeteriaName.includes('소담마루')) {
+    if (cafeteriaName.includes('220동')) {
       console.log(string);
+      return string
+        .split('※')[0]
+        .split('원 ')
+        .map(item => {
+          return item.split(' ');
+        })
+        .map(menuAndPrice => {
+          if (
+            menuAndPrice.length !== 2 &&
+            !menuAndPrice[0].includes('플러스메뉴')
+          ) {
+            return;
+          }
+          const [menuName, price] = menuAndPrice[0].includes('플러스메뉴')
+            ? [
+                (menuAndPrice[0] + '\n' + menuAndPrice[1]).replace(
+                  '&amp;',
+                  '&\n',
+                ),
+                menuAndPrice[2] + '원',
+              ]
+            : [menuAndPrice[0].replace('&amp;', '&\n'), menuAndPrice[1] + '원'];
+
+          return (
+            <HStack
+              alignItems="center"
+              paddingTop="3px"
+              paddingBottom="3px"
+              key={menuName}>
+              <Text textAlign="center" width="70%" fontSize="lg" marginTop={2}>
+                {menuName}
+              </Text>
+              <Text textAlign="right" width="30%" fontSize="md">
+                {price}
+              </Text>
+            </HStack>
+          );
+        });
+    }
+
+    if (cafeteriaName.includes('소담마루')) {
       return (
         <Text textAlign="center" width="70%" fontSize="lg">
           {string}
