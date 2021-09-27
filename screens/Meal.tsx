@@ -360,14 +360,42 @@ export default function Meal({navigation}: Props) {
     );
   }
 
-  function showMenu(string) {
+  function showMenu(cafeteriaName, whichMenu) {
+    const string = menu[cafeteriaName][whichMenu];
+    if (cafeteriaName.includes('자하연')) {
+      return string
+        .split('※')[0]
+        .split('원 ')
+        .map(item => {
+          return item.split(' ');
+        })
+        .map(menuAndPrice => {
+          if (menuAndPrice.length !== 2) {
+            return;
+          }
+          const [menuName, price] = [
+            menuAndPrice[0].replace('&amp;', '&\n'),
+            menuAndPrice[1] + '원',
+          ];
+          return (
+            <HStack alignItems="center" paddingTop="3px" paddingBottom="3px">
+              <Text textAlign="center" width="70%" fontSize="lg">
+                {menuName}
+              </Text>
+              <Text textAlign="right" width="30%" fontSize="md">
+                {price}
+              </Text>
+            </HStack>
+          );
+        });
+    }
+
     return string
       .split('원 ')
       .map(text => {
         return text.split(' ');
       })
-      .map((menuAndPrice, idx) => {
-        console.log(idx, menuAndPrice);
+      .map(menuAndPrice => {
         if (menuAndPrice[0].includes('※')) {
           return;
         }
@@ -574,7 +602,7 @@ export default function Meal({navigation}: Props) {
                           </Text>
                         </VStack>
                         <VStack width="75%">
-                          {showMenu(menu[selectedMeal].breakfast)}
+                          {showMenu(selectedMeal, 'breakfast')}
                         </VStack>
                       </HStack>
                       <Divider
@@ -603,7 +631,7 @@ export default function Meal({navigation}: Props) {
                         </Text>
                       </VStack>
                       <VStack width="75%">
-                        {showMenu(menu[selectedMeal].lunch)}
+                        {showMenu(selectedMeal, 'lunch')}
                       </VStack>
                     </HStack>
                   ) : (
@@ -634,7 +662,7 @@ export default function Meal({navigation}: Props) {
                           </Text>
                         </VStack>
                         <VStack width="75%">
-                          {showMenu(menu[selectedMeal].dinner)}
+                          {showMenu(selectedMeal, 'dinner')}
                         </VStack>
                       </HStack>
                     </>
