@@ -12,7 +12,7 @@ import {
 import {WebView} from 'react-native-webview';
 import {color} from 'native-base/lib/typescript/theme/styled-system';
 import React, {useState} from 'react';
-import {Keyboard, StyleSheet} from 'react-native';
+import {Keyboard, StyleSheet, Dimensions} from 'react-native';
 import {RootTabList} from '../App';
 import {colors} from '../ui/colors';
 
@@ -20,6 +20,7 @@ type Props = BottomTabScreenProps<RootTabList, 'Etcs'>;
 
 export default function Etcs({navigation}: Props) {
   const [focusedEtc, setFocusedEtc] = useState<string | null>(null);
+  const webViewHeight = Dimensions.get('window').height;
 
   return (
     <Box>
@@ -93,7 +94,7 @@ export default function Etcs({navigation}: Props) {
               <WebView
                 height="100%"
                 width="100%"
-                source={{uri: 'http://google.com/'}}
+                source={{uri: 'https://lib.snu.ac.kr/hours'}}
               />
             </Modal.Content>
           </Modal>
