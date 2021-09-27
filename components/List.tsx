@@ -13,6 +13,7 @@ import {
   Modal,
   Flex,
   Divider,
+  Row,
 } from 'native-base';
 import FilledStar from '../icons/filled-star.svg';
 import UnfilledStar from '../icons/unfilled-star.svg';
@@ -101,26 +102,28 @@ const List = <T extends AvailableItem>(props: Props<T>) => {
                         width="100%"
                         bgColor="transparent"
                         onPress={() => setFocusedItem(item.name)}>
-                        <Flex flexDirection="row" height="100%" width="100%">
-                          <Text
-                            flex={1}
-                            color={
-                              favorateRate > 0
-                                ? colors.bage[200]
-                                : colors.grey[400]
-                            }>
-                            {name}
-                          </Text>
-                          <Text
-                            flex={1}
-                            color={
-                              favorateRate > 0
-                                ? colors.bage[200]
-                                : colors.grey[400]
-                            }>
-                            {`배차간격: ${interval}`}
-                          </Text>
-                        </Flex>
+                        <Center flexDirection="row">
+                          <Row height="100%" width="100%">
+                            <Text
+                              flex={1}
+                              color={
+                                favorateRate > 0
+                                  ? colors.bage[200]
+                                  : colors.grey[400]
+                              }>
+                              {name}
+                            </Text>
+                            <Text
+                              flex={1}
+                              color={
+                                favorateRate > 0
+                                  ? colors.bage[200]
+                                  : colors.grey[400]
+                              }>
+                              {`배차간격: ${interval}`}
+                            </Text>
+                          </Row>
+                        </Center>
                       </Button>
                       <Box
                         position="absolute"
