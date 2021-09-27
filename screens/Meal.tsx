@@ -147,7 +147,15 @@ export default function Meal({navigation}: Props) {
               blank_4,
               dinner,
             ] = trTexts;
-            const [name, contact] = nameAndContact.split(/\(|\)/);
+            const rawName = nameAndContact.split(/\(|\)/)[0];
+            const contact = nameAndContact.split(/\(|\)/)[1];
+            const name =
+              rawName.trim() === '3식당'
+                ? rawName.trim()
+                : rawName.trim() === '공대간이식당'
+                ? '공간'
+                : rawName.trim().replace('식당', '');
+
             data[name] = {breakfast, lunch, dinner, contact};
           })
           .value();
@@ -185,7 +193,16 @@ export default function Meal({navigation}: Props) {
               if (nameAndContact === undefined) {
                 return ['undefined', 'undefined'];
               } else {
-                return nameAndContact.split(/\(|\)/);
+                const rawName = nameAndContact.split(/\(|\)/)[0];
+
+                return [
+                  rawName.trim() === '3식당'
+                    ? rawName.trim()
+                    : rawName.trim() === '공대간이식당'
+                    ? '공간'
+                    : rawName.trim().replace('식당', ''),
+                  nameAndContact.split(/\(|\)/)[1],
+                ];
               }
             })();
             return {
@@ -196,7 +213,12 @@ export default function Meal({navigation}: Props) {
               scale,
               floors: floors || '2',
               location,
-              name: name.trim(),
+              name:
+                name.trim() === '3식당'
+                  ? name.trim()
+                  : name.trim() === '공대간이식당'
+                  ? '공간'
+                  : name.trim().replace('식당', ''),
               contact,
             };
           })
@@ -226,7 +248,7 @@ export default function Meal({navigation}: Props) {
           .map(item => {
             return item.name;
           })
-          .concat('아워홈식당');
+          .concat('대학원기숙사');
         setCafeteria(processedData);
         setMealList(refinedMealList);
 
@@ -251,13 +273,13 @@ export default function Meal({navigation}: Props) {
   // 식당 메뉴 정보 정제
   // to do
 
-  // 아워홈식당 메뉴 크롤링 로직
+  // 대학원기숙사 메뉴 크롤링 로직
   useEffect(() => {
     if (
       menu !== null &&
-      menu['아워홈식당'] === undefined &&
+      menu['대학원기숙사'] === undefined &&
       cafeteria !== null &&
-      cafeteria['아워홈식당'] === undefined
+      cafeteria['대학원기숙사'] === undefined
     ) {
       axios.get('https://snudorm.snu.ac.kr/food-schedule/').then(res => {
         const html = res.data;
@@ -307,12 +329,12 @@ export default function Meal({navigation}: Props) {
         const dinner = data[5][day] + data[6][day] + data[7][day];
         const contact = 'unknwon';
         const todaysMenu: TodaysMenu = {
-          아워홈식당: {breakfast, lunch, dinner, contact},
+          대학원기숙사: {breakfast, lunch, dinner, contact},
         };
         const menuIncludeOurhome = {...menu, ...todaysMenu};
         setMenu(menuIncludeOurhome);
         const ourhomeCafeteria = {
-          name: '아워홈식당',
+          name: '대학원기숙사',
           contact: 'unknown',
           location: '901동',
           floors: '1층',
@@ -324,7 +346,7 @@ export default function Meal({navigation}: Props) {
         };
         const cafeteriaIncludeOurhome = {
           ...cafeteria,
-          아워홈식당: ourhomeCafeteria,
+          대학원기숙사: ourhomeCafeteria,
         };
         setCafeteria(cafeteriaIncludeOurhome);
       });
@@ -504,7 +526,7 @@ export default function Meal({navigation}: Props) {
         });
     }
 
-    if (cafeteriaName.includes('아워홈')) {
+    if (cafeteriaName.includes('대학원')) {
       console.log(string);
       return string
         .match(/[A-Z]/gi)
@@ -544,7 +566,7 @@ export default function Meal({navigation}: Props) {
       );
     }
 
-    if (cafeteriaName.includes('공대간이') || cafeteriaName.includes('301')) {
+    if (cafeteriaName.includes('공간') || cafeteriaName.includes('301')) {
       return (
         <Text textAlign="center" width="100%" fontSize="md">
           {string
@@ -553,6 +575,17 @@ export default function Meal({navigation}: Props) {
             .replaceAll('&amp;', '&\n')
             .replaceAll('&lt;', '\n<')
             .replaceAll('&gt;', '>\n')}
+        </Text>
+      );
+    }
+    if (
+      string.includes('휴관') ||
+      string.includes('휴점') ||
+      string.includes('폐점')
+    ) {
+      return (
+        <Text textAlign="center" fontSize="lg">
+          휴무/휴점
         </Text>
       );
     }
@@ -666,7 +699,6 @@ export default function Meal({navigation}: Props) {
             </Center>
           ))}
         </Center>
-
         <Center marginTop={0} marginBottom={12}>
           <VStack>
             {chunk(notFavoriteList, 3).map(subNotFavoriteListInfoArray => {
