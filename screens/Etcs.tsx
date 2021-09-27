@@ -64,7 +64,12 @@ export default function Etcs({navigation}: Props) {
               <Modal.Content height="100%">
                 <Modal.CloseButton />
                 <Modal.Body>
-                  <WebView source={{uri: 'https://google.com/'}} />
+                  {console.log('TQ')}
+                  <WebView
+                    height="100%"
+                    width="100%"
+                    source={{uri: 'http://google.com/'}}
+                  />
                 </Modal.Body>
               </Modal.Content>
             </Modal>
