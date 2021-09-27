@@ -378,7 +378,44 @@ export default function Meal({navigation}: Props) {
             menuAndPrice[1] + '원',
           ];
           return (
-            <HStack alignItems="center" paddingTop="3px" paddingBottom="3px">
+            <HStack
+              alignItems="center"
+              paddingTop="3px"
+              paddingBottom="3px"
+              key={menuName}>
+              <Text textAlign="center" width="70%" fontSize="lg">
+                {menuName}
+              </Text>
+              <Text textAlign="right" width="30%" fontSize="md">
+                {price}
+              </Text>
+            </HStack>
+          );
+        });
+    }
+
+    if (cafeteriaName.includes('예술계')) {
+      console.log(string);
+      return string
+        .split('▶')[0]
+        .split('원 ')
+        .map(item => {
+          return item.split(' : ');
+        })
+        .map(menuAndPrice => {
+          if (menuAndPrice.length !== 2) {
+            return;
+          }
+          const [menuName, price] = [
+            menuAndPrice[0].replace('&amp;', '&\n'),
+            menuAndPrice[1] + '원',
+          ];
+          return (
+            <HStack
+              alignItems="center"
+              paddingTop="3px"
+              paddingBottom="3px"
+              key={menuName}>
               <Text textAlign="center" width="70%" fontSize="lg">
                 {menuName}
               </Text>
@@ -404,7 +441,11 @@ export default function Meal({navigation}: Props) {
           menuAndPrice[1] + '원',
         ];
         return (
-          <HStack alignItems="center" paddingTop="3px" paddingBottom="3px">
+          <HStack
+            alignItems="center"
+            paddingTop="3px"
+            paddingBottom="3px"
+            key={menuName}>
             <Text textAlign="center" width="70%" fontSize="lg">
               {menuName}
             </Text>
