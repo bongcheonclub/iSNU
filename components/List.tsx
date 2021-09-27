@@ -18,12 +18,9 @@ import {
 import FilledStar from '../icons/filled-star.svg';
 import UnfilledStar from '../icons/unfilled-star.svg';
 import React, {useEffect, useState} from 'react';
-import {StyleSheet} from 'react-native';
-import {RootTabList} from '../App';
-import {compareAsc, getDay, parse as parseTime} from 'date-fns';
-import {compareDesc} from 'date-fns/esm';
 import {colors} from '../ui/colors';
 import {Shuttle} from '../screens/Shuttle';
+import {ItemClick} from 'native-base/lib/typescript/components/composites/Typeahead/useTypeahead/types';
 
 type AvailableItem = Shuttle;
 
@@ -179,7 +176,7 @@ const List = <T extends AvailableItem>(props: Props<T>) => {
                     <Center flex={1}>대수</Center>
                   </Flex>
                   {focusedItem.operatings.map(item => (
-                    <Box>
+                    <Box key={item.time}>
                       <Divider bgColor={colors.black} width="100%" />
                       <Flex flexDirection="row">
                         <Center flex={1}>{item.time}</Center>
