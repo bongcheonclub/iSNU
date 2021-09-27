@@ -471,7 +471,6 @@ export default function Meal({navigation}: Props) {
     }
 
     if (cafeteriaName.includes('감골')) {
-      console.log(string);
       return string
         .split('※')[0]
         .split('원 ')
@@ -487,6 +486,38 @@ export default function Meal({navigation}: Props) {
               .replace('&amp;', '&\n')
               .replace('&lt;', '<')
               .replace('&gt;', '>'),
+            menuAndPrice[1] + '원',
+          ];
+          return (
+            <HStack
+              alignItems="center"
+              paddingTop="3px"
+              paddingBottom="3px"
+              key={menuName}>
+              <Text textAlign="center" width="70%" fontSize="lg" marginTop={2}>
+                {menuName}
+              </Text>
+              <Text textAlign="right" width="30%" fontSize="md">
+                {price}
+              </Text>
+            </HStack>
+          );
+        });
+    }
+
+    if (cafeteriaName.includes('아워홈')) {
+      console.log(string);
+      return string
+        .match(/[A-Z]/gi)
+        .map((priceSymbol, priceIndex) => {
+          return [
+            string.split(/[A-Z]/)[priceIndex + 1],
+            (priceSymbol.charCodeAt(0) - 65) * 500 + 2000,
+          ];
+        })
+        .map(menuAndPrice => {
+          const [menuName, price] = [
+            menuAndPrice[0].replace('&', '&\n'),
             menuAndPrice[1] + '원',
           ];
           return (
@@ -716,7 +747,7 @@ export default function Meal({navigation}: Props) {
                     {menu[selectedMeal].breakfast.length > 0 ? (
                       <>
                         <HStack>
-                          <VStack width="25%" justifyContent="space-between">
+                          <VStack width="25%" justifyContent="center">
                             <Text
                               textAlign="center"
                               fontSize="lg"
@@ -779,7 +810,7 @@ export default function Meal({navigation}: Props) {
                           marginBottom={5}
                         />
                         <HStack>
-                          <VStack width="25%">
+                          <VStack width="25%" justifyContent="center">
                             <Text
                               textAlign="center"
                               fontSize="lg"
