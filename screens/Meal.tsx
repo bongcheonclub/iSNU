@@ -360,6 +360,34 @@ export default function Meal({navigation}: Props) {
     );
   }
 
+  function showMenu(string) {
+    return string
+      .split('원 ')
+      .map(text => {
+        return text.split(' ');
+      })
+      .map((menuAndPrice, idx) => {
+        console.log(idx, menuAndPrice);
+        if (menuAndPrice[0].includes('※')) {
+          return;
+        }
+        const [menuName, price] = [
+          menuAndPrice[0].replace('&amp;', '&\n'),
+          menuAndPrice[1] + '원',
+        ];
+        return (
+          <HStack alignItems="center" paddingTop="3px" paddingBottom="3px">
+            <Text textAlign="center" width="70%" fontSize="lg">
+              {menuName}
+            </Text>
+            <Text textAlign="right" width="30%" fontSize="md">
+              {price}
+            </Text>
+          </HStack>
+        );
+      });
+  }
+
   console.log('rendering');
 
   return (
@@ -387,6 +415,7 @@ export default function Meal({navigation}: Props) {
               <HStack position="relative" width="100%" height="100%">
                 <Button
                   onPress={() => setSelectedMeal(name)}
+                  colorScheme="yellow"
                   width="38%"
                   height="100%"
                   marginBottom={0}
@@ -450,6 +479,7 @@ export default function Meal({navigation}: Props) {
                       <Box key={name}>
                         <Button
                           onPress={() => setSelectedMeal(name)}
+                          colorScheme="dark"
                           width="100px"
                           height="100px"
                           margin={2}
@@ -543,13 +573,9 @@ export default function Meal({navigation}: Props) {
                             00:00 ~ 00:00
                           </Text>
                         </VStack>
-                        <Text textAlign="center" width="75%">
-                          {replaceAll(
-                            menu[selectedMeal].breakfast,
-                            '0원 ',
-                            '0원\n',
-                          )}
-                        </Text>
+                        <VStack width="75%">
+                          {showMenu(menu[selectedMeal].breakfast)}
+                        </VStack>
                       </HStack>
                       <Divider
                         my={2}
@@ -565,20 +591,20 @@ export default function Meal({navigation}: Props) {
 
                   {menu[selectedMeal].lunch.length > 0 ? (
                     <HStack>
-                      <VStack width="25%">
-                        <Text textAlign="center" fontSize="lg" fontWeight={600}>
+                      <VStack width="25%" justifyContent="center">
+                        <Text textAlign="center" fontSize="xl" fontWeight={600}>
                           점심
                         </Text>
                         <Text
                           textAlign="center"
-                          fontSize={10}
+                          fontSize={11}
                           color={colors.grey[300]}>
                           00:00 ~ 00:00
                         </Text>
                       </VStack>
-                      <Text textAlign="center" width="75%">
-                        {replaceAll(menu[selectedMeal].lunch, '0원 ', '0원\n')}
-                      </Text>
+                      <VStack width="75%">
+                        {showMenu(menu[selectedMeal].lunch)}
+                      </VStack>
                     </HStack>
                   ) : (
                     <Text />
@@ -607,13 +633,9 @@ export default function Meal({navigation}: Props) {
                             00:00 ~ 00:00
                           </Text>
                         </VStack>
-                        <Text textAlign="center" width="75%">
-                          {replaceAll(
-                            menu[selectedMeal].dinner,
-                            '0원 ',
-                            '0원\n',
-                          )}
-                        </Text>
+                        <VStack width="75%">
+                          {showMenu(menu[selectedMeal].dinner)}
+                        </VStack>
                       </HStack>
                     </>
                   ) : (
