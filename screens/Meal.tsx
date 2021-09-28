@@ -42,6 +42,7 @@ import FilledStar from '../icons/filled-star.svg';
 import UnfilledStar from '../icons/unfilled-star.svg';
 import et from 'date-fns/esm/locale/et/index.js';
 import {ParamListBase} from '@react-navigation/native';
+import {check} from 'prettier';
 
 function replaceAll(str: string, searchStr: string, replaceStr: string) {
   return str.split(searchStr).join(replaceStr);
@@ -251,6 +252,7 @@ export default function Meal({navigation}: Props) {
             return item.name;
           })
           .concat('대학원기숙사');
+        processedData['공간'].weekday = '11:00-14:30 15:30-18:30';
         setCafeteria(processedData);
         setMealList(refinedMealList);
 
@@ -258,7 +260,7 @@ export default function Meal({navigation}: Props) {
           // 즐겨찾기 가져오는 함수
           const key = 'favoriteMealList';
           const getList = await AsyncStorage.getItem(key);
-          const getFavoriteList = getList ? JSON.parse(getList) : [];
+          const getFavoriteList = getList ? await JSON.parse(getList) : [];
           const getNotFavoriteList = initialMealList.filter(
             mealName => !getFavoriteList.includes(mealName),
           );
@@ -351,6 +353,7 @@ export default function Meal({navigation}: Props) {
           대학원기숙사: ourhomeCafeteria,
         };
         setCafeteria(cafeteriaIncludeOurhome);
+        console.log('ourhome done');
       });
     }
   }, [cafeteria, day, menu]);
@@ -385,6 +388,7 @@ export default function Meal({navigation}: Props) {
   }
 
   function showMenu(cafeteriaName, whichMenu) {
+    // 메뉴 표기
     const string = menu[cafeteriaName][whichMenu];
     if (cafeteriaName.includes('자하연')) {
       return string
@@ -404,8 +408,8 @@ export default function Meal({navigation}: Props) {
           return (
             <HStack
               alignItems="center"
-              paddingTop="3px"
-              paddingBottom="3px"
+              paddingTop="2px"
+              paddingBottom="2px"
               key={menuName}>
               <Text textAlign="center" width="70%" fontSize="lg">
                 {menuName}
@@ -436,8 +440,8 @@ export default function Meal({navigation}: Props) {
           return (
             <HStack
               alignItems="center"
-              paddingTop="3px"
-              paddingBottom="3px"
+              paddingTop="2px"
+              paddingBottom="2px"
               key={menuName}>
               <Text textAlign="center" width="70%" fontSize="lg">
                 {menuName}
@@ -479,8 +483,8 @@ export default function Meal({navigation}: Props) {
           return (
             <HStack
               alignItems="center"
-              paddingTop="3px"
-              paddingBottom="3px"
+              paddingTop="2px"
+              paddingBottom="2px"
               key={menuName}>
               <Text textAlign="center" width="70%" fontSize="lg" marginTop={2}>
                 {menuName}
@@ -514,8 +518,8 @@ export default function Meal({navigation}: Props) {
           return (
             <HStack
               alignItems="center"
-              paddingTop="3px"
-              paddingBottom="3px"
+              paddingTop="2px"
+              paddingBottom="2px"
               key={menuName}>
               <Text textAlign="center" width="70%" fontSize="lg" marginTop={2}>
                 {menuName}
@@ -545,8 +549,8 @@ export default function Meal({navigation}: Props) {
           return (
             <HStack
               alignItems="center"
-              paddingTop="3px"
-              paddingBottom="3px"
+              paddingTop="2px"
+              paddingBottom="2px"
               key={menuName}>
               <Text textAlign="center" width="70%" fontSize="lg" marginTop={2}>
                 {menuName}
@@ -567,7 +571,18 @@ export default function Meal({navigation}: Props) {
       );
     }
 
-    if (cafeteriaName.includes('공간') || cafeteriaName.includes('301')) {
+    if (cafeteriaName.includes('공간')) {
+      return (
+        <Text textAlign="center" width="100%" fontSize="md">
+          {string
+            .replaceAll('00원', '00원\n')
+            .replaceAll('&amp;', '&\n')
+            .replaceAll('&lt;', '\n<')
+            .replaceAll('&gt;', '>\n')}
+        </Text>
+      );
+    }
+    if (cafeteriaName.includes('301')) {
       return (
         <Text textAlign="center" width="100%" fontSize="md">
           {string
@@ -594,7 +609,7 @@ export default function Meal({navigation}: Props) {
     return string
       .split('원 ')
       .map(text => {
-        return text.split(' ');
+        return text.replaceAll(' &amp; ', '&amp;').split(' ');
       })
       .map(menuAndPrice => {
         if (menuAndPrice[0].includes('※')) {
@@ -607,8 +622,8 @@ export default function Meal({navigation}: Props) {
         return (
           <HStack
             alignItems="center"
-            paddingTop="3px"
-            paddingBottom="3px"
+            paddingTop="2px"
+            paddingBottom="2px"
             key={menuName}>
             <Text textAlign="center" width="70%" fontSize="lg">
               {menuName}
@@ -631,17 +646,282 @@ export default function Meal({navigation}: Props) {
     ];
     if (status === 'breakfast' || status === 'lunch' || status === 'dinner') {
       const string = menu[cafeteriaName][status];
+      if (cafeteriaName.includes('자하연')) {
+        return string
+          .split('※')[0]
+          .split('원 ')
+          .map(item => {
+            return item.split(' ');
+          })
+          .map(menuAndPrice => {
+            if (menuAndPrice.length !== 2) {
+              return;
+            }
+            const [menuName, price] = [
+              menuAndPrice[0].replace('&amp;', '&\n'),
+              menuAndPrice[1] + '원',
+            ];
+            return (
+              <HStack
+                alignItems="center"
+                paddingTop="2px"
+                paddingBottom="2px"
+                key={menuName}>
+                <Text
+                  textAlign="center"
+                  width="60%"
+                  fontSize="md"
+                  fontWeight={600}
+                  color="#59584E">
+                  {menuName}
+                </Text>
+                <Text
+                  textAlign="right"
+                  width="40%"
+                  fontSize="md"
+                  paddingRight={4}
+                  color="#8B7A55">
+                  {price}
+                </Text>
+              </HStack>
+            );
+          });
+      }
+
+      if (cafeteriaName.includes('예술계')) {
+        return string
+          .split('▶')[0]
+          .split('원 ')
+          .map(item => {
+            return item.split(' : ');
+          })
+          .map(menuAndPrice => {
+            if (menuAndPrice.length !== 2) {
+              return;
+            }
+            const [menuName, price] = [
+              menuAndPrice[0].replace('&amp;', '&\n'),
+              menuAndPrice[1] + '원',
+            ];
+            return (
+              <HStack
+                alignItems="center"
+                paddingTop="2px"
+                paddingBottom="2px"
+                key={menuName}>
+                <Text
+                  textAlign="center"
+                  width="60%"
+                  fontSize="md"
+                  fontWeight={600}
+                  color="#59584E">
+                  {menuName}
+                </Text>
+                <Text
+                  textAlign="right"
+                  width="40%"
+                  fontSize="md"
+                  paddingRight={4}
+                  color="#8B7A55">
+                  {price}
+                </Text>
+              </HStack>
+            );
+          });
+      }
+
+      if (cafeteriaName.includes('220동')) {
+        return string
+          .split('※')[0]
+          .split('원 ')
+          .map(item => {
+            return item.split(' ');
+          })
+          .map(menuAndPrice => {
+            if (
+              menuAndPrice.length !== 2 &&
+              !menuAndPrice[0].includes('플러스메뉴')
+            ) {
+              return;
+            }
+            const [menuName, price] = menuAndPrice[0].includes('플러스메뉴')
+              ? [
+                  menuAndPrice[1].replaceAll('&amp;', '&\n'),
+                  menuAndPrice[2] + '원',
+                ]
+              : [
+                  menuAndPrice[0].replaceAll('&amp;', '&\n'),
+                  menuAndPrice[1] + '원',
+                ];
+            return (
+              <HStack
+                alignItems="center"
+                paddingTop="2px"
+                paddingBottom="2px"
+                key={menuName}>
+                <Text
+                  textAlign="center"
+                  width="60%"
+                  fontSize="md"
+                  fontWeight={600}
+                  color="#59584E">
+                  {menuName}
+                </Text>
+                <Text
+                  textAlign="right"
+                  width="40%"
+                  fontSize="md"
+                  paddingRight={4}
+                  color="#8B7A55">
+                  {price}
+                </Text>
+              </HStack>
+            );
+          });
+      }
+
+      if (cafeteriaName.includes('감골')) {
+        return string
+          .split('※')[0]
+          .split('원 ')
+          .map(item => {
+            return item.split(' ');
+          })
+          .map(menuAndPrice => {
+            if (menuAndPrice.length !== 2) {
+              return;
+            }
+            const [menuName, price] = [
+              menuAndPrice[0]
+                .replace('&amp;', '&\n')
+                .replace('&lt;', '<')
+                .replace('&gt;', '>'),
+              menuAndPrice[1] + '원',
+            ];
+            return (
+              <HStack
+                alignItems="center"
+                paddingTop="2px"
+                paddingBottom="2px"
+                key={menuName}>
+                <Text
+                  textAlign="center"
+                  width="60%"
+                  fontSize="md"
+                  fontWeight={600}
+                  color="#59584E">
+                  {menuName}
+                </Text>
+                <Text
+                  textAlign="right"
+                  width="40%"
+                  fontSize="md"
+                  paddingRight={4}
+                  color="#8B7A55">
+                  {price}
+                </Text>
+              </HStack>
+            );
+          });
+      }
+
+      if (cafeteriaName.includes('대학원')) {
+        return string
+          .match(/[A-Z]|\(\d,\d\d\d원\)/gi)
+          .map((priceSymbol, priceIndex) => {
+            if (priceSymbol.length === 1) {
+              return [
+                string.split(/[A-Z]|\(\d,\d\d\d원\)/)[priceIndex + 1],
+                (priceSymbol.charCodeAt(0) - 65) * 500 + 2000,
+              ];
+            } else {
+              return [
+                string.split(/[A-Z]|\(\d,\d\d\d원\)/)[priceIndex + 1],
+                priceSymbol.slice(1, -2),
+              ];
+            }
+          })
+          .map(menuAndPrice => {
+            const [menuName, price] = [
+              menuAndPrice[0].replace('&', '&\n'),
+              menuAndPrice[1] + '원',
+            ];
+            return (
+              <HStack
+                alignItems="center"
+                paddingTop="2px"
+                paddingBottom="2px"
+                key={menuName}>
+                <Text
+                  textAlign="center"
+                  width="60%"
+                  fontSize="md"
+                  fontWeight={600}
+                  color="#59584E">
+                  {menuName}
+                </Text>
+                <Text
+                  textAlign="right"
+                  width="40%"
+                  fontSize="md"
+                  paddingRight={4}
+                  color="#8B7A55">
+                  {price}
+                </Text>
+              </HStack>
+            );
+          });
+      }
+
+      if (cafeteriaName.includes('소담마루')) {
+        return (
+          <Text textAlign="center" width="70%" fontSize="lg">
+            {string}
+          </Text>
+        );
+      }
+
+      if (cafeteriaName.includes('공간')) {
+        return (
+          <Text textAlign="center" width="100%" fontSize="xl">
+            메뉴 정보 보기
+          </Text>
+        );
+      }
+      if (cafeteriaName.includes('301')) {
+        return (
+          <Text textAlign="center" width="100%" fontSize="md">
+            {string
+              .replaceAll('00원', '00원\n')
+              .replaceAll('소반', '\n소반')
+              .replaceAll('&amp;', '&\n')
+              .replaceAll('&lt;', '\n<')
+              .replaceAll('&gt;', '>\n')}
+          </Text>
+        );
+      }
+      if (
+        string.includes('휴관') ||
+        string.includes('휴점') ||
+        string.includes('폐점')
+      ) {
+        return (
+          <Text textAlign="center" fontSize="lg">
+            {string}
+          </Text>
+        );
+      }
       return string
         .split('원 ')
         .map(text => {
-          return text.split(' ');
+          return text.replaceAll(' &amp; ', '&amp;').split(' ');
         })
         .map(menuAndPrice => {
           if (menuAndPrice[0].includes('※')) {
             return;
           }
           const [menuName, price] = [
-            menuAndPrice[0].replace('&amp;', '&\n'),
+            menuAndPrice[0].replace('&amp;', '\n& '),
             menuAndPrice[1] + '원',
           ];
           return (
@@ -670,11 +950,24 @@ export default function Meal({navigation}: Props) {
           );
         });
     } else {
-      return (
-        <Text color="#888888" fontSize="lg">
-          {nextTime} 운영 예정
-        </Text>
-      );
+      const string = menu[cafeteriaName].lunch;
+      if (
+        string.includes('휴점') ||
+        string.includes('폐점') ||
+        string.includes('폐관')
+      ) {
+        return (
+          <Text color="#888888" fontSize="lg">
+            {string}
+          </Text>
+        );
+      } else {
+        return (
+          <Text color="#888888" fontSize="lg">
+            {nextTime} 운영 예정
+          </Text>
+        );
+      }
     }
   }
 
@@ -692,6 +985,10 @@ export default function Meal({navigation}: Props) {
             name: cafeteriaName,
             status: checkOperating(cafeteriaName)[0],
             nextTime: checkOperating(cafeteriaName)[1],
+            operatingInfo:
+              checkOperating(cafeteriaName)[2] !== undefined
+                ? checkOperating(cafeteriaName)[2]
+                : {}, // 소담마루, 301 등 현재 운영 상태 비정상인 곳 에러 넘기기
           };
         })
         .map(item => item);
@@ -699,10 +996,9 @@ export default function Meal({navigation}: Props) {
       setCheckStatus(data);
     }
     function checkOperating(cafeteriaName) {
-      if (cafeteria[cafeteriaName] === undefined) {
-        return ['end', '추후'];
-      }
-      const now = new Date('Tue Sep 28 2021 12:34:15 GMT+0900');
+      // const now = new Date();
+      const now = new Date('Tue Sep 28 2021 12:24:15 GMT+0900');
+      const spliter = cafeteriaName.includes('감골') ? '~' : '-';
       const today = (() => {
         switch (day) {
           case 0: // sunday
@@ -714,7 +1010,7 @@ export default function Meal({navigation}: Props) {
         }
       })();
       const rawData = cafeteria[cafeteriaName][today];
-      if (rawData === '휴관' || rawData === '휴점 중') {
+      if (rawData === '휴관' || rawData === '휴점 중' || rawData === '') {
         return ['end', '추후'];
       }
       const additionalInfo = rawData
@@ -725,8 +1021,8 @@ export default function Meal({navigation}: Props) {
         .filter(
           item => item[0] !== '(' && item[-1] !== ')' && item.includes('0'),
         )
-        .join('-')
-        .split('-');
+        .join(spliter)
+        .split(spliter);
       normalInfo.unshift('00:00');
       if (normalInfo.length === 7) {
         const results = [
@@ -737,6 +1033,12 @@ export default function Meal({navigation}: Props) {
           'beforeDinner',
           'dinner',
         ];
+        const operatingInfo = keyBy(
+          results.map((when, index) => {
+            return {when: when, time: normalInfo[index + 1]};
+          }),
+          'when',
+        );
         return results
           .map((result, idx) => {
             const [startAtString, endedAtString] = [
@@ -746,14 +1048,20 @@ export default function Meal({navigation}: Props) {
             const startAt = parseTime(startAtString, 'HH:mm', now);
             const endedAt = parseTime(endedAtString, 'HH:mm', now);
             if (compareAsc(startAt, now) < 0 && compareAsc(now, endedAt) < 0) {
-              return [result, normalInfo[idx + 1]];
-            } else if (idx === 6) {
-              return ['end', normalInfo[0]];
+              return [result, normalInfo[idx + 1], operatingInfo];
+            } else if (idx === 5) {
+              return ['end', '내일 ' + normalInfo[1], operatingInfo];
             }
           })
           .filter(item => item !== undefined)[0];
       } else if (normalInfo.length === 5) {
         const results = ['beforeLunch', 'lunch', 'beforeDinner', 'dinner'];
+        const operatingInfo = keyBy(
+          results.map((when, index) => {
+            return {when: when, time: normalInfo[index + 1]};
+          }),
+          'when',
+        );
         return results
           .map((result, idx) => {
             const [startAtString, endedAtString] = [
@@ -763,14 +1071,20 @@ export default function Meal({navigation}: Props) {
             const startAt = parseTime(startAtString, 'HH:mm', now);
             const endedAt = parseTime(endedAtString, 'HH:mm', now);
             if (compareAsc(startAt, now) < 0 && compareAsc(now, endedAt) < 0) {
-              return [result, normalInfo[idx + 1]];
-            } else if (idx === 4) {
-              return ['end', normalInfo[0]];
+              return [result, normalInfo[idx + 1], operatingInfo];
+            } else if (idx === 3) {
+              return ['end', '내일 ' + normalInfo[1], operatingInfo];
             }
           })
           .filter(item => item !== undefined)[0];
       } else if (normalInfo.length === 3) {
         const results = ['beforeLunch', 'lunch'];
+        const operatingInfo = keyBy(
+          results.map((when, index) => {
+            return {when: when, time: normalInfo[index + 1]};
+          }),
+          'when',
+        );
         return results
           .map((result, idx) => {
             const [startAtString, endedAtString] = [
@@ -780,9 +1094,9 @@ export default function Meal({navigation}: Props) {
             const startAt = parseTime(startAtString, 'HH:mm', now);
             const endedAt = parseTime(endedAtString, 'HH:mm', now);
             if (compareAsc(startAt, now) < 0 && compareAsc(now, endedAt) < 0) {
-              return [result, normalInfo[idx + 1]];
-            } else if (idx === 2) {
-              return ['end', normalInfo[0]];
+              return [result, normalInfo[idx + 1], operatingInfo];
+            } else if (idx === 1) {
+              return ['end', '내일 ' + normalInfo[1], operatingInfo];
             }
           })
           .filter(item => item !== undefined)[0];
@@ -793,7 +1107,7 @@ export default function Meal({navigation}: Props) {
   }, [menu, cafeteria, mealList, day]);
 
   function isOperating(name) {
-    if (checkStatus === null) {
+    if (checkStatus === null || menu[name] === undefined) {
       return false;
     }
     if (
@@ -812,81 +1126,82 @@ export default function Meal({navigation}: Props) {
     <VStack>
       <ScrollView bgColor={colors.white} height="100%">
         <Center marginTop={5}>
-          {favoriteList.map(name => (
-            <Center
-              width="332px"
-              height={isOperating(name) ? '124px' : '80px'}
-              bg={isOperating(name) ? '#E9E7CE' : '#E2E2E2'}
-              rounded={10}
-              position="relative"
-              marginBottom={4}
-              shadow={0}
-              key={name}>
-              <Circle
-                size={2.5}
-                bg={colors.green}
-                position="absolute"
-                top={2}
-                right={2}
-              />
-
-              <Button
-                backgroundColor="transparent"
-                padding={0}
-                onPress={() => setSelectedMeal(name)}>
-                <HStack
-                  position="relative"
-                  width="100%"
-                  height="100%"
-                  padding={0}>
-                  <Center
-                    width="30%"
+          {favoriteList
+            .sort((a, b) => {
+              return Number(isOperating(b)) - Number(isOperating(a));
+            })
+            .map(name => (
+              <Center
+                width="360px"
+                height={isOperating(name) ? '132px' : '72px'}
+                bg={isOperating(name) ? '#E9E7CE' : '#E2E2E2'}
+                rounded={10}
+                position="relative"
+                marginBottom={4}
+                shadow={0}
+                key={name}>
+                <Button
+                  backgroundColor="transparent"
+                  padding={0}
+                  onPress={() => setSelectedMeal(name)}>
+                  <HStack
+                    position="relative"
+                    width="100%"
                     height="100%"
-                    marginBottom={0}
-                    padding={1}
-                    bg="transparent"
-                    rounded={15}>
-                    <Text
-                      color={colors.bage[200]}
-                      fontWeight={800}
-                      fontSize="xl"
-                      textAlign="center">
-                      {name}
-                    </Text>
-                    {isOperating(name) ? (
+                    padding={0}>
+                    <Center
+                      width="32%"
+                      height="100%"
+                      marginBottom={0}
+                      padding={1}
+                      bg="transparent"
+                      rounded={15}>
                       <Text
-                        color={colors.grey[400]}
-                        textAlign="center"
-                        marginTop={4}>
-                        ~{checkStatus[name].nextTime}
+                        color={colors.bage[200]}
+                        fontWeight={800}
+                        fontSize="xl"
+                        textAlign="center">
+                        {name === '대학원기숙사' ? '대학원\n기숙사' : name}
                       </Text>
-                    ) : (
-                      <Box height="0px" />
-                    )}
-                  </Center>
-                  {menu !== null &&
-                  name !== null &&
-                  menu[name] !== undefined ? (
-                    <Center width="70%" padding={0}>
-                      {showFavoriteMenu(name)}
+                      {isOperating(name) ? (
+                        <Text
+                          color={colors.grey[400]}
+                          textAlign="center"
+                          marginTop={4}>
+                          ~{checkStatus[name].nextTime}
+                        </Text>
+                      ) : (
+                        <Box height="0px" />
+                      )}
                     </Center>
-                  ) : (
-                    <Text
-                      color="#888888"
-                      fontSize="lg"
-                      alignSelf="center"
-                      margin="auto">
-                      추후 운영 예정
-                    </Text>
-                  )}
-                </HStack>
-              </Button>
-            </Center>
-          ))}
+                    {menu !== null &&
+                    name !== null &&
+                    menu[name] !== undefined ? (
+                      <Center width="68%" padding={0}>
+                        {showFavoriteMenu(name)}
+                      </Center>
+                    ) : (
+                      <Text
+                        color="#888888"
+                        fontSize="lg"
+                        alignSelf="center"
+                        margin="auto">
+                        추후 운영 예정
+                      </Text>
+                    )}
+                  </HStack>
+                </Button>
+              </Center>
+            ))}
         </Center>
         <Center marginTop={0} marginBottom={12}>
           <VStack>
-            {chunk(notFavoriteList, 3).map(subNotFavoriteListInfoArray => {
+            {chunk(
+              notFavoriteList.sort((a, b) => {
+                return Number(isOperating(b)) - Number(isOperating(a));
+              }),
+              3,
+            ).map(subNotFavoriteListInfoArray => {
               // not favorite meal 3줄로 나누기
               return (
                 <HStack key={subNotFavoriteListInfoArray[0]}>
@@ -899,7 +1214,7 @@ export default function Meal({navigation}: Props) {
                           width="100px"
                           height="100px"
                           margin={2}
-                          bg={colors.grey[100]} // isOperating
+                          bg={isOperating(name) ? colors.grey[100] : '#E2E2E2'} // isOperating
                           borderColor={colors.grey[200]}
                           borderWidth={1}
                           rounded={10}
@@ -909,16 +1224,9 @@ export default function Meal({navigation}: Props) {
                             color={colors.grey[400]}
                             fontSize="lg"
                             fontWeight={500}>
-                            {name}
+                            {name === '대학원기숙사' ? '대학원\n기숙사' : name}
                           </Text>
                         </Button>
-                        <Circle
-                          size={2.5}
-                          bg={colors.green}
-                          position="absolute"
-                          top={4}
-                          right={4}
-                        />
                       </Box>
                     );
                   })}
@@ -987,7 +1295,14 @@ export default function Meal({navigation}: Props) {
                               textAlign="center"
                               fontSize={10}
                               color={colors.grey[300]}>
-                              00:00 ~ 00:00
+                              {checkStatus[selectedMeal].operatingInfo
+                                .beforeBreakfast
+                                ? checkStatus[selectedMeal].operatingInfo
+                                    .beforeBreakfast.time +
+                                  '~' +
+                                  checkStatus[selectedMeal].operatingInfo
+                                    .breakfast.time
+                                : ''}
                             </Text>
                           </VStack>
                           <VStack width="75%">
@@ -1019,7 +1334,13 @@ export default function Meal({navigation}: Props) {
                             textAlign="center"
                             fontSize={11}
                             color={colors.grey[300]}>
-                            00:00 ~ 00:00
+                            {checkStatus[selectedMeal].operatingInfo.beforeLunch
+                              ? checkStatus[selectedMeal].operatingInfo
+                                  .beforeLunch.time +
+                                '~' +
+                                checkStatus[selectedMeal].operatingInfo.lunch
+                                  .time
+                              : ''}
                           </Text>
                         </VStack>
                         <VStack width="75%">
@@ -1050,7 +1371,14 @@ export default function Meal({navigation}: Props) {
                               textAlign="center"
                               fontSize={10}
                               color={colors.grey[300]}>
-                              00:00 ~ 00:00
+                              {checkStatus[selectedMeal].operatingInfo
+                                .beforeDinner
+                                ? checkStatus[selectedMeal].operatingInfo
+                                    .beforeDinner.time +
+                                  '~' +
+                                  checkStatus[selectedMeal].operatingInfo.dinner
+                                    .time
+                                : ''}
                             </Text>
                           </VStack>
                           <VStack width="75%">
@@ -1063,13 +1391,19 @@ export default function Meal({navigation}: Props) {
                     )}
                   </ScrollView>
                 ) : (
-                  <Text />
+                  <Text
+                    height={20}
+                    marginTop={10}
+                    textAlign="center"
+                    fontSize="lg">
+                    운영 정보 없음
+                  </Text>
                 )}
               </Modal.Body>
             </Modal.Content>
           </Modal>
         ) : (
-          <Box />
+          <Text />
         )}
       </ScrollView>
     </VStack>
