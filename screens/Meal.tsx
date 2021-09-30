@@ -15,6 +15,7 @@ import {
   Button,
   Divider,
   Circle,
+  AspectRatio,
 } from 'native-base';
 import {
   size,
@@ -1132,7 +1133,7 @@ export default function Meal({navigation}: Props) {
             })
             .map(name => (
               <Center
-                width="360px"
+                width="85%"
                 height={isOperating(name) ? '132px' : '72px'}
                 bg={isOperating(name) ? '#E9E7CE' : '#E2E2E2'}
                 rounded={10}
@@ -1150,7 +1151,7 @@ export default function Meal({navigation}: Props) {
                     height="100%"
                     padding={0}>
                     <Center
-                      width="32%"
+                      width="30%"
                       height="100%"
                       marginBottom={0}
                       padding={1}
@@ -1177,7 +1178,7 @@ export default function Meal({navigation}: Props) {
                     {menu !== null &&
                     name !== null &&
                     menu[name] !== undefined ? (
-                      <Center width="68%" padding={0}>
+                      <Center width="70%" padding={0}>
                         {showFavoriteMenu(name)}
                       </Center>
                     ) : (
@@ -1194,8 +1195,8 @@ export default function Meal({navigation}: Props) {
               </Center>
             ))}
         </Center>
-        <Center marginTop={0} marginBottom={12}>
-          <VStack>
+        <Center marginTop={0} marginBottom={12} width="85%" alignSelf="center">
+          <VStack width="100%">
             {chunk(
               notFavoriteList.sort((a, b) => {
                 return Number(isOperating(b)) - Number(isOperating(a));
@@ -1204,16 +1205,23 @@ export default function Meal({navigation}: Props) {
             ).map(subNotFavoriteListInfoArray => {
               // not favorite meal 3줄로 나누기
               return (
-                <HStack key={subNotFavoriteListInfoArray[0]}>
+                <HStack
+                  key={subNotFavoriteListInfoArray[0]}
+                  width="100%"
+                  marginLeft="-2.5%">
                   {subNotFavoriteListInfoArray.map(name => {
                     return (
-                      <Box key={name}>
+                      <AspectRatio
+                        key={name}
+                        width="30%"
+                        ratio={1}
+                        marginBottom="5%"
+                        margin="2.5%">
                         <Button
                           onPress={() => setSelectedMeal(name)}
                           colorScheme="dark"
-                          width="100px"
-                          height="100px"
-                          margin={2}
+                          width="100%"
+                          margin={0}
                           bg={colors.grey[100]} // isOperating
                           borderColor={colors.grey[200]}
                           borderWidth={1}
@@ -1229,7 +1237,7 @@ export default function Meal({navigation}: Props) {
                             {name === '대학원기숙사' ? '대학원\n기숙사' : name}
                           </Text>
                         </Button>
-                      </Box>
+                      </AspectRatio>
                     );
                   })}
                 </HStack>
@@ -1281,7 +1289,7 @@ export default function Meal({navigation}: Props) {
                     margin={5}
                     marginLeft={1}
                     marginRight={1}
-                    maxHeight="400px"
+                    maxHeight="420px"
                     bounces={false}>
                     {menu[selectedMeal].breakfast.length > 0 ? (
                       <>
