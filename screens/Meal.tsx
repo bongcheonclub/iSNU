@@ -409,10 +409,14 @@ export default function Meal({navigation}: Props) {
           return (
             <HStack
               alignItems="center"
-              paddingTop="2px"
-              paddingBottom="2px"
+              marginTop="6px"
+              marginBottom="6px"
               key={menuName}>
-              <Text textAlign="center" width="70%" fontSize="lg">
+              <Text
+                textAlign="center"
+                width="70%"
+                fontSize="lg"
+                lineHeight="sm">
                 {menuName}
               </Text>
               <Text textAlign="right" width="30%" fontSize="md">
@@ -441,10 +445,14 @@ export default function Meal({navigation}: Props) {
           return (
             <HStack
               alignItems="center"
-              paddingTop="2px"
-              paddingBottom="2px"
+              marginTop="6px"
+              marginBottom="6px"
               key={menuName}>
-              <Text textAlign="center" width="70%" fontSize="lg">
+              <Text
+                textAlign="center"
+                width="70%"
+                fontSize="lg"
+                lineHeight="sm">
                 {menuName}
               </Text>
               <Text textAlign="right" width="30%" fontSize="md">
@@ -484,10 +492,15 @@ export default function Meal({navigation}: Props) {
           return (
             <HStack
               alignItems="center"
-              paddingTop="2px"
-              paddingBottom="2px"
+              marginTop="6px"
+              marginBottom="6px"
               key={menuName}>
-              <Text textAlign="center" width="70%" fontSize="lg" marginTop={2}>
+              <Text
+                textAlign="center"
+                width="70%"
+                fontSize="lg"
+                marginTop={2}
+                lineHeight="sm">
                 {menuName}
               </Text>
               <Text textAlign="right" width="30%" fontSize="md">
@@ -519,10 +532,15 @@ export default function Meal({navigation}: Props) {
           return (
             <HStack
               alignItems="center"
-              paddingTop="2px"
-              paddingBottom="2px"
+              marginTop="6px"
+              marginBottom="6px"
               key={menuName}>
-              <Text textAlign="center" width="70%" fontSize="lg" marginTop={2}>
+              <Text
+                textAlign="center"
+                width="70%"
+                fontSize="lg"
+                marginTop={2}
+                lineHeight="sm">
                 {menuName}
               </Text>
               <Text textAlign="right" width="30%" fontSize="md">
@@ -550,10 +568,15 @@ export default function Meal({navigation}: Props) {
           return (
             <HStack
               alignItems="center"
-              paddingTop="2px"
-              paddingBottom="2px"
+              marginTop="6px"
+              marginBottom="6px"
               key={menuName}>
-              <Text textAlign="center" width="70%" fontSize="lg" marginTop={2}>
+              <Text
+                textAlign="center"
+                width="70%"
+                fontSize="lg"
+                marginTop={2}
+                lineHeight="sm">
                 {menuName}
               </Text>
               <Text textAlign="right" width="30%" fontSize="md">
@@ -623,10 +646,10 @@ export default function Meal({navigation}: Props) {
         return (
           <HStack
             alignItems="center"
-            paddingTop="2px"
-            paddingBottom="2px"
+            marginTop="6px"
+            marginBottom="6px"
             key={menuName}>
-            <Text textAlign="center" width="70%" fontSize="lg">
+            <Text textAlign="center" width="70%" fontSize="lg" lineHeight="sm">
               {menuName}
             </Text>
             <Text textAlign="right" width="30%" fontSize="md">
@@ -1171,7 +1194,7 @@ export default function Meal({navigation}: Props) {
                         <Text
                           color={colors.grey[400]}
                           textAlign="center"
-                          marginTop={4}>
+                          marginTop={1}>
                           ~{checkStatus[name].nextTime}
                         </Text>
                       ) : (
