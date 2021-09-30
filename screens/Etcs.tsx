@@ -22,7 +22,7 @@ export default function Etcs({navigation}: Props) {
   const webViewHeight = Dimensions.get('window').height;
 
   return (
-    <Box>
+    <Box height="100%">
       {focusedEtc ? (
         <>
           <Modal
