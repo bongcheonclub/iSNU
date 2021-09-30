@@ -986,13 +986,13 @@ export default function Meal({navigation}: Props) {
         string.includes('폐관')
       ) {
         return (
-          <Text color="#888888" fontSize="lg">
+          <Text color="#888888" fontSize="lg" textAlign="center">
             {string}
           </Text>
         );
       } else {
         return (
-          <Text color="#888888" fontSize="lg">
+          <Text color="#888888" fontSize="lg" textAlign="center">
             {nextTime} 운영 예정
           </Text>
         );
@@ -1209,9 +1209,10 @@ export default function Meal({navigation}: Props) {
                       </Center>
                     ) : (
                       <Text
+                        width="70%"
                         color="#888888"
                         fontSize="lg"
-                        alignSelf="center"
+                        textAlign="center"
                         margin="auto">
                         추후 운영 예정
                       </Text>
