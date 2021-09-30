@@ -1026,7 +1026,7 @@ export default function Meal({navigation}: Props) {
     }
     function checkOperating(cafeteriaName) {
       // const now = new Date();
-      const now = new Date('Tue Sep 28 2021 12:24:15 GMT+0900');
+      const now = new Date('Tue Sep 28 2021 17:24:15 GMT+0900');
       const spliter = cafeteriaName.includes('감골') ? '~' : '-';
       const today = (() => {
         switch (day) {
@@ -1163,7 +1163,7 @@ export default function Meal({navigation}: Props) {
               <Center
                 width="85%"
                 // height={isOperating(name) ? '132px' : '72px'}
-                minHeight="100px"
+                minHeight="60px"
                 paddingTop={2}
                 paddingBottom={2}
                 bg={isOperating(name) ? '#E9E7CE' : '#E2E2E2'}
