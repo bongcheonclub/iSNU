@@ -1008,6 +1008,13 @@ export default function Meal({navigation}: Props) {
           </Text>
         );
       } else {
+        if (cafeteriaName.includes('301')) {
+          return (
+            <Text color="#888888" fontSize="lg" textAlign="center">
+              교직원 식당만 운영
+            </Text>
+          );
+        }
         return (
           <Text color="#888888" fontSize="lg" textAlign="center">
             {nextTime} 운영 예정
