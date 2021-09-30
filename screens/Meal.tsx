@@ -665,14 +665,15 @@ export default function Meal({navigation}: Props) {
             return (
               <HStack
                 alignItems="center"
-                paddingTop="2px"
-                paddingBottom="2px"
+                marginTop="6px"
+                marginBottom="6px"
                 key={menuName}>
                 <Text
                   textAlign="center"
                   width="60%"
                   fontSize="md"
                   fontWeight={600}
+                  lineHeight="sm"
                   color="#59584E">
                   {menuName}
                 </Text>
@@ -707,14 +708,15 @@ export default function Meal({navigation}: Props) {
             return (
               <HStack
                 alignItems="center"
-                paddingTop="2px"
-                paddingBottom="2px"
+                marginTop="6px"
+                marginBottom="6px"
                 key={menuName}>
                 <Text
                   textAlign="center"
                   width="60%"
                   fontSize="md"
                   fontWeight={600}
+                  lineHeight="sm"
                   color="#59584E">
                   {menuName}
                 </Text>
@@ -757,14 +759,15 @@ export default function Meal({navigation}: Props) {
             return (
               <HStack
                 alignItems="center"
-                paddingTop="2px"
-                paddingBottom="2px"
+                marginTop="6px"
+                marginBottom="6px"
                 key={menuName}>
                 <Text
                   textAlign="center"
                   width="60%"
                   fontSize="md"
                   fontWeight={600}
+                  lineHeight="sm"
                   color="#59584E">
                   {menuName}
                 </Text>
@@ -802,14 +805,15 @@ export default function Meal({navigation}: Props) {
             return (
               <HStack
                 alignItems="center"
-                paddingTop="2px"
-                paddingBottom="2px"
+                marginTop="6px"
+                marginBottom="6px"
                 key={menuName}>
                 <Text
                   textAlign="center"
                   width="60%"
                   fontSize="md"
                   fontWeight={600}
+                  lineHeight="sm"
                   color="#59584E">
                   {menuName}
                 </Text>
@@ -850,14 +854,15 @@ export default function Meal({navigation}: Props) {
             return (
               <HStack
                 alignItems="center"
-                paddingTop="2px"
-                paddingBottom="2px"
+                marginTop="6px"
+                marginBottom="6px"
                 key={menuName}>
                 <Text
                   textAlign="center"
                   width="60%"
                   fontSize="md"
                   fontWeight={600}
+                  lineHeight="sm"
                   color="#59584E">
                   {menuName}
                 </Text>
@@ -928,8 +933,8 @@ export default function Meal({navigation}: Props) {
           return (
             <HStack
               alignItems="center"
-              paddingTop="2px"
-              paddingBottom="2px"
+              marginTop="6px"
+              marginBottom="6px"
               key={menuName}>
               <Text
                 textAlign="center"
@@ -1136,8 +1141,8 @@ export default function Meal({navigation}: Props) {
                 width="85%"
                 // height={isOperating(name) ? '132px' : '72px'}
                 minHeight="100px"
-                paddingTop={3}
-                paddingBottom={3}
+                paddingTop={2}
+                paddingBottom={2}
                 bg={isOperating(name) ? '#E9E7CE' : '#E2E2E2'}
                 rounded={10}
                 position="relative"
