@@ -1214,14 +1214,16 @@ export default function Meal({navigation}: Props) {
                           width="100px"
                           height="100px"
                           margin={2}
-                          bg={isOperating(name) ? colors.grey[100] : '#E2E2E2'} // isOperating
+                          bg={colors.grey[100]} // isOperating
                           borderColor={colors.grey[200]}
                           borderWidth={1}
                           rounded={10}
                           padding={0}
                           key={name}>
                           <Text
-                            color={colors.grey[400]}
+                            color={
+                              isOperating(name) ? colors.grey[400] : '#ABABAB'
+                            }
                             fontSize="lg"
                             fontWeight={500}>
                             {name === '대학원기숙사' ? '대학원\n기숙사' : name}
