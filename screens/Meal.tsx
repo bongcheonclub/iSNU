@@ -568,12 +568,19 @@ export default function Meal({navigation}: Props) {
 
     if (cafeteriaName.includes('대학원')) {
       return string
-        .match(/[A-Z]/gi)
+        .match(/[A-Z]|\(\d,\d\d\d원\)/gi)
         .map((priceSymbol, priceIndex) => {
-          return [
-            string.replaceAll('&', '&\n').split(/[A-Z]/)[priceIndex + 1],
-            (priceSymbol.charCodeAt(0) - 65) * 500 + 2000,
-          ];
+          if (priceSymbol.length === 1) {
+            return [
+              string.split(/[A-Z]|\(\d,\d\d\d원\)/)[priceIndex + 1],
+              (priceSymbol.charCodeAt(0) - 65) * 500 + 2000,
+            ];
+          } else {
+            return [
+              string.split(/[A-Z]|\(\d,\d\d\d원\)/)[priceIndex + 1],
+              priceSymbol.slice(1, -2),
+            ];
+          }
         })
         .map(menuAndPrice => {
           const [menuName, price] = [
