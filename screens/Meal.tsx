@@ -1134,7 +1134,10 @@ export default function Meal({navigation}: Props) {
             .map(name => (
               <Center
                 width="85%"
-                height={isOperating(name) ? '132px' : '72px'}
+                // height={isOperating(name) ? '132px' : '72px'}
+                minHeight="100px"
+                paddingTop={3}
+                paddingBottom={3}
                 bg={isOperating(name) ? '#E9E7CE' : '#E2E2E2'}
                 rounded={10}
                 position="relative"
@@ -1145,14 +1148,9 @@ export default function Meal({navigation}: Props) {
                   backgroundColor="transparent"
                   padding={0}
                   onPress={() => setSelectedMeal(name)}>
-                  <HStack
-                    position="relative"
-                    width="100%"
-                    height="100%"
-                    padding={0}>
+                  <HStack position="relative" padding={0}>
                     <Center
                       width="30%"
-                      height="100%"
                       marginBottom={0}
                       padding={1}
                       bg="transparent"
