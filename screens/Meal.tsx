@@ -28,6 +28,8 @@ import {
   floor,
   fromPairs,
   keys,
+  trim,
+  last,
 } from 'lodash';
 import axios from 'axios';
 import {parse} from 'node-html-parser';
@@ -44,10 +46,6 @@ import UnfilledStar from '../icons/unfilled-star.svg';
 import et from 'date-fns/esm/locale/et/index.js';
 import {ParamListBase} from '@react-navigation/native';
 import {check} from 'prettier';
-
-function replaceAll(str: string, searchStr: string, replaceStr: string) {
-  return str.split(searchStr).join(replaceStr);
-}
 
 type Props = BottomTabScreenProps<ParamListBase, '식당'>;
 
@@ -388,6 +386,28 @@ export default function Meal({navigation}: Props) {
     );
   }
 
+  function refineMenuName(rawText) {
+    const splitedText = rawText.split(/\+|&/).map(item => item.trim());
+
+    const refinedMenuNameArray = [];
+    splitedText.forEach((item, idx) => {
+      const lastIndex = refinedMenuNameArray.length - 1;
+      if (lastIndex === -1) {
+        refinedMenuNameArray.push(item);
+      } else {
+        if (refinedMenuNameArray[lastIndex].length + item.length > 8) {
+          refinedMenuNameArray[lastIndex] =
+            refinedMenuNameArray[lastIndex] + '\n';
+          refinedMenuNameArray.push('+' + item);
+        } else if (refinedMenuNameArray[lastIndex].length + item.length <= 8) {
+          refinedMenuNameArray[lastIndex] =
+            refinedMenuNameArray[lastIndex] + '+' + item;
+        }
+      }
+    });
+    return refinedMenuNameArray.join('');
+  }
+
   function showMenu(cafeteriaName, whichMenu) {
     // 메뉴 표기
     const string = menu[cafeteriaName][whichMenu];
@@ -396,14 +416,14 @@ export default function Meal({navigation}: Props) {
         .split('※')[0]
         .split('원 ')
         .map(item => {
-          return item.split(' ');
+          return item.replace('&amp;', '&').split(' ');
         })
         .map(menuAndPrice => {
           if (menuAndPrice.length !== 2) {
             return;
           }
           const [menuName, price] = [
-            menuAndPrice[0].replace('&amp;', '&\n'),
+            refineMenuName(menuAndPrice[0]),
             menuAndPrice[1] + '원',
           ];
           return (
@@ -432,14 +452,14 @@ export default function Meal({navigation}: Props) {
         .split('▶')[0]
         .split('원 ')
         .map(item => {
-          return item.split(' : ');
+          return item.replace('&amp;', '&\n').split(' : ');
         })
         .map(menuAndPrice => {
           if (menuAndPrice.length !== 2) {
             return;
           }
           const [menuName, price] = [
-            menuAndPrice[0].replace('&amp;', '&\n'),
+            refineMenuName(menuAndPrice[0]),
             menuAndPrice[1] + '원',
           ];
           return (
@@ -468,7 +488,7 @@ export default function Meal({navigation}: Props) {
         .split('※')[0]
         .split('원 ')
         .map(item => {
-          return item.split(' ');
+          return item.replaceAll('&amp;', '&\n').split(' ');
         })
         .map(menuAndPrice => {
           if (
@@ -479,16 +499,10 @@ export default function Meal({navigation}: Props) {
           }
           const [menuName, price] = menuAndPrice[0].includes('플러스메뉴')
             ? [
-                (menuAndPrice[0] + '\n' + menuAndPrice[1]).replaceAll(
-                  '&amp;',
-                  '&\n',
-                ),
+                refineMenuName(menuAndPrice[0] + '\n' + menuAndPrice[1]),
                 menuAndPrice[2] + '원',
               ]
-            : [
-                menuAndPrice[0].replaceAll('&amp;', '&\n'),
-                menuAndPrice[1] + '원',
-              ];
+            : [refineMenuName(menuAndPrice[0]), menuAndPrice[1] + '원'];
           return (
             <HStack
               alignItems="center"
@@ -516,17 +530,18 @@ export default function Meal({navigation}: Props) {
         .split('※')[0]
         .split('원 ')
         .map(item => {
-          return item.split(' ');
+          return item
+            .replace('&amp;', '&\n')
+            .replace('&lt;', '<')
+            .replace('&gt;', '>')
+            .split(' ');
         })
         .map(menuAndPrice => {
           if (menuAndPrice.length !== 2) {
             return;
           }
           const [menuName, price] = [
-            menuAndPrice[0]
-              .replace('&amp;', '&\n')
-              .replace('&lt;', '<')
-              .replace('&gt;', '>'),
+            refineMenuName(menuAndPrice[0]),
             menuAndPrice[1] + '원',
           ];
           return (
@@ -556,13 +571,13 @@ export default function Meal({navigation}: Props) {
         .match(/[A-Z]/gi)
         .map((priceSymbol, priceIndex) => {
           return [
-            string.split(/[A-Z]/)[priceIndex + 1],
+            string.replace('&', '&\n').split(/[A-Z]/)[priceIndex + 1],
             (priceSymbol.charCodeAt(0) - 65) * 500 + 2000,
           ];
         })
         .map(menuAndPrice => {
           const [menuName, price] = [
-            menuAndPrice[0].replace('&', '&\n'),
+            refineMenuName(menuAndPrice[0]),
             menuAndPrice[1] + '원',
           ];
           return (
@@ -633,14 +648,14 @@ export default function Meal({navigation}: Props) {
     return string
       .split('원 ')
       .map(text => {
-        return text.replaceAll(' &amp; ', '&amp;').split(' ');
+        return text.replaceAll('&amp;', '&').split(' ');
       })
       .map(menuAndPrice => {
         if (menuAndPrice[0].includes('※')) {
           return;
         }
         const [menuName, price] = [
-          menuAndPrice[0].replace('&amp;', '&\n'),
+          refineMenuName(menuAndPrice[0]),
           menuAndPrice[1] + '원',
         ];
         return (
@@ -675,14 +690,14 @@ export default function Meal({navigation}: Props) {
           .split('※')[0]
           .split('원 ')
           .map(item => {
-            return item.split(' ');
+            return item.replace('&amp;', '&').split(' ');
           })
           .map(menuAndPrice => {
             if (menuAndPrice.length !== 2) {
               return;
             }
             const [menuName, price] = [
-              menuAndPrice[0].replace('&amp;', '&\n'),
+              refineMenuName(menuAndPrice[0]),
               menuAndPrice[1] + '원',
             ];
             return (
@@ -718,14 +733,14 @@ export default function Meal({navigation}: Props) {
           .split('▶')[0]
           .split('원 ')
           .map(item => {
-            return item.split(' : ');
+            return item.replaceAll('&amp;', '&').trim().split(' : ');
           })
           .map(menuAndPrice => {
             if (menuAndPrice.length !== 2) {
               return;
             }
             const [menuName, price] = [
-              menuAndPrice[0].replace('&amp;', '&\n'),
+              refineMenuName(menuAndPrice[0]),
               menuAndPrice[1] + '원',
             ];
             return (
@@ -761,7 +776,7 @@ export default function Meal({navigation}: Props) {
           .split('※')[0]
           .split('원 ')
           .map(item => {
-            return item.split(' ');
+            return item.replaceAll('&amp;', '&').split(' ');
           })
           .map(menuAndPrice => {
             if (
@@ -771,14 +786,8 @@ export default function Meal({navigation}: Props) {
               return;
             }
             const [menuName, price] = menuAndPrice[0].includes('플러스메뉴')
-              ? [
-                  menuAndPrice[1].replaceAll('&amp;', '&\n'),
-                  menuAndPrice[2] + '원',
-                ]
-              : [
-                  menuAndPrice[0].replaceAll('&amp;', '&\n'),
-                  menuAndPrice[1] + '원',
-                ];
+              ? [refineMenuName(menuAndPrice[1]), menuAndPrice[2] + '원']
+              : [refineMenuName(menuAndPrice[0]), menuAndPrice[1] + '원'];
             return (
               <HStack
                 alignItems="center"
@@ -812,17 +821,18 @@ export default function Meal({navigation}: Props) {
           .split('※')[0]
           .split('원 ')
           .map(item => {
-            return item.split(' ');
+            return item
+              .replace('&amp;', '&')
+              .replace('&lt;', '<')
+              .replace('&gt;', '>')
+              .split(' ');
           })
           .map(menuAndPrice => {
             if (menuAndPrice.length !== 2) {
               return;
             }
             const [menuName, price] = [
-              menuAndPrice[0]
-                .replace('&amp;', '&\n')
-                .replace('&lt;', '<')
-                .replace('&gt;', '>'),
+              refineMenuName(menuAndPrice[0]),
               menuAndPrice[1] + '원',
             ];
             return (
@@ -871,7 +881,7 @@ export default function Meal({navigation}: Props) {
           })
           .map(menuAndPrice => {
             const [menuName, price] = [
-              menuAndPrice[0].replace('&', '&\n'),
+              refineMenuName(menuAndPrice[0]),
               menuAndPrice[1] + '원',
             ];
             return (
@@ -943,14 +953,14 @@ export default function Meal({navigation}: Props) {
       return string
         .split('원 ')
         .map(text => {
-          return text.replaceAll(' &amp; ', '&amp;').split(' ');
+          return text.replaceAll('&amp;', '&').split(' ');
         })
         .map(menuAndPrice => {
           if (menuAndPrice[0].includes('※')) {
             return;
           }
           const [menuName, price] = [
-            menuAndPrice[0].replace('&amp;', '\n& '),
+            refineMenuName(menuAndPrice[0]),
             menuAndPrice[1] + '원',
           ];
           return (
@@ -1026,7 +1036,7 @@ export default function Meal({navigation}: Props) {
     }
     function checkOperating(cafeteriaName) {
       // const now = new Date();
-      const now = new Date('Tue Sep 28 2021 17:24:15 GMT+0900');
+      const now = new Date('Tue Sep 28 2021 12:24:15 GMT+0900');
       const spliter = cafeteriaName.includes('감골') ? '~' : '-';
       const today = (() => {
         switch (day) {
