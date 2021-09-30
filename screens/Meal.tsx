@@ -416,7 +416,7 @@ export default function Meal({navigation}: Props) {
         .split('※')[0]
         .split('원 ')
         .map(item => {
-          return item.replace('&amp;', '&').split(' ');
+          return item.replaceAll('&amp;', '&').split(' ');
         })
         .map(menuAndPrice => {
           if (menuAndPrice.length !== 2) {
@@ -452,7 +452,7 @@ export default function Meal({navigation}: Props) {
         .split('▶')[0]
         .split('원 ')
         .map(item => {
-          return item.replace('&amp;', '&\n').split(' : ');
+          return item.replaceAll('&amp;', '&\n').split(' : ');
         })
         .map(menuAndPrice => {
           if (menuAndPrice.length !== 2) {
@@ -531,9 +531,9 @@ export default function Meal({navigation}: Props) {
         .split('원 ')
         .map(item => {
           return item
-            .replace('&amp;', '&\n')
-            .replace('&lt;', '<')
-            .replace('&gt;', '>')
+            .replaceAll('&amp;', '&\n')
+            .replaceAll('&lt;', '<')
+            .replaceAll('&gt;', '>')
             .split(' ');
         })
         .map(menuAndPrice => {
@@ -571,7 +571,7 @@ export default function Meal({navigation}: Props) {
         .match(/[A-Z]/gi)
         .map((priceSymbol, priceIndex) => {
           return [
-            string.replace('&', '&\n').split(/[A-Z]/)[priceIndex + 1],
+            string.replaceAll('&', '&\n').split(/[A-Z]/)[priceIndex + 1],
             (priceSymbol.charCodeAt(0) - 65) * 500 + 2000,
           ];
         })
@@ -690,7 +690,7 @@ export default function Meal({navigation}: Props) {
           .split('※')[0]
           .split('원 ')
           .map(item => {
-            return item.replace('&amp;', '&').split(' ');
+            return item.replaceAll('&amp;', '&').split(' ');
           })
           .map(menuAndPrice => {
             if (menuAndPrice.length !== 2) {
@@ -822,9 +822,9 @@ export default function Meal({navigation}: Props) {
           .split('원 ')
           .map(item => {
             return item
-              .replace('&amp;', '&')
-              .replace('&lt;', '<')
-              .replace('&gt;', '>')
+              .replaceAll('&amp;', '&')
+              .replaceAll('&lt;', '<')
+              .replaceAll('&gt;', '>')
               .split(' ');
           })
           .map(menuAndPrice => {
