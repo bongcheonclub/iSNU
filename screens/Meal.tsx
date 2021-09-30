@@ -1218,7 +1218,6 @@ export default function Meal({navigation}: Props) {
                         key={name}
                         width="30%"
                         ratio={1}
-                        marginBottom="5%"
                         margin="2.5%">
                         <Button
                           onPress={() => setSelectedMeal(name)}
