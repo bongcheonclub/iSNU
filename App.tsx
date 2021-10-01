@@ -30,6 +30,7 @@ import axios from 'axios';
 import {chain, map} from 'lodash';
 import {parse} from 'node-html-parser';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {theme} from './ui/theme';
 
 export const FAVORITE_STORAGE_KEY = {
   cafe: 'favoriteCafeList',
@@ -148,7 +149,7 @@ export default function App() {
     });
   }, []);
   return (
-    <NativeBaseProvider>
+    <NativeBaseProvider theme={theme}>
       {data ? (
         <NavigationContainer>
           <Tab.Navigator
