@@ -28,7 +28,7 @@ export const theme = extendTheme({
     gray: {
       100: '#F8F8F8', //Normal Place Background
       200: '#EBEBEB', //Closed Favorite Place Background
-      300: '#DCDCDC', //Normal Place Outline
+      300: '#DCDCDC', //Closed Favorite Place, Normal Place Outline
       400: '#ABABAB', //Closed Normal Place Name
       500: '#929292', //Sub Info
       600: '#888888', //Favorite Place Time
@@ -41,6 +41,86 @@ export const theme = extendTheme({
     Text: {
       baseStyle: {
         fontFamily: 'body',
+      },
+      variants: {
+        pageTitle: {
+          color: 'blue',
+          fontSize: '50px',
+          fontWeight: '500',
+        },
+        favoritePlaceNameBig: {
+          // For Meal, Bus
+          color: 'brown.300',
+          fontSize: '25px',
+          fontWeight: '500',
+        },
+        favoritePlaceNameSmall: {
+          // For Cafe, Mart
+          color: 'brown.300',
+          fontSize: '20px',
+          fontWeight: '500',
+        },
+        favoritePlaceTime: {
+          color: 'gray.600',
+          fontSize: '15px',
+          fontWeight: '400',
+        },
+        favoriteMenuName: {
+          color: 'brown.500',
+          fontSize: '15px',
+          fontWeight: '400',
+        },
+        favoriteMenuPrice: {
+          color: 'brown.400',
+          fontSize: '15px',
+          fontWeight: '400',
+        },
+        normalOpenPlaceBig: {
+          // For Bus, Etc
+          color: 'gray.700',
+          fontSize: '25px',
+          fontWeight: '400',
+        },
+        normalOpenPlaceSmall: {
+          // For Else
+          color: 'gray.700',
+          fontSize: '20px',
+          fontWeight: '400',
+        },
+        normalClosedPlaceBig: {
+          // For Bus
+          color: 'gray.400',
+          fontSize: '25px',
+          fontWeight: '400',
+        },
+        normalClosedPlaceSmall: {
+          // For Else
+          color: 'gray.400',
+          fontSize: '20px',
+          fontWeight: '400',
+        },
+      },
+    },
+    Button: {
+      variants: {
+        favoriteOpenPlace: {
+          bg: 'brown.100',
+          borderColor: 'brown.200',
+          borderWidth: '1px',
+          rounded: '10px',
+        },
+        favoriteClosedPlace: {
+          bg: 'gray.200',
+          borderColor: 'gray.300',
+          borderWidth: '1px',
+          rounded: '10px',
+        },
+        place: {
+          bg: 'gray.100',
+          borderColor: 'gray.300',
+          borderWidth: '1px',
+          rounded: '10px',
+        },
       },
     },
   },
