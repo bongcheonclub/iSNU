@@ -33,6 +33,7 @@ export const theme = extendTheme({
       500: '#929292', //Sub Info
       600: '#888888', //Favorite Place Time
       700: '#636363', //Normal Place Name
+      800: '#505050', //Sub Content
     },
     blue: '#0C146B', //Page Title
   },
@@ -97,6 +98,16 @@ export const theme = extendTheme({
           // For Else
           color: 'gray.400',
           fontSize: '20px',
+          fontWeight: '400',
+        },
+        modalTitle: {
+          color: 'blue',
+          fontSize: '25px',
+          fontWeight: '500',
+        },
+        modalSubInfo: {
+          color: 'gray.500',
+          fontSize: '15px',
           fontWeight: '400',
         },
       },
