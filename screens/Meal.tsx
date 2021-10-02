@@ -121,7 +121,7 @@ export default function Meal({navigation}: Props) {
   useEffect(() => {
     function fetchMenu() {
       // 식단 정보 가져오는 함수
-      axios.get(todayMenuURL).then(res => {
+      axios.get(exampleDateURL).then(res => {
         const html = res.data;
         const root = parse(html);
         const data: TodaysMenu = {};
@@ -387,7 +387,7 @@ export default function Meal({navigation}: Props) {
   }
 
   function refineMenuName(rawText) {
-    const splitedText = rawText.split(/\+|&/).map(item => item.trim());
+    const splitedText = rawText.split(/\+|&|\*/).map(item => item.trim());
 
     const refinedMenuNameArray = [];
     splitedText.forEach((item, idx) => {
@@ -416,7 +416,7 @@ export default function Meal({navigation}: Props) {
         .split('※')[0]
         .split('원 ')
         .map(item => {
-          return item.replaceAll('&amp;', '&').split(' ');
+          return item.split('&amp;').join('&').split(' ');
         })
         .map(menuAndPrice => {
           if (menuAndPrice.length !== 2) {
@@ -452,7 +452,7 @@ export default function Meal({navigation}: Props) {
         .split('▶')[0]
         .split('원 ')
         .map(item => {
-          return item.replaceAll('&amp;', '&\n').split(' : ');
+          return item.split('&amp;').join('&\n').split(' : ');
         })
         .map(menuAndPrice => {
           if (menuAndPrice.length !== 2) {
@@ -488,7 +488,7 @@ export default function Meal({navigation}: Props) {
         .split('※')[0]
         .split('원 ')
         .map(item => {
-          return item.replaceAll('&amp;', '&\n').split(' ');
+          return item.split('&amp;').join('&\n').split(' ');
         })
         .map(menuAndPrice => {
           if (
@@ -531,9 +531,12 @@ export default function Meal({navigation}: Props) {
         .split('원 ')
         .map(item => {
           return item
-            .replaceAll('&amp;', '&\n')
-            .replaceAll('&lt;', '<')
-            .replaceAll('&gt;', '>')
+            .split('&amp;')
+            .join('&\n')
+            .split('&lt;')
+            .join('<')
+            .split('&gt;')
+            .join('>')
             .split(' ');
         })
         .map(menuAndPrice => {
@@ -621,10 +624,14 @@ export default function Meal({navigation}: Props) {
       return (
         <Text textAlign="center" width="100%" fontSize="md">
           {string
-            .replaceAll('00원', '00원\n')
-            .replaceAll('&amp;', '&\n')
-            .replaceAll('&lt;', '\n<')
-            .replaceAll('&gt;', '>\n')}
+            .split('00원')
+            .join('00원\n')
+            .split('&amp;')
+            .join('&\n')
+            .split('&lt;')
+            .join('\n<')
+            .split('&gt;')
+            .join('>\n')}
         </Text>
       );
     }
@@ -632,11 +639,16 @@ export default function Meal({navigation}: Props) {
       return (
         <Text textAlign="center" width="100%" fontSize="md">
           {string
-            .replaceAll('00원', '00원\n')
-            .replaceAll('소반', '\n소반')
-            .replaceAll('&amp;', '&\n')
-            .replaceAll('&lt;', '\n<')
-            .replaceAll('&gt;', '>\n')}
+            .split('00원')
+            .join('00원\n')
+            .split('소반')
+            .join('\n소반')
+            .split('&amp;')
+            .join('&\n')
+            .split('&lt;')
+            .join('\n<')
+            .split('&gt;')
+            .join('>\n')}
         </Text>
       );
     }
@@ -655,7 +667,7 @@ export default function Meal({navigation}: Props) {
     return string
       .split('원 ')
       .map(text => {
-        return text.replaceAll('&amp;', '&').split(' ');
+        return text.split('&amp;').join('&').split(' ');
       })
       .map(menuAndPrice => {
         if (menuAndPrice[0].includes('※')) {
@@ -697,7 +709,7 @@ export default function Meal({navigation}: Props) {
           .split('※')[0]
           .split('원 ')
           .map(item => {
-            return item.replaceAll('&amp;', '&').split(' ');
+            return item.split('&amp;').join('&').split(' ');
           })
           .map(menuAndPrice => {
             if (menuAndPrice.length !== 2) {
@@ -740,7 +752,7 @@ export default function Meal({navigation}: Props) {
           .split('▶')[0]
           .split('원 ')
           .map(item => {
-            return item.replaceAll('&amp;', '&').trim().split(' : ');
+            return item.split('&amp;').join('&').trim().split(' : ');
           })
           .map(menuAndPrice => {
             if (menuAndPrice.length !== 2) {
@@ -783,7 +795,7 @@ export default function Meal({navigation}: Props) {
           .split('※')[0]
           .split('원 ')
           .map(item => {
-            return item.replaceAll('&amp;', '&').split(' ');
+            return item.split('&amp;').join('&').split(' ');
           })
           .map(menuAndPrice => {
             if (
@@ -829,9 +841,12 @@ export default function Meal({navigation}: Props) {
           .split('원 ')
           .map(item => {
             return item
-              .replaceAll('&amp;', '&')
-              .replaceAll('&lt;', '<')
-              .replaceAll('&gt;', '>')
+              .split('&amp;')
+              .join('&')
+              .split('&lt;')
+              .join('<')
+              .split('&gt;')
+              .join('>')
               .split(' ');
           })
           .map(menuAndPrice => {
@@ -938,11 +953,16 @@ export default function Meal({navigation}: Props) {
         return (
           <Text textAlign="center" width="100%" fontSize="md">
             {string
-              .replaceAll('00원', '00원\n')
-              .replaceAll('소반', '\n소반')
-              .replaceAll('&amp;', '&\n')
-              .replaceAll('&lt;', '\n<')
-              .replaceAll('&gt;', '>\n')}
+              .split('00원')
+              .join('00원\n')
+              .split('소반')
+              .join('\n소반')
+              .split('&amp;')
+              .join('&\n')
+              .split('&lt;')
+              .join('\n<')
+              .split('&gt;')
+              .join('>\n')}
           </Text>
         );
       }
@@ -960,7 +980,7 @@ export default function Meal({navigation}: Props) {
       return string
         .split('원 ')
         .map(text => {
-          return text.replaceAll('&amp;', '&').split(' ');
+          return text.split('&amp;').join('&').split(' ');
         })
         .map(menuAndPrice => {
           if (menuAndPrice[0].includes('※')) {
@@ -1057,10 +1077,12 @@ export default function Meal({navigation}: Props) {
     }
     function checkOperating(cafeteriaName) {
       // const now = new Date();
-      const now = new Date('Tue Sep 28 2021 12:24:15 GMT+0900');
+      const now = new Date('Tue Sep 23 2021 12:24:15 GMT+0900');
       const spliter = cafeteriaName.includes('감골') ? '~' : '-';
       const today = (() => {
-        switch (day) {
+        switch (
+          getDay(now) // day
+        ) {
           case 0: // sunday
             return 'holiday';
           case 6: // saturday
