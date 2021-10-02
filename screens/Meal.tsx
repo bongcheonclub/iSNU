@@ -259,7 +259,7 @@ export default function Meal({navigation}: Props) {
           // 즐겨찾기 가져오는 함수
           const key = 'favoriteMealList';
           const getList = await AsyncStorage.getItem(key);
-          const getFavoriteList = getList ? await JSON.parse(getList) : [];
+          const getFavoriteList = getList ? JSON.parse(getList) : [];
           const getNotFavoriteList = initialMealList.filter(
             mealName => !getFavoriteList.includes(mealName),
           );
