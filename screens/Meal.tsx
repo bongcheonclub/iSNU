@@ -1015,11 +1015,18 @@ export default function Meal({navigation}: Props) {
             </Text>
           );
         }
-        return (
+        if (nextTime === '추후') {
+          // 운영 정보 없음
           <Text color="#888888" fontSize="lg" textAlign="center">
-            {nextTime} 운영 예정
-          </Text>
-        );
+            운영 정보 없음
+          </Text>;
+        } else {
+          return (
+            <Text color="#888888" fontSize="lg" textAlign="center">
+              {nextTime} 운영 예정
+            </Text>
+          );
+        }
       }
     }
   }
@@ -1238,7 +1245,7 @@ export default function Meal({navigation}: Props) {
                         fontSize="lg"
                         textAlign="center"
                         margin="auto">
-                        추후 운영 예정
+                        운영 정보 없음
                       </Text>
                     )}
                   </HStack>
