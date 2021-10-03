@@ -140,11 +140,18 @@ export default function App() {
             initialRouteName={'Mart'}
             screenOptions={{
               headerStatusBarHeight: 100,
-              headerTitleStyle: {color: colors.blue, fontSize: 40},
+              headerTitleStyle: {
+                color: colors.blue,
+                fontSize: 40,
+                marginLeft: 12,
+              },
               headerTitleAlign: 'left',
-              headerStyle: {borderBottomWidth: 0},
+              headerStyle: {borderBottomWidth: 0, height: 150},
+              headerTitleContainerStyle: {paddingBottom: 10},
               headerRight: () => (
                 <Button
+                  marginBottom="6px"
+                  marginRight="3"
                   onPress={() => setSelectedMoreTap('main')}
                   backgroundColor="transparent">
                   <More />
