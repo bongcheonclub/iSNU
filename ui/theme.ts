@@ -110,6 +110,11 @@ export const theme = extendTheme({
           fontSize: '15px',
           fontWeight: '400',
         },
+        modalSubContent: {
+          color: 'gray.800',
+          fontSize: '15px',
+          fontWeight: '400',
+        },
       },
     },
     Button: {
