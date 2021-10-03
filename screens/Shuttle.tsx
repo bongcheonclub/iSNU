@@ -4,7 +4,7 @@ import React, {useEffect, useState} from 'react';
 import {compareAsc, getDay, parse as parseTime, subDays} from 'date-fns';
 import List from '../components/List';
 import {ParamListBase} from '@react-navigation/native';
-import {FAVORITE_STORAGE_KEY} from '../App';
+import {FAVORITE_STORAGE_KEY} from '../constants';
 
 type Props = BottomTabScreenProps<ParamListBase, '셔틀'> & {
   initialFavoriteNames: string[];
