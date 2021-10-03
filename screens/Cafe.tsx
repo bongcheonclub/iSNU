@@ -3,7 +3,7 @@ import React, {useEffect, useState} from 'react';
 import {compareAsc, getDay, parse as parseTime} from 'date-fns';
 import Grid from '../components/Grid';
 import {ParamListBase} from '@react-navigation/routers';
-import {FAVORITE_STORAGE_KEY} from '../App';
+import {FAVORITE_STORAGE_KEY} from '../constants';
 
 type Props = BottomTabScreenProps<ParamListBase, '카페'> & {
   cafes: Cafe[];
