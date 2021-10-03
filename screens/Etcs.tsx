@@ -8,6 +8,7 @@ import {
   Text,
   Modal,
   Divider,
+  HStack,
 } from 'native-base';
 import {WebView} from 'react-native-webview';
 import React, {useState} from 'react';
@@ -28,65 +29,377 @@ export default function Etcs({navigation}: Props) {
           <Modal
             isOpen={focusedEtc === 'Bank'}
             onClose={() => setFocusedEtc(null)}>
-            <Modal.Content>
+            <Modal.Content padding={0} width="90%">
               <Modal.CloseButton />
               <Modal.Body>
-                <Text>은행</Text>
-                <Text>평일 09:00 ~ 16:00 운영</Text>
-                <Text>은행 위치</Text>
-                <Divider />
-                <Text>우리 4동 인문대 신양학술정보관 1층</Text>
-                <Divider />
-                <Text>농협 301동 제1공학관 1층</Text>
-                <Divider />
-                <Text>농협 940동 연구공원 지원시설 1층</Text>
-                <Divider />
-                <Text>농협 58동 SK경영관 1층</Text>
-                <Divider />
-                <Text>농협 109동 자하연식당 1층</Text>
-                <Divider />
-                <Text>농협 200동 농생대 2층</Text>
-                <Divider />
-                <Text>신한 63동 학생회관 1층</Text>
-                <Divider />
-                <Text>신한 44-1동 공대 신양학술정보관 1층</Text>
-                <Divider />
-                <Text>신한 941동 연구공원 백학어린이집 1층</Text>
+                <Box margin={6} marginBottom={1}>
+                  <HStack left={-15} top={-15}>
+                    <Text variant="modalTitle" marginBottom={1}>
+                      은행
+                    </Text>
+                  </HStack>
+                  <Text variant="modalSubInfo" left={-15} top={-20}>
+                    평일 09:00 ~ 16:00 운영
+                  </Text>
+                </Box>
+                <VStack>
+                  <HStack width="100%">
+                    <Text width="20%" variant="modalSubInfo" textAlign="center">
+                      은행
+                    </Text>
+                    <Text width="80%" variant="modalSubInfo" textAlign="center">
+                      위치
+                    </Text>
+                  </HStack>
+                  <Divider
+                    my={2}
+                    bg="black"
+                    width="100%"
+                    marginTop="14px"
+                    marginBottom="14px"
+                  />
+                  <HStack width="100%">
+                    <Text
+                      width="20%"
+                      variant="modalSubContent"
+                      textAlign="center">
+                      우리
+                    </Text>
+
+                    <Text
+                      width="80%"
+                      variant="modalSubContent"
+                      textAlign="center">
+                      4동 인문대 신양학술정보관 1층
+                    </Text>
+                  </HStack>
+                  <Divider
+                    my={2}
+                    bg="black"
+                    width="100%"
+                    marginTop="14px"
+                    marginBottom="14px"
+                  />
+                  <HStack width="100%">
+                    <Text
+                      width="20%"
+                      variant="modalSubContent"
+                      textAlign="center">
+                      농협
+                    </Text>
+                    <Text
+                      width="80%"
+                      variant="modalSubContent"
+                      textAlign="center">
+                      109동 자하연식당 1층
+                    </Text>
+                  </HStack>
+                  <Divider
+                    my={2}
+                    bg="black"
+                    width="100%"
+                    marginTop="14px"
+                    marginBottom="14px"
+                  />
+                  <HStack width="100%">
+                    <Text
+                      width="20%"
+                      variant="modalSubContent"
+                      textAlign="center">
+                      농협
+                    </Text>
+                    <Text
+                      width="80%"
+                      variant="modalSubContent"
+                      textAlign="center">
+                      58동 SK경영관 1층
+                    </Text>
+                  </HStack>
+                  <Divider
+                    my={2}
+                    bg="black"
+                    width="100%"
+                    marginTop="14px"
+                    marginBottom="14px"
+                  />
+                  <HStack width="100%">
+                    <Text
+                      width="20%"
+                      variant="modalSubContent"
+                      textAlign="center">
+                      농협
+                    </Text>
+                    <Text
+                      width="80%"
+                      variant="modalSubContent"
+                      textAlign="center">
+                      200동 농생대 2층
+                    </Text>
+                  </HStack>
+                  <Divider
+                    my={2}
+                    bg="black"
+                    width="100%"
+                    marginTop="14px"
+                    marginBottom="14px"
+                  />
+                  <HStack width="100%">
+                    <Text
+                      width="20%"
+                      variant="modalSubContent"
+                      textAlign="center">
+                      농협
+                    </Text>
+                    <Text
+                      width="80%"
+                      variant="modalSubContent"
+                      textAlign="center">
+                      301동 제1공학관 1층
+                    </Text>
+                  </HStack>
+                  <Divider
+                    my={2}
+                    bg="black"
+                    width="100%"
+                    marginTop="14px"
+                    marginBottom="14px"
+                  />
+                  <HStack width="100%">
+                    <Text
+                      width="20%"
+                      variant="modalSubContent"
+                      textAlign="center">
+                      농협
+                    </Text>
+                    <Text
+                      width="80%"
+                      variant="modalSubContent"
+                      textAlign="center">
+                      940동 연구공원 지원시설 1층
+                    </Text>
+                  </HStack>
+                  <Divider
+                    my={2}
+                    bg="black"
+                    width="100%"
+                    marginTop="14px"
+                    marginBottom="14px"
+                  />
+                  <HStack width="100%">
+                    <Text
+                      width="20%"
+                      variant="modalSubContent"
+                      textAlign="center">
+                      신한
+                    </Text>
+                    <Text
+                      width="80%"
+                      variant="modalSubContent"
+                      textAlign="center">
+                      63동 학생회관 1층
+                    </Text>
+                  </HStack>
+                  <Divider
+                    my={2}
+                    bg="black"
+                    width="100%"
+                    marginTop="14px"
+                    marginBottom="14px"
+                  />
+                  <HStack width="100%">
+                    <Text
+                      width="20%"
+                      variant="modalSubContent"
+                      textAlign="center">
+                      신한
+                    </Text>
+                    <Text
+                      width="80%"
+                      variant="modalSubContent"
+                      textAlign="center">
+                      44-1동 공대 신양학술정보관 1층
+                    </Text>
+                  </HStack>
+                  <Divider
+                    my={2}
+                    bg="black"
+                    width="100%"
+                    marginTop="14px"
+                    marginBottom="14px"
+                  />
+                  <HStack width="100%">
+                    <Text
+                      width="20%"
+                      variant="modalSubContent"
+                      textAlign="center">
+                      신한
+                    </Text>
+                    <Text
+                      width="80%"
+                      variant="modalSubContent"
+                      textAlign="center"
+                      marginBottom="20px">
+                      941동 연구공원 백학어린이집 1층
+                    </Text>
+                  </HStack>
+                </VStack>
               </Modal.Body>
             </Modal.Content>
           </Modal>
           <Modal
             isOpen={focusedEtc === 'Post'}
             onClose={() => setFocusedEtc(null)}>
-            <Modal.Content>
+            <Modal.Content width="90%">
               <Modal.CloseButton />
               <Modal.Body>
-                <Text>우체국</Text>
-                <Text>위치 행정관 1층 (학생식당 앞)</Text>
-                <Divider />
-                <Text>
-                  운영시간 평일 09:00 ~ 18:00 (금융서비스: 09:00 ~ 16:30)
-                </Text>
-                <Divider />
-                <Text>연락처 02-889-0205</Text>
+                <Box margin={6} marginBottom={1}>
+                  <HStack left={-15} top={-15}>
+                    <Text variant="modalTitle" marginBottom={1}>
+                      우체국
+                    </Text>
+                  </HStack>
+                </Box>
+                <VStack>
+                  <HStack width="100%">
+                    <Text
+                      width="25%"
+                      variant="modalSubContent"
+                      textAlign="center">
+                      위치
+                    </Text>
+                    <Text
+                      width="75%"
+                      variant="modalSubContent"
+                      textAlign="center">
+                      행정관 1층 (학생회관 식당 앞)
+                    </Text>
+                  </HStack>
+                  <Divider
+                    my={2}
+                    bg="black"
+                    width="100%"
+                    marginTop="14px"
+                    marginBottom="14px"
+                  />
+                  <HStack width="100%" alignItems="center">
+                    <Text
+                      width="25%"
+                      variant="modalSubContent"
+                      textAlign="center">
+                      운영시간
+                    </Text>
+                    <VStack width="75%">
+                      <Text variant="modalSubContent" textAlign="center">
+                        평일 09:00 ~ 18:00
+                      </Text>
+                      <Text variant="modalSubContent" textAlign="center">
+                        (금융서비스: 09:00 ~ 16:30)
+                      </Text>
+                    </VStack>
+                  </HStack>
+                  <Divider
+                    my={2}
+                    bg="black"
+                    width="100%"
+                    marginTop="14px"
+                    marginBottom="14px"
+                  />
+                  <HStack width="100%">
+                    <Text
+                      width="25%"
+                      variant="modalSubContent"
+                      textAlign="center">
+                      연락처
+                    </Text>
+                    <Text
+                      width="75%"
+                      variant="modalSubContent"
+                      textAlign="center"
+                      marginBottom="20px">
+                      02-889-0205
+                    </Text>
+                  </HStack>
+                </VStack>
               </Modal.Body>
             </Modal.Content>
           </Modal>
           <Modal
             isOpen={focusedEtc === 'Book'}
             onClose={() => setFocusedEtc(null)}>
-            <Modal.Content>
+            <Modal.Content width="90%">
               <Modal.CloseButton />
               <Modal.Body>
-                <Text>교보문고</Text>
-                <Text>위치 학생회관 1층</Text>
-                <Divider />
-                <Text>
-                  운영시간 평일 08:30 ~ 19:00 토요일 10:00 ~ 17:00 (일요일,
-                  공휴일 휴무)
-                </Text>
-                <Divider />
-                <Text>연락처 02-880-8581</Text>
+                <Box margin={6} marginBottom={1}>
+                  <HStack left={-15} top={-15}>
+                    <Text variant="modalTitle" marginBottom={1}>
+                      교보문고
+                    </Text>
+                  </HStack>
+                </Box>
+                <VStack>
+                  <HStack width="100%">
+                    <Text
+                      width="25%"
+                      variant="modalSubContent"
+                      textAlign="center">
+                      위치
+                    </Text>
+                    <Text
+                      width="75%"
+                      variant="modalSubContent"
+                      textAlign="center">
+                      학생회관 1층
+                    </Text>
+                  </HStack>
+                  <Divider
+                    my={2}
+                    bg="black"
+                    width="100%"
+                    marginTop="14px"
+                    marginBottom="14px"
+                  />
+                  <HStack width="100%" alignItems="center">
+                    <Text
+                      width="25%"
+                      variant="modalSubContent"
+                      textAlign="center">
+                      운영시간
+                    </Text>
+                    <VStack width="75%">
+                      <Text variant="modalSubContent" textAlign="center">
+                        평일 08:30 ~ 19:00
+                      </Text>
+                      <Text variant="modalSubContent" textAlign="center">
+                        토요일 10:00 ~ 17:00
+                      </Text>
+                      <Text variant="modalSubContent" textAlign="center">
+                        (일요일, 공휴일 휴무)
+                      </Text>
+                    </VStack>
+                  </HStack>
+                  <Divider
+                    my={2}
+                    bg="black"
+                    width="100%"
+                    marginTop="14px"
+                    marginBottom="14px"
+                  />
+                  <HStack width="100%">
+                    <Text
+                      width="25%"
+                      variant="modalSubContent"
+                      textAlign="center">
+                      연락처
+                    </Text>
+                    <Text
+                      width="75%"
+                      variant="modalSubContent"
+                      textAlign="center"
+                      marginBottom="20px">
+                      02-880-8581
+                    </Text>
+                  </HStack>
+                </VStack>
               </Modal.Body>
             </Modal.Content>
           </Modal>
