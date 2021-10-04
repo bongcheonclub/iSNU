@@ -1,4 +1,4 @@
-apply plugin: "com.android.application"
+apply plugin: "com.snuinfo"
 
 import com.android.build.OutputFile
 
@@ -126,11 +126,11 @@ android {
     compileSdkVersion rootProject.ext.compileSdkVersion
 
     defaultConfig {
-        applicationId "com.snuinfoapp"
+        applicationId "com.snuinfo"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
+        versionCode 4200000
+        versionName "2.0.0"
     }
     splits {
         abi {
