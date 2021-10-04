@@ -145,13 +145,15 @@ export default function App() {
                 color: colors.blue,
                 fontSize: 40,
                 marginLeft: 12,
+                top: '0%',
+                height: '150%',
               },
               headerTitleAlign: 'left',
-              headerStyle: {borderBottomWidth: 0, height: 150},
+              headerStyle: {borderBottomWidth: 0, height: 140},
               headerTitleContainerStyle: {paddingBottom: 10},
               headerRight: () => (
                 <Button
-                  marginBottom="6px"
+                  marginBottom="14px"
                   marginRight="3"
                   onPress={() => setSelectedMoreTap('main')}
                   backgroundColor="transparent">
@@ -230,7 +232,7 @@ export default function App() {
                     color="blue"
                     fontSize="25px"
                     fontWeight="extrabold">
-                    잘못된 정보 제공하기
+                    잘못된 정보 제보하기
                   </Text>
                   <Outlink />
                 </Center>
