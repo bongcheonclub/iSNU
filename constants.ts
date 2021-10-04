@@ -1,6 +1,7 @@
-export const FAVORITE_STORAGE_KEY = {
-  cafe: 'favoriteCafeList',
-  mart: 'favoriteMartList',
-  shuttle: 'favoriteShuttleList',
-  meal: 'favoriteMealList',
+export const STORAGE_KEY = {
+  favoriteCafe: 'favoriteCafeList',
+  favoriteMart: 'favoriteMartList',
+  favoriteShuttle: 'favoriteShuttleList',
+  favoriteMeal: 'favoriteMealList',
+  initialize: 'cachedInitializeData',
 };

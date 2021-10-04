@@ -1,4 +1,4 @@
-import {FAVORITE_STORAGE_KEY} from '../constants';
+import {STORAGE_KEY} from '../constants';
 import axios, {AxiosResponse} from 'axios';
 import {chain, keyBy, map} from 'lodash';
 import {Node, parse} from 'node-html-parser';
@@ -10,6 +10,38 @@ import {
   getMonth,
   parse as parseTime,
 } from 'date-fns';
+
+function getTodaysDate() {
+  const now = new Date();
+  const month = getMonth(now) + 1;
+  const date = getDate(now);
+  const day = getDay(now);
+  const koreanDay = (() => {
+    if (day === 0) {
+      return '일';
+    }
+    if (day === 1) {
+      return '월';
+    }
+    if (day === 2) {
+      return '화';
+    }
+    if (day === 3) {
+      return '수';
+    }
+    if (day === 4) {
+      return '목';
+    }
+    if (day === 5) {
+      return '금';
+    }
+    if (day === 6) {
+      return '토';
+    }
+    throw Error('이럴리없다.');
+  })();
+  return {month, date, koreanDay, day};
+}
 
 export type TodaysMenu = {
   [name: string]: {
@@ -52,6 +84,7 @@ function processMealData(
   mealMenuListRes: AxiosResponse<any>,
   favoriteMealList: string | null,
 ) {
+  const {month, date, koreanDay, day} = getTodaysDate();
   function fetchMenu() {
     // 식단 정보 가져오는 함수
     const html = mealMenuListRes.data;
@@ -207,40 +240,6 @@ function processMealData(
   const menu = fetchMenu();
   const {cafeteria, mealList, favoriteList, nonFavoriteList} = fetchInfo();
 
-  function getTodaysDate() {
-    const now = new Date();
-    const month = getMonth(now) + 1;
-    const date = getDate(now);
-    const day = getDay(now);
-    const koreanDay = (() => {
-      if (day === 0) {
-        return '일';
-      }
-      if (day === 1) {
-        return '월';
-      }
-      if (day === 2) {
-        return '화';
-      }
-      if (day === 3) {
-        return '수';
-      }
-      if (day === 4) {
-        return '목';
-      }
-      if (day === 5) {
-        return '금';
-      }
-      if (day === 6) {
-        return '토';
-      }
-      throw Error('이럴리없다.');
-    })();
-    return {month, date, koreanDay, day};
-  }
-
-  const {month, date, koreanDay, day} = getTodaysDate();
-
   function processDormData() {
     const html = mealDormListRes.data;
     const root = parse(html);
@@ -313,6 +312,32 @@ function processMealData(
 }
 
 export async function initializeData() {
+  const now = Date.now();
+  const {month, date} = getTodaysDate();
+  const cachedItem = await AsyncStorage.getItem(STORAGE_KEY.initialize);
+
+  const nowDate = `${month}/${date}`;
+
+  if (cachedItem) {
+    const {cachedDate, cachedData}: {cachedDate: string; cachedData: any} =
+      JSON.parse(cachedItem);
+
+    if (cachedDate === nowDate) {
+      return cachedData;
+    }
+  }
+
+  const fetchedData = await fetchData();
+
+  await AsyncStorage.setItem(
+    STORAGE_KEY.initialize,
+    JSON.stringify({cachedData: fetchedData, cachedDate: nowDate}),
+  );
+
+  return fetchedData;
+}
+
+async function fetchData() {
   const [
     [res, martRes, mealListRes, mealDormListRes, mealMenuListRes],
     [favoriteCafeList, favoriteMartList, favoriteShuttleList, favoriteMealList],
@@ -324,7 +349,7 @@ export async function initializeData() {
       axios.get('https://snudorm.snu.ac.kr/food-schedule/'),
       axios.get('https://snuco.snu.ac.kr/ko/foodmenu'),
     ]),
-    Promise.all(map(FAVORITE_STORAGE_KEY, key => AsyncStorage.getItem(key))),
+    Promise.all(map(STORAGE_KEY, key => AsyncStorage.getItem(key))),
   ]);
 
   const mealData = processMealData(
