@@ -456,61 +456,61 @@ export default function Etcs({navigation}: Props) {
       ) : null}
       <ScrollView bgColor={colors.white}>
         <VStack>
-          <Center margin={2.5}>
+          <Center marginTop={2.5} marginBottom={2.5}>
             <Button
               onPress={() => setFocusedEtc('Bank')}
               rounded="10px"
-              width="315px"
+              width="85%"
               height="72px"
               variant="place">
               <Text variant="normalOpenPlaceBig">은행</Text>
             </Button>
           </Center>
-          <Center margin={2.5}>
+          <Center marginTop={2.5} marginBottom={2.5}>
             <Button
               onPress={() => setFocusedEtc('Post')}
               rounded="10px"
-              width="315px"
+              width="85%"
               height="72px"
               variant="place">
               <Text variant="normalOpenPlaceBig">우체국</Text>
             </Button>
           </Center>
-          <Center margin={2.5}>
+          <Center marginTop={2.5} marginBottom={2.5}>
             <Button
               onPress={() => setFocusedEtc('Book')}
               rounded="10px"
-              width="315px"
+              width="85%"
               height="72px"
               variant="place">
               <Text variant="normalOpenPlaceBig">교보문고</Text>
             </Button>
           </Center>
-          <Center margin={2.5}>
+          <Center marginTop={2.5} marginBottom={2.5}>
             <Button
               onPress={() => setFocusedEtc('Library')}
               rounded="10px"
-              width="315px"
+              width="85%"
               height="72px"
               variant="place">
               <Text variant="normalOpenPlaceBig">도서관</Text>
             </Button>
           </Center>
-          <Center margin={2.5}>
+          <Center marginTop={2.5} marginBottom={2.5}>
             <Button
               onPress={() => setFocusedEtc('PHC')}
               rounded="10px"
-              width="315px"
+              width="85%"
               height="72px"
               variant="place">
               <Text variant="normalOpenPlaceBig">보건진료소</Text>
             </Button>
           </Center>
-          <Center margin={2.5}>
+          <Center marginTop={2.5} marginBottom={2.5}>
             <Button
               onPress={() => setFocusedEtc('Dorm')}
               rounded="10px"
-              width="315px"
+              width="85%"
               height="72px"
               variant="place">
               <Text variant="normalOpenPlaceBig">기숙사 편의시설</Text>
