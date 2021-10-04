@@ -4,7 +4,7 @@ import React, {useEffect, useState} from 'react';
 import {compareAsc, getDay, parse as parseTime, subDays} from 'date-fns';
 import List from '../components/List';
 import {ParamListBase} from '@react-navigation/native';
-import {FAVORITE_STORAGE_KEY} from '../constants';
+import {STORAGE_KEY} from '../constants';
 
 type Props = BottomTabScreenProps<ParamListBase, '셔틀'> & {
   initialFavoriteNames: string[];
@@ -191,7 +191,7 @@ export default function Shuttle({navigation, initialFavoriteNames}: Props) {
       items={SHUTTLES}
       checkOperating={checkOperating}
       initialFavoriteNames={initialFavoriteNames}
-      favoriteStorageKey={FAVORITE_STORAGE_KEY.shuttle}
+      favoriteStorageKey={STORAGE_KEY.favoriteShuttle}
     />
   );
 }
