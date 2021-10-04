@@ -89,47 +89,43 @@ const List = <T extends AvailableItem>(props: Props<T>) => {
                 .map(item => {
                   const {name, isOperating, favoriteRate, interval} = item;
                   return (
-                    <>
-                      <Center marginY={2.5}>
-                        <Button
-                          key={name}
-                          width="100%"
-                          height="72px"
-                          paddingLeft="15px"
-                          variant={
-                            favoriteRate
-                              ? isOperating
-                                ? 'favoriteOpenPlace'
-                                : 'favoriteClosedPlace'
-                              : 'place'
-                          }
-                          onPress={() => setFocusedItem(item.name)}>
-                          <Center flexDirection="row">
-                            <Row height="100%" width="100%" alignItems="center">
-                              <Text
-                                width="60%"
-                                variant={
-                                  favoriteRate > 0
-                                    ? 'favoritePlaceNameBig'
-                                    : isOperating
-                                    ? 'normalOpenPlaceBig'
-                                    : 'normalClosedPlaceBig'
-                                }>
-                                {name}
-                              </Text>
-                              <Text
-                                textAlign="center"
-                                width="40%"
-                                variant="favoritePlaceTime">
-                                {interval
-                                  ? `배차간격: ${interval}`
-                                  : '미운행중'}
-                              </Text>
-                            </Row>
-                          </Center>
-                        </Button>
-                      </Center>
-                    </>
+                    <Center key={item.name} marginY={2.5}>
+                      <Button
+                        key={name}
+                        width="100%"
+                        height="72px"
+                        paddingLeft="15px"
+                        variant={
+                          favoriteRate
+                            ? isOperating
+                              ? 'favoriteOpenPlace'
+                              : 'favoriteClosedPlace'
+                            : 'place'
+                        }
+                        onPress={() => setFocusedItem(item.name)}>
+                        <Center flexDirection="row">
+                          <Row height="100%" width="100%" alignItems="center">
+                            <Text
+                              width="60%"
+                              variant={
+                                favoriteRate > 0
+                                  ? 'favoritePlaceNameBig'
+                                  : isOperating
+                                  ? 'normalOpenPlaceBig'
+                                  : 'normalClosedPlaceBig'
+                              }>
+                              {name}
+                            </Text>
+                            <Text
+                              textAlign="center"
+                              width="40%"
+                              variant="favoritePlaceTime">
+                              {interval ? `배차간격: ${interval}` : '미운행중'}
+                            </Text>
+                          </Row>
+                        </Center>
+                      </Button>
+                    </Center>
                   );
                 })
                 .value()}
@@ -198,7 +194,7 @@ const List = <T extends AvailableItem>(props: Props<T>) => {
                       </Text>
                     </HStack>
                     {focusedItem.operatings.map(item => (
-                      <>
+                      <Box key={item.time}>
                         <Divider
                           my={2}
                           bg="black"
@@ -225,7 +221,7 @@ const List = <T extends AvailableItem>(props: Props<T>) => {
                             {item.numbers}
                           </Text>
                         </HStack>
-                      </>
+                      </Box>
                     ))}
                   </VStack>
                   <Text marginBottom="2px" />

@@ -133,37 +133,36 @@ const Grid = <T extends AvailableItem>(props: Props<T>) => {
                         const {name, isOperating, favoriteRate} = item;
 
                         return (
-                          <>
-                            <Button
-                              flext={1}
-                              height="100%"
-                              width="30%"
-                              marginRight="5%"
-                              padding={2}
-                              onPress={() => setFocusedItem(item.name)}
+                          <Button
+                            key={name}
+                            flext={1}
+                            height="100%"
+                            width="30%"
+                            marginRight="5%"
+                            padding={2}
+                            onPress={() => setFocusedItem(item.name)}
+                            variant={
+                              favoriteRate > 0
+                                ? isOperating
+                                  ? 'favoriteOpenPlace'
+                                  : 'favoriteClosedPlace'
+                                : 'place'
+                            }>
+                            <Text
                               variant={
                                 favoriteRate > 0
-                                  ? isOperating
-                                    ? 'favoriteOpenPlace'
-                                    : 'favoriteClosedPlace'
-                                  : 'place'
-                              }>
-                              <Text
-                                variant={
-                                  favoriteRate > 0
-                                    ? 'favoritePlaceNameSmall'
-                                    : isOperating
-                                    ? 'normalOpenPlaceSmall'
-                                    : 'normalClosedPlaceSmall'
-                                }
-                                textAlign="center">
-                                {refineName(name)
-                                  .replace('편의점', '')
-                                  .trim()
-                                  .replace(' ', '\n')}
-                              </Text>
-                            </Button>
-                          </>
+                                  ? 'favoritePlaceNameSmall'
+                                  : isOperating
+                                  ? 'normalOpenPlaceSmall'
+                                  : 'normalClosedPlaceSmall'
+                              }
+                              textAlign="center">
+                              {refineName(name)
+                                .replace('편의점', '')
+                                .trim()
+                                .replace(' ', '\n')}
+                            </Text>
+                          </Button>
                         );
                       })}
                     </Flex>
