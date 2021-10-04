@@ -9,10 +9,11 @@ import {
   Modal,
   Divider,
   HStack,
+  Link,
 } from 'native-base';
 import {WebView} from 'react-native-webview';
 import React, {useState} from 'react';
-import {Keyboard, StyleSheet, Dimensions} from 'react-native';
+import {Keyboard, StyleSheet, Dimensions, Linking} from 'react-native';
 import {colors} from '../ui/colors';
 import {ParamListBase} from '@react-navigation/native';
 
@@ -20,7 +21,8 @@ type Props = BottomTabScreenProps<ParamListBase, '기타'>;
 
 export default function Etcs({navigation}: Props) {
   const [focusedEtc, setFocusedEtc] = useState<string | null>(null);
-  const webViewHeight = Dimensions.get('window').height;
+  const windowHeight = Dimensions.get('window').height;
+  const windowWidth = Dimensions.get('window').width;
 
   return (
     <Box height="100%">
@@ -403,55 +405,6 @@ export default function Etcs({navigation}: Props) {
               </Modal.Body>
             </Modal.Content>
           </Modal>
-          <Modal
-            isOpen={focusedEtc === 'Library'}
-            onClose={() => setFocusedEtc(null)}
-            size="full"
-            animation="ease-in"
-            height="100%">
-            <Modal.Content height="100%">
-              <Modal.CloseButton />
-              <WebView
-                height="100%"
-                width="100%"
-                source={{uri: 'https://lib.snu.ac.kr/hours'}}
-              />
-            </Modal.Content>
-          </Modal>
-          <Modal
-            isOpen={focusedEtc === 'PHC'}
-            onClose={() => setFocusedEtc(null)}
-            size="full"
-            animation="ease-in"
-            height="100%">
-            <Modal.Content height="100%">
-              <Modal.CloseButton />
-              <WebView
-                height="100%"
-                width="100%"
-                source={{
-                  uri: 'https://m.health4u.snu.ac.kr/medicalTreatment/PracticeSchedule/_/view.do',
-                }}
-              />
-            </Modal.Content>
-          </Modal>
-          <Modal
-            isOpen={focusedEtc === 'Dorm'}
-            onClose={() => setFocusedEtc(null)}
-            size="full"
-            animation="ease-in"
-            height="100%">
-            <Modal.Content height="100%">
-              <Modal.CloseButton />
-              <WebView
-                height="100%"
-                width="100%"
-                source={{
-                  uri: 'https://snudorm.snu.ac.kr/%ec%83%9d%ed%99%9c%ec%95%88%eb%82%b4/%ed%8e%b8%ec%9d%98%ec%8b%9c%ec%84%a4/%ec%9d%8c%ec%8b%9d/',
-                }}
-              />
-            </Modal.Content>
-          </Modal>
         </>
       ) : null}
       <ScrollView bgColor={colors.white}>
@@ -488,7 +441,7 @@ export default function Etcs({navigation}: Props) {
           </Center>
           <Center marginTop={2.5} marginBottom={2.5}>
             <Button
-              onPress={() => setFocusedEtc('Library')}
+              onPress={() => Linking.openURL('https://lib.snu.ac.kr/hours')}
               rounded="10px"
               width="85%"
               height="72px"
@@ -498,7 +451,11 @@ export default function Etcs({navigation}: Props) {
           </Center>
           <Center marginTop={2.5} marginBottom={2.5}>
             <Button
-              onPress={() => setFocusedEtc('PHC')}
+              onPress={() =>
+                Linking.openURL(
+                  'https://m.health4u.snu.ac.kr/medicalTreatment/PracticeSchedule/_/view.do',
+                )
+              }
               rounded="10px"
               width="85%"
               height="72px"
@@ -508,7 +465,11 @@ export default function Etcs({navigation}: Props) {
           </Center>
           <Center marginTop={2.5} marginBottom={2.5}>
             <Button
-              onPress={() => setFocusedEtc('Dorm')}
+              onPress={() =>
+                Linking.openURL(
+                  'https://snudorm.snu.ac.kr/%ec%83%9d%ed%99%9c%ec%95%88%eb%82%b4/%ed%8e%b8%ec%9d%98%ec%8b%9c%ec%84%a4/%ec%9d%8c%ec%8b%9d/',
+                )
+              }
               rounded="10px"
               width="85%"
               height="72px"
