@@ -1,4 +1,5 @@
 import {chain, map} from 'lodash';
+import {Dimensions} from 'react-native';
 import {
   Box,
   Center,
@@ -30,10 +31,11 @@ type Props<T> = {
 
 type ItemWithFlag<T> = T & {
   isOperating: boolean;
-  favorateRate: number;
+  favoriteRate: number;
 };
 
 const Grid = <T extends AvailableItem>(props: Props<T>) => {
+  const windowWidth = Dimensions.get('window').width;
   const {items, checkOperating, initialFavoriteNames, favoriteStorageKey} =
     props;
   const syncFavoritesToStorage = (favorites: string[]) => {
@@ -47,13 +49,13 @@ const Grid = <T extends AvailableItem>(props: Props<T>) => {
   const sortedItems: ItemWithFlag<T>[] = chain(items)
     .map(item => {
       const isOperating = checkOperating(item);
-      const favorateRate =
+      const favoriteRate =
         favoriteNames.findIndex(name => name === item.name) + 1;
-      return {...item, isOperating, favorateRate};
+      return {...item, isOperating, favoriteRate};
     })
-    .sortBy(({isOperating, favorateRate}) => {
-      if (favorateRate > 0) {
-        return favorateRate;
+    .sortBy(({isOperating, favoriteRate}) => {
+      if (favoriteRate > 0) {
+        return favoriteRate;
       } else if (isOperating) {
         return 100;
       } else {
@@ -72,7 +74,7 @@ const Grid = <T extends AvailableItem>(props: Props<T>) => {
       {sortedItems ? (
         <Box>
           <ScrollView bgColor={colors.white}>
-            <VStack padding={8}>
+            <VStack width="85%" marginTop={2.5} marginLeft="7.5%">
               {chain(sortedItems)
                 .chunk(3)
                 .map(itemsInARow =>
@@ -86,63 +88,52 @@ const Grid = <T extends AvailableItem>(props: Props<T>) => {
                   return (
                     <Flex
                       key={itemsInARow[0]?.name}
-                      height={90}
-                      marginY={2}
+                      height={windowWidth * 0.85 * 0.3}
+                      marginBottom={windowWidth * 0.85 * 0.05}
                       flexDirection="row">
                       {itemsInARow.map((item, index) => {
                         if (!item) {
                           return (
                             <Box
                               key={'hi' + index}
-                              marginX={2}
-                              flex={1}
+                              width="30%"
                               height="100%"
+                              marginRight="5%"
+                              flex={1}
                             />
                           );
                         }
-                        const {name, isOperating, favorateRate} = item;
+                        const {name, isOperating, favoriteRate} = item;
 
                         return (
-                          <Box
-                            key={name}
-                            marginX={2}
-                            borderRadius={8}
-                            flex={1}
-                            height="100%"
-                            padding={0}
-                            borderColor={
-                              favorateRate > 0 ? undefined : colors.grey[200]
-                            }
-                            borderWidth={1}
-                            bgColor={
-                              favorateRate > 0
-                                ? colors.bage[100]
-                                : colors.grey[100]
-                            }>
+                          <>
                             <Button
+                              flext={1}
                               height="100%"
-                              width="100%"
-                              bgColor="transparent"
-                              onPress={() => setFocusedItem(item.name)}>
+                              width="30%"
+                              marginRight="5%"
+                              padding={2}
+                              onPress={() => setFocusedItem(item.name)}
+                              variant={
+                                favoriteRate > 0
+                                  ? isOperating
+                                    ? 'favoriteOpenPlace'
+                                    : 'favoriteClosedPlace'
+                                  : 'place'
+                              }>
                               <Text
-                                color={
-                                  favorateRate > 0
-                                    ? colors.bage[200]
-                                    : colors.grey[400]
-                                }>
+                                variant={
+                                  favoriteRate > 0
+                                    ? 'favoritePlaceNameSmall'
+                                    : isOperating
+                                    ? 'normalOpenPlaceSmall'
+                                    : 'normalClosedPlaceSmall'
+                                }
+                                textAlign="center">
                                 {name}
                               </Text>
                             </Button>
-                            <Box
-                              position="absolute"
-                              top={2}
-                              right={2}
-                              borderRadius={4}
-                              bgColor={isOperating ? colors.green : colors.red}
-                              width={2}
-                              height={2}
-                            />
-                          </Box>
+                          </>
                         );
                       })}
                     </Flex>
@@ -155,52 +146,103 @@ const Grid = <T extends AvailableItem>(props: Props<T>) => {
             <Modal
               isOpen={focusedName !== null}
               onClose={() => setFocusedItem(null)}>
-              <Modal.Content>
-                <Modal.Header>
-                  <Flex flexDirection="row">
-                    <Text color={colors.blue}>{focusedItem.name}</Text>
-                    <Button
-                      bgColor="transparent"
-                      onPress={() => {
-                        setFavoriteNames(prev => {
-                          if (prev.find(name => name === focusedItem.name)) {
-                            const next = prev.filter(
-                              name => name !== focusedItem.name,
-                            );
-                            syncFavoritesToStorage(next);
-                            return next;
-                          } else {
-                            const next = prev.concat(focusedItem.name);
-                            syncFavoritesToStorage(next);
-                            return next;
-                          }
-                        });
-                      }}>
-                      {focusedItem.favorateRate > 0 ? (
-                        <FilledStar />
-                      ) : (
-                        <UnfilledStar />
-                      )}
-                    </Button>
-                  </Flex>
-                  <Text color={colors.grey[300]}>{focusedItem.location}</Text>
-                </Modal.Header>
+              <Modal.Content width="90%">
                 <Modal.CloseButton />
                 <Modal.Body>
-                  <Flex flexDirection="row">
-                    <Center flex={1}>평일</Center>
-                    <Center flex={1}>{focusedItem.weekday}</Center>
-                  </Flex>
-                  <Divider bgColor={colors.black} width="100%" />
-                  <Flex flexDirection="row">
-                    <Center flex={1}>토요일</Center>
-                    <Center flex={1}>{focusedItem.saturday}</Center>
-                  </Flex>
-                  <Divider bgColor={colors.black} width="100%" />
-                  <Flex flexDirection="row">
-                    <Center flex={1}>휴일</Center>
-                    <Center flex={1}>{focusedItem.holiday}</Center>
-                  </Flex>
+                  <Box margin={6} marginBottom={1}>
+                    <HStack left={-15} top={-15}>
+                      <Text variant="modalTitle" marginBottom={1}>
+                        {focusedItem.name}
+                      </Text>
+                      <Button
+                        bgColor="transparent"
+                        left={-6}
+                        top={-1}
+                        onPress={() => {
+                          setFavoriteNames(prev => {
+                            if (prev.find(name => name === focusedItem.name)) {
+                              const next = prev.filter(
+                                name => name !== focusedItem.name,
+                              );
+                              syncFavoritesToStorage(next);
+                              return next;
+                            } else {
+                              const next = prev.concat(focusedItem.name);
+                              syncFavoritesToStorage(next);
+                              return next;
+                            }
+                          });
+                        }}>
+                        {focusedItem.favoriteRate > 0 ? (
+                          <FilledStar />
+                        ) : (
+                          <UnfilledStar />
+                        )}
+                      </Button>
+                    </HStack>
+                    <Text variant="modalSubInfo" left={-15} top={-20}>
+                      {focusedItem.location}
+                    </Text>
+                  </Box>
+                  <VStack>
+                    <HStack width="100%">
+                      <Text
+                        width="40%"
+                        variant="modalSubContent"
+                        textAlign="center">
+                        평일
+                      </Text>
+                      <Text
+                        width="60%"
+                        variant="modalSubContent"
+                        textAlign="center">
+                        {focusedItem.weekday}
+                      </Text>
+                    </HStack>
+                    <Divider
+                      my={2}
+                      bg="black"
+                      width="100%"
+                      marginTop="14px"
+                      marginBottom="14px"
+                    />
+                    <HStack width="100%">
+                      <Text
+                        width="40%"
+                        variant="modalSubContent"
+                        textAlign="center">
+                        토요일
+                      </Text>
+                      <Text
+                        width="60%"
+                        variant="modalSubContent"
+                        textAlign="center">
+                        {focusedItem.saturday}
+                      </Text>
+                    </HStack>
+                    <Divider
+                      my={2}
+                      bg="black"
+                      width="100%"
+                      marginTop="14px"
+                      marginBottom="14px"
+                    />
+                    <HStack width="100%">
+                      <Text
+                        width="40%"
+                        variant="modalSubContent"
+                        textAlign="center">
+                        휴일
+                      </Text>
+                      <Text
+                        width="60%"
+                        variant="modalSubContent"
+                        textAlign="center"
+                        marginBottom="20px">
+                        {focusedItem.holiday}
+                      </Text>
+                    </HStack>
+                  </VStack>
                 </Modal.Body>
               </Modal.Content>
             </Modal>
