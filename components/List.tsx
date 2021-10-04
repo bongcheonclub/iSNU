@@ -38,7 +38,7 @@ type Props<T extends AvailableItem> = {
 type ItemWithFlag<T> = T & {
   isOperating: boolean;
   interval: string | null;
-  favorateRate: number;
+  favoriteRate: number;
 };
 
 const List = <T extends AvailableItem>(props: Props<T>) => {
@@ -54,18 +54,18 @@ const List = <T extends AvailableItem>(props: Props<T>) => {
   const sortedItems: ItemWithFlag<T>[] = chain(items)
     .map(item => {
       const {isOperating, operating} = checkOperating(item);
-      const favorateRate =
+      const favoriteRate =
         favoriteNames.findIndex(name => name === item.name) + 1;
       return {
         ...item,
         isOperating,
-        favorateRate,
+        favoriteRate,
         interval: operating?.interval ?? null,
       };
     })
-    .sortBy(({isOperating, favorateRate}) => {
-      if (favorateRate > 0) {
-        return favorateRate;
+    .sortBy(({isOperating, favoriteRate}) => {
+      if (favoriteRate > 0) {
+        return favoriteRate;
       } else if (isOperating) {
         return 100;
       } else {
@@ -80,67 +80,56 @@ const List = <T extends AvailableItem>(props: Props<T>) => {
     null;
 
   return (
-    <Box>
+    <Box height="100%" bgColor={colors.white}>
       {sortedItems ? (
         <Box>
           <ScrollView bgColor={colors.white}>
-            <VStack paddingX={7}>
+            <VStack width="85%" marginLeft="7.5%">
               {chain(sortedItems)
                 .map(item => {
-                  const {name, isOperating, favorateRate, interval} = item;
+                  const {name, isOperating, favoriteRate, interval} = item;
                   return (
-                    <Box
-                      key={name}
-                      marginY={2}
-                      borderRadius={8}
-                      flex={1}
-                      height="72px"
-                      padding={0}
-                      borderColor={
-                        favorateRate > 0 ? undefined : colors.grey[200]
-                      }
-                      borderWidth={1}
-                      bgColor={
-                        favorateRate > 0 ? colors.bage[100] : colors.grey[100]
-                      }>
-                      <Button
-                        height="100%"
-                        width="100%"
-                        bgColor="transparent"
-                        onPress={() => setFocusedItem(item.name)}>
-                        <Center flexDirection="row">
-                          <Row height="100%" width="100%">
-                            <Text
-                              flex={1}
-                              color={
-                                favorateRate > 0
-                                  ? colors.bage[200]
-                                  : colors.grey[400]
-                              }>
-                              {name}
-                            </Text>
-                            <Text
-                              flex={1}
-                              color={
-                                favorateRate > 0
-                                  ? colors.bage[200]
-                                  : colors.grey[400]
-                              }>
-                              {interval ? `배차간격: ${interval}` : '미운행중'}
-                            </Text>
-                          </Row>
-                        </Center>
-                      </Button>
-                      <Box
-                        position="absolute"
-                        top={2}
-                        right={2}
-                        borderRadius={4}
-                        bgColor={isOperating ? colors.green : colors.red}
-                        width={2}
-                        height={2}
-                      />
-                    </Box>
+                    <>
+                      <Center marginY={2.5}>
+                        <Button
+                          key={name}
+                          width="100%"
+                          height="72px"
+                          paddingLeft="15px"
+                          variant={
+                            favoriteRate
+                              ? isOperating
+                                ? 'favoriteOpenPlace'
+                                : 'favoriteClosedPlace'
+                              : 'place'
+                          }
+                          onPress={() => setFocusedItem(item.name)}>
+                          <Center flexDirection="row">
+                            <Row height="100%" width="100%" alignItems="center">
+                              <Text
+                                width="60%"
+                                variant={
+                                  favoriteRate > 0
+                                    ? 'favoritePlaceNameBig'
+                                    : isOperating
+                                    ? 'normalOpenPlaceBig'
+                                    : 'normalClosedPlaceBig'
+                                }>
+                                {name}
+                              </Text>
+                              <Text
+                                textAlign="center"
+                                width="40%"
+                                variant="favoritePlaceTime">
+                                {interval
+                                  ? `배차간격: ${interval}`
+                                  : '미운행중'}
+                              </Text>
+                            </Row>
+                          </Center>
+                        </Button>
+                      </Center>
+                    </>
                   );
                 })
                 .value()}
@@ -150,53 +139,96 @@ const List = <T extends AvailableItem>(props: Props<T>) => {
             <Modal
               isOpen={focusedName !== null}
               onClose={() => setFocusedItem(null)}>
-              <Modal.Content>
-                <Modal.Header>
-                  <Flex flexDirection="row">
-                    <Text color={colors.blue}>{focusedItem.name}</Text>
-                    <Button
-                      bgColor="transparent"
-                      onPress={() => {
-                        setFavoriteNames(prev => {
-                          if (prev.find(name => name === focusedItem.name)) {
-                            const next = prev.filter(
-                              name => name !== focusedItem.name,
-                            );
-                            syncFavoritesToStorage(next);
-                            return next;
-                          } else {
-                            const next = prev.concat(focusedItem.name);
-                            syncFavoritesToStorage(next);
-                            return next;
-                          }
-                        });
-                      }}>
-                      {focusedItem.favorateRate > 0 ? (
-                        <FilledStar />
-                      ) : (
-                        <UnfilledStar />
-                      )}
-                    </Button>
-                  </Flex>
-                  <Text color={colors.grey[300]}>평일만 운행</Text>
-                </Modal.Header>
+              <Modal.Content width="90%">
                 <Modal.CloseButton />
                 <Modal.Body>
-                  <Flex flexDirection="row">
-                    <Center flex={1} />
-                    <Center flex={1}>배차간격</Center>
-                    <Center flex={1}>대수</Center>
-                  </Flex>
-                  {focusedItem.operatings.map(item => (
-                    <Box key={item.time}>
-                      <Divider bgColor={colors.black} width="100%" />
-                      <Flex flexDirection="row">
-                        <Center flex={1}>{item.time}</Center>
-                        <Center flex={1}>{item.interval}</Center>
-                        <Center flex={1}>{item.numbers}</Center>
-                      </Flex>
-                    </Box>
-                  ))}
+                  <Box margin={6} marginBottom={1}>
+                    <HStack left={-15} top={-15}>
+                      <Text variant="modalTitle" marginBottom={1}>
+                        {focusedItem.name}
+                      </Text>
+                      <Button
+                        bgColor="transparent"
+                        left={-6}
+                        top={-1}
+                        onPress={() => {
+                          setFavoriteNames(prev => {
+                            if (prev.find(name => name === focusedItem.name)) {
+                              const next = prev.filter(
+                                name => name !== focusedItem.name,
+                              );
+                              syncFavoritesToStorage(next);
+                              return next;
+                            } else {
+                              const next = prev.concat(focusedItem.name);
+                              syncFavoritesToStorage(next);
+                              return next;
+                            }
+                          });
+                        }}>
+                        {focusedItem.favoriteRate > 0 ? (
+                          <FilledStar />
+                        ) : (
+                          <UnfilledStar />
+                        )}
+                      </Button>
+                    </HStack>
+                    <Text variant="modalSubInfo" left={-15} top={-20}>
+                      평일만 운행
+                    </Text>
+                  </Box>
+                  <VStack>
+                    <HStack width="100%">
+                      <Text
+                        width="40%"
+                        variant="modalSubInfo"
+                        textAlign="center"
+                      />
+                      <Text
+                        width="30%"
+                        variant="modalSubInfo"
+                        textAlign="center">
+                        배차간격
+                      </Text>
+                      <Text
+                        width="30%"
+                        variant="modalSubInfo"
+                        textAlign="center">
+                        대수
+                      </Text>
+                    </HStack>
+                    {focusedItem.operatings.map(item => (
+                      <>
+                        <Divider
+                          my={2}
+                          bg="black"
+                          width="100%"
+                          marginY="14px"
+                        />
+                        <HStack key={item.time} width="100%">
+                          <Text
+                            width="40%"
+                            variant="modalSubContent"
+                            textAlign="center">
+                            {item.time}
+                          </Text>
+                          <Text
+                            width="30%"
+                            variant="modalSubContent"
+                            textAlign="center">
+                            {item.interval}
+                          </Text>
+                          <Text
+                            width="30%"
+                            variant="modalSubContent"
+                            textAlign="center">
+                            {item.numbers}
+                          </Text>
+                        </HStack>
+                      </>
+                    ))}
+                  </VStack>
+                  <Text marginBottom="2px" />
                 </Modal.Body>
               </Modal.Content>
             </Modal>
