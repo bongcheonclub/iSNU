@@ -115,6 +115,16 @@ export const theme = extendTheme({
           fontSize: '15px',
           fontWeight: '400',
         },
+        modalMenuTime: {
+          color: 'gray.500',
+          fontSize: '10px',
+          fontWeight: '400',
+        },
+        modalMenuPrice: {
+          color: 'gray.800',
+          fontSize: '13px',
+          fontWeight: '400',
+        },
       },
     },
     Button: {

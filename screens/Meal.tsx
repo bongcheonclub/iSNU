@@ -238,14 +238,10 @@ export default function Meal({navigation, mealData}: Props) {
               marginTop="6px"
               marginBottom="6px"
               key={menuName}>
-              <Text
-                textAlign="center"
-                width="70%"
-                fontSize="lg"
-                lineHeight="sm">
+              <Text textAlign="center" width="70%" variant="modalSubContent">
                 {menuName}
               </Text>
-              <Text textAlign="right" width="30%" fontSize="md">
+              <Text textAlign="right" width="30%" variant="modalMenuPrice">
                 {price}
               </Text>
             </HStack>
@@ -274,14 +270,10 @@ export default function Meal({navigation, mealData}: Props) {
               marginTop="6px"
               marginBottom="6px"
               key={menuName}>
-              <Text
-                textAlign="center"
-                width="70%"
-                fontSize="lg"
-                lineHeight="sm">
+              <Text textAlign="center" width="70%" variant="modalSubContent">
                 {menuName}
               </Text>
-              <Text textAlign="right" width="30%" fontSize="md">
+              <Text textAlign="right" width="30%" variant="modalMenuPrice">
                 {price}
               </Text>
             </HStack>
@@ -318,12 +310,11 @@ export default function Meal({navigation, mealData}: Props) {
               <Text
                 textAlign="center"
                 width="70%"
-                fontSize="lg"
                 marginTop={2}
-                lineHeight="sm">
+                variant="modalSubContent">
                 {menuName}
               </Text>
-              <Text textAlign="right" width="30%" fontSize="md">
+              <Text textAlign="right" width="30%" variant="modalMenuPrice">
                 {price}
               </Text>
             </HStack>
@@ -362,12 +353,11 @@ export default function Meal({navigation, mealData}: Props) {
               <Text
                 textAlign="center"
                 width="70%"
-                fontSize="lg"
-                marginTop={2}
-                lineHeight="sm">
+                variant="modalSubContent"
+                marginTop={2}>
                 {menuName}
               </Text>
-              <Text textAlign="right" width="30%" fontSize="md">
+              <Text textAlign="right" width="30%" variant="modalMenuPrice">
                 {price}
               </Text>
             </HStack>
@@ -408,12 +398,11 @@ export default function Meal({navigation, mealData}: Props) {
               <Text
                 textAlign="center"
                 width="70%"
-                fontSize="lg"
                 marginTop={2}
-                lineHeight="sm">
+                variant="modalSubContent">
                 {menuName}
               </Text>
-              <Text textAlign="right" width="30%" fontSize="md">
+              <Text textAlign="right" width="30%" variant="modalMenuPrice">
                 {price}
               </Text>
             </HStack>
@@ -423,7 +412,7 @@ export default function Meal({navigation, mealData}: Props) {
 
     if (cafeteriaName.includes('소담마루')) {
       return (
-        <Text textAlign="center" width="70%" fontSize="lg">
+        <Text textAlign="center" width="70%" variant="modalSubContent">
           {string}
         </Text>
       );
@@ -431,7 +420,7 @@ export default function Meal({navigation, mealData}: Props) {
 
     if (cafeteriaName.includes('공간')) {
       return (
-        <Text textAlign="center" width="100%" fontSize="md">
+        <Text textAlign="center" width="100%" variant="modalSubContent">
           {string
             .split('00원')
             .join('00원\n')
@@ -446,7 +435,7 @@ export default function Meal({navigation, mealData}: Props) {
     }
     if (cafeteriaName.includes('301')) {
       return (
-        <Text textAlign="center" width="100%" fontSize="md">
+        <Text textAlign="center" width="100%" variant="modalSubContent">
           {string
             .split('00원')
             .join('00원\n')
@@ -467,7 +456,7 @@ export default function Meal({navigation, mealData}: Props) {
       string.includes('폐점')
     ) {
       return (
-        <Text textAlign="center" fontSize="lg">
+        <Text textAlign="center" variant="modalSubContent">
           휴무/휴점
         </Text>
       );
@@ -492,10 +481,10 @@ export default function Meal({navigation, mealData}: Props) {
             marginTop="6px"
             marginBottom="6px"
             key={menuName}>
-            <Text textAlign="center" width="70%" fontSize="lg" lineHeight="sm">
+            <Text textAlign="center" width="70%" variant="modalSubContent">
               {menuName}
             </Text>
-            <Text textAlign="right" width="30%" fontSize="md">
+            <Text textAlign="right" width="30%" variant="modalMenuPrice">
               {price}
             </Text>
           </HStack>
@@ -534,21 +523,13 @@ export default function Meal({navigation, mealData}: Props) {
                 marginTop="6px"
                 marginBottom="6px"
                 key={menuName}>
-                <Text
-                  textAlign="center"
-                  width="60%"
-                  fontSize="md"
-                  fontWeight={600}
-                  lineHeight="sm"
-                  color="#59584E">
+                <Text textAlign="center" width="60%" variant="favoriteMenuName">
                   {menuName}
                 </Text>
                 <Text
-                  textAlign="right"
+                  textAlign="center"
                   width="40%"
-                  fontSize="md"
-                  paddingRight={4}
-                  color="#8B7A55">
+                  variant="favoriteMenuPrice">
                   {price}
                 </Text>
               </HStack>
@@ -577,21 +558,13 @@ export default function Meal({navigation, mealData}: Props) {
                 marginTop="6px"
                 marginBottom="6px"
                 key={menuName}>
-                <Text
-                  textAlign="center"
-                  width="60%"
-                  fontSize="md"
-                  fontWeight={600}
-                  lineHeight="sm"
-                  color="#59584E">
+                <Text textAlign="center" width="60%" variant="favoriteMenuName">
                   {menuName}
                 </Text>
                 <Text
-                  textAlign="right"
+                  textAlign="center"
                   width="40%"
-                  fontSize="md"
-                  paddingRight={4}
-                  color="#8B7A55">
+                  variant="favoriteMenuPrice">
                   {price}
                 </Text>
               </HStack>
@@ -622,21 +595,13 @@ export default function Meal({navigation, mealData}: Props) {
                 marginTop="6px"
                 marginBottom="6px"
                 key={menuName}>
-                <Text
-                  textAlign="center"
-                  width="60%"
-                  fontSize="md"
-                  fontWeight={600}
-                  lineHeight="sm"
-                  color="#59584E">
+                <Text textAlign="center" width="60%" variant="favoriteMenuName">
                   {menuName}
                 </Text>
                 <Text
-                  textAlign="right"
+                  textAlign="center"
                   width="40%"
-                  fontSize="md"
-                  paddingRight={4}
-                  color="#8B7A55">
+                  variant="favoriteMenuPrice">
                   {price}
                 </Text>
               </HStack>
@@ -672,21 +637,13 @@ export default function Meal({navigation, mealData}: Props) {
                 marginTop="6px"
                 marginBottom="6px"
                 key={menuName}>
-                <Text
-                  textAlign="center"
-                  width="60%"
-                  fontSize="md"
-                  fontWeight={600}
-                  lineHeight="sm"
-                  color="#59584E">
+                <Text textAlign="center" width="60%" variant="favoriteMenuName">
                   {menuName}
                 </Text>
                 <Text
-                  textAlign="right"
+                  textAlign="center"
                   width="40%"
-                  fontSize="md"
-                  paddingRight={4}
-                  color="#8B7A55">
+                  variant="favoriteMenuPrice">
                   {price}
                 </Text>
               </HStack>
@@ -725,21 +682,13 @@ export default function Meal({navigation, mealData}: Props) {
                 marginTop="6px"
                 marginBottom="6px"
                 key={menuName}>
-                <Text
-                  textAlign="center"
-                  width="60%"
-                  fontSize="md"
-                  fontWeight={600}
-                  lineHeight="sm"
-                  color="#59584E">
+                <Text textAlign="center" width="60%" variant="favoriteMenuName">
                   {menuName}
                 </Text>
                 <Text
-                  textAlign="right"
+                  textAlign="center"
                   width="40%"
-                  fontSize="md"
-                  paddingRight={4}
-                  color="#8B7A55">
+                  variant="favoriteMenuPrice">
                   {price}
                 </Text>
               </HStack>
@@ -749,7 +698,7 @@ export default function Meal({navigation, mealData}: Props) {
 
       if (cafeteriaName.includes('소담마루')) {
         return (
-          <Text textAlign="center" width="70%" fontSize="lg">
+          <Text textAlign="center" width="100%" variant="favoritePlaceTime">
             {string}
           </Text>
         );
@@ -757,7 +706,7 @@ export default function Meal({navigation, mealData}: Props) {
 
       if (cafeteriaName.includes('공간')) {
         return (
-          <Text textAlign="center" width="100%" fontSize="xl">
+          <Text textAlign="center" width="100%" variant="favoriteMenuName">
             메뉴 정보 보기
           </Text>
         );
@@ -785,7 +734,7 @@ export default function Meal({navigation, mealData}: Props) {
         string.includes('폐점')
       ) {
         return (
-          <Text textAlign="center" fontSize="lg">
+          <Text textAlign="center" width="100%" variant="favoritePlaceTime">
             {string}
           </Text>
         );
@@ -809,20 +758,10 @@ export default function Meal({navigation, mealData}: Props) {
               marginTop="6px"
               marginBottom="6px"
               key={menuName}>
-              <Text
-                textAlign="center"
-                width="60%"
-                fontSize="md"
-                fontWeight={600}
-                color="#59584E">
+              <Text textAlign="center" width="60%" variant="favoriteMenuName">
                 {menuName}
               </Text>
-              <Text
-                textAlign="right"
-                width="40%"
-                fontSize="md"
-                paddingRight={4}
-                color="#8B7A55">
+              <Text textAlign="center" width="40%" variant="favoriteMenuPrice">
                 {price}
               </Text>
             </HStack>
@@ -836,26 +775,26 @@ export default function Meal({navigation, mealData}: Props) {
         string.includes('폐관')
       ) {
         return (
-          <Text color="#888888" fontSize="lg" textAlign="center">
+          <Text variant="favoritePlaceTime" textAlign="center">
             {string}
           </Text>
         );
       } else {
         if (cafeteriaName.includes('301')) {
           return (
-            <Text color="#888888" fontSize="lg" textAlign="center">
+            <Text variant="favoritePlaceTime" textAlign="center">
               교직원 식당만 운영
             </Text>
           );
         }
         if (nextTime === '추후') {
           // 운영 정보 없음
-          <Text color="#888888" fontSize="lg" textAlign="center">
+          <Text variant="favoritePlaceTime" textAlign="center">
             운영 정보 없음
           </Text>;
         } else {
           return (
-            <Text color="#888888" fontSize="lg" textAlign="center">
+            <Text variant="favoritePlaceTime" textAlign="center">
               {nextTime} 운영 예정
             </Text>
           );
@@ -912,7 +851,7 @@ export default function Meal({navigation, mealData}: Props) {
   return (
     <VStack>
       <ScrollView bgColor={colors.white} height="100%">
-        <Center marginTop={5}>
+        <Center marginTop={2.5}>
           {favoriteList
             .sort((a, b) => {
               return Number(isOperating(b)) - Number(isOperating(a));
@@ -922,30 +861,26 @@ export default function Meal({navigation, mealData}: Props) {
                 width="85%"
                 // height={isOperating(name) ? '132px' : '72px'}
                 minHeight="60px"
-                paddingTop={2}
-                paddingBottom={2}
-                bg={isOperating(name) ? '#E9E7CE' : '#E2E2E2'}
-                rounded={10}
+                // paddingTop={2}
+                // paddingBottom={2}
+                // bg={isOperating(name) ? '#E9E7CE' : '#E2E2E2'}
+                // rounded={10}
                 position="relative"
-                marginBottom={4}
+                marginBottom="15px"
                 shadow={0}
                 key={name}>
                 <Button
-                  backgroundColor="transparent"
-                  padding={0}
+                  variant={
+                    isOperating(name)
+                      ? 'favoriteOpenPlace'
+                      : 'favoriteClosedPlace'
+                  }
+                  py="10px"
+                  px="0px"
                   onPress={() => setSelectedMeal(name)}>
                   <HStack position="relative" padding={0}>
-                    <Center
-                      width="30%"
-                      marginBottom={0}
-                      padding={1}
-                      bg="transparent"
-                      rounded={15}>
-                      <Text
-                        color={colors.bage[200]}
-                        fontWeight={800}
-                        fontSize="xl"
-                        textAlign="center">
+                    <Center width="35%" marginBottom={0} bg="transparent">
+                      <Text variant="favoritePlaceNameBig" textAlign="center">
                         {name === '대학원기숙사' ? '대학원\n기숙사' : name}
                       </Text>
                       {isOperating(name) ? (
@@ -962,14 +897,13 @@ export default function Meal({navigation, mealData}: Props) {
                     {menu !== null &&
                     name !== null &&
                     menu[name] !== undefined ? (
-                      <Center width="70%" padding={0}>
+                      <Center width="65%" padding={0}>
                         {showFavoriteMenu(name)}
                       </Center>
                     ) : (
                       <Text
-                        width="70%"
-                        color="#888888"
-                        fontSize="lg"
+                        width="65%"
+                        variant="favoritePlaceTime"
                         textAlign="center"
                         margin="auto">
                         운영 정보 없음
@@ -980,7 +914,7 @@ export default function Meal({navigation, mealData}: Props) {
               </Center>
             ))}
         </Center>
-        <Center marginTop={0} marginBottom={12} width="85%" alignSelf="center">
+        <Center marginTop={0} width="85%" alignSelf="center">
           <VStack width="100%">
             {chunk(
               nonFavoriteList.sort((a, b) => {
@@ -1000,24 +934,21 @@ export default function Meal({navigation, mealData}: Props) {
                         key={name}
                         width="30%"
                         ratio={1}
-                        margin="2.5%">
+                        mx="2.5%"
+                        marginBottom="5%">
                         <Button
                           onPress={() => setSelectedMeal(name)}
-                          colorScheme="dark"
                           width="100%"
                           margin={0}
-                          bg={colors.grey[100]} // isOperating
-                          borderColor={colors.grey[200]}
-                          borderWidth={1}
-                          rounded={10}
+                          variant="place"
                           padding={0}
                           key={name}>
                           <Text
-                            color={
-                              isOperating(name) ? colors.grey[400] : '#ABABAB'
-                            }
-                            fontSize="lg"
-                            fontWeight={500}>
+                            variant={
+                              isOperating(name)
+                                ? 'normalOpenPlaceSmall'
+                                : 'normalClosedPlaceSmall'
+                            }>
                             {name === '대학원기숙사' ? '대학원\n기숙사' : name}
                           </Text>
                         </Button>
@@ -1039,17 +970,13 @@ export default function Meal({navigation, mealData}: Props) {
                 {selectedMeal !== null ? (
                   <Box margin={6} marginBottom={1}>
                     <HStack left={-15} top={-15}>
-                      <Text
-                        fontSize="2xl"
-                        marginBottom={1}
-                        color={colors.blue}
-                        fontWeight={700}>
+                      <Text marginBottom={1} variant="modalTitle">
                         {selectedMeal}
                       </Text>
                       <Button
                         bgColor="transparent"
-                        left={-4}
-                        top={-3}
+                        left={-6}
+                        top={-1}
                         onPress={() => editFavoriteList(String(selectedMeal))}>
                         {favoriteList.includes(selectedMeal) ? (
                           <FilledStar />
@@ -1058,10 +985,15 @@ export default function Meal({navigation, mealData}: Props) {
                         )}
                       </Button>
                     </HStack>
-                    <Text color={colors.grey[300]} left={-15} top={-20}>
+                    <Text variant="modalSubInfo" left={-15} top={-20}>
                       {cafeteria[selectedMeal].location}
                     </Text>
-                    <Text color={colors.black} textAlign="center" marginTop={3}>
+                    <Text
+                      color={colors.black}
+                      fontSize="15px"
+                      fontWeight="400"
+                      textAlign="center"
+                      marginTop={3}>
                       {month}월 {date}일 ({koreanDay})
                     </Text>
                   </Box>
@@ -1079,16 +1011,10 @@ export default function Meal({navigation, mealData}: Props) {
                       <>
                         <HStack>
                           <VStack width="25%" justifyContent="center">
-                            <Text
-                              textAlign="center"
-                              fontSize="lg"
-                              fontWeight={600}>
+                            <Text textAlign="center" variant="modalSubContent">
                               아침
                             </Text>
-                            <Text
-                              textAlign="center"
-                              fontSize={10}
-                              color={colors.grey[300]}>
+                            <Text textAlign="center" variant="modalMenuTime">
                               {checkStatus[selectedMeal].operatingInfo
                                 ?.beforeBreakfast
                                 ? checkStatus[selectedMeal].operatingInfo
@@ -1118,16 +1044,10 @@ export default function Meal({navigation, mealData}: Props) {
                     {menu[selectedMeal].lunch.length > 0 ? (
                       <HStack>
                         <VStack width="25%" justifyContent="center">
-                          <Text
-                            textAlign="center"
-                            fontSize="xl"
-                            fontWeight={600}>
+                          <Text textAlign="center" variant="modalSubContent">
                             점심
                           </Text>
-                          <Text
-                            textAlign="center"
-                            fontSize={11}
-                            color={colors.grey[300]}>
+                          <Text textAlign="center" variant="modalMenuTime">
                             {checkStatus[selectedMeal].operatingInfo
                               ?.beforeLunch
                               ? checkStatus[selectedMeal].operatingInfo
@@ -1156,16 +1076,10 @@ export default function Meal({navigation, mealData}: Props) {
                         />
                         <HStack>
                           <VStack width="25%" justifyContent="center">
-                            <Text
-                              textAlign="center"
-                              fontSize="lg"
-                              fontWeight={600}>
+                            <Text textAlign="center" variant="modalSubContent">
                               저녁
                             </Text>
-                            <Text
-                              textAlign="center"
-                              fontSize={10}
-                              color={colors.grey[300]}>
+                            <Text textAlign="center" variant="modalMenuTime">
                               {checkStatus[selectedMeal].operatingInfo
                                 ?.beforeDinner
                                 ? checkStatus[selectedMeal].operatingInfo
@@ -1190,7 +1104,7 @@ export default function Meal({navigation, mealData}: Props) {
                     height={20}
                     marginTop={10}
                     textAlign="center"
-                    fontSize="lg">
+                    variant="modalSubContent">
                     운영 정보 없음
                   </Text>
                 )}
