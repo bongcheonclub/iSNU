@@ -31,7 +31,7 @@ import ShuttleIcon from './icons/shuttle.svg';
 import {colors} from './ui/colors';
 import SplashScreen from 'react-native-splash-screen';
 import {theme} from './ui/theme';
-import {initializeData} from './helpers/initializeData';
+import {initializeData, MealData} from './helpers/initializeData';
 import {NativeSyntheticEvent, TextInputChangeEventData} from 'react-native';
 import {slack} from './helpers/axios';
 
@@ -41,6 +41,7 @@ export default function App() {
   const [data, setData] = useState<{
     marts: MartType[];
     cafes: CafeType[];
+    mealData: MealData;
     initialFavoriteCafes: string[];
     initialFavoriteMarts: string[];
     initialFavoriteShuttles: string[];
@@ -160,11 +161,12 @@ export default function App() {
             }}>
             <Tab.Screen
               name="식당"
-              component={Meal}
               options={{
                 tabBarIcon: () => <MealIcon />,
-              }}
-            />
+              }}>
+              {props => <Meal {...props} mealData={data.mealData} />}
+            </Tab.Screen>
+
             <Tab.Screen
               name="카페"
               options={{
