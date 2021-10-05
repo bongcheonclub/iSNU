@@ -31,21 +31,18 @@ import ShuttleIcon from './icons/shuttle.svg';
 import {colors} from './ui/colors';
 import SplashScreen from 'react-native-splash-screen';
 import {theme} from './ui/theme';
-import {initializeData, MealData} from './helpers/initializeData';
+import {initializeData} from './InitializeData';
 import {NativeSyntheticEvent, TextInputChangeEventData} from 'react-native';
 import {slack} from './helpers/axios';
+import {MealData} from './InitializeData/ProcessMealData';
+import {Awaited} from './helpers/type';
 
 const Tab = createBottomTabNavigator();
 
 export default function App() {
-  const [data, setData] = useState<{
-    marts: MartType[];
-    cafes: CafeType[];
-    mealData: MealData;
-    initialFavoriteCafes: string[];
-    initialFavoriteMarts: string[];
-    initialFavoriteShuttles: string[];
-  } | null>(null);
+  const [data, setData] = useState<Awaited<
+    ReturnType<typeof initializeData>
+  > | null>(null);
 
   const [selectedMoreTap, setSelectedMoreTap] = useState<
     'tip' | 'suggest' | 'main' | null
@@ -177,8 +174,8 @@ export default function App() {
               {props => (
                 <Cafe
                   {...props}
-                  cafes={data.cafes}
-                  initialFavoriteNames={data.initialFavoriteCafes}
+                  cafes={data.cafeData}
+                  initialFavoriteNames={data.favoriteCafes}
                 />
               )}
             </Tab.Screen>
@@ -190,8 +187,8 @@ export default function App() {
               {props => (
                 <Mart
                   {...props}
-                  marts={data.marts}
-                  initialFavoriteNames={data.initialFavoriteMarts}
+                  marts={data.martData}
+                  initialFavoriteNames={data.favoriteMarts}
                 />
               )}
             </Tab.Screen>
@@ -203,7 +200,7 @@ export default function App() {
               {props => (
                 <Shuttle
                   {...props}
-                  initialFavoriteNames={data.initialFavoriteShuttles}
+                  initialFavoriteNames={data.favoriteShuttles}
                 />
               )}
             </Tab.Screen>

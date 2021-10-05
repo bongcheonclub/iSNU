@@ -3,7 +3,6 @@ import React, {useEffect, useState} from 'react';
 import {compareAsc, getDay, parse as parseTime} from 'date-fns';
 import Grid from '../components/Grid';
 import {ParamListBase} from '@react-navigation/native';
-import {STORAGE_KEY} from '../constants';
 
 type Props = BottomTabScreenProps<ParamListBase, '편의점'> & {
   marts: Mart[];
@@ -72,7 +71,7 @@ export default function Mart({navigation, marts, initialFavoriteNames}: Props) {
         items={marts}
         checkOperating={checkOperating}
         initialFavoriteNames={initialFavoriteNames}
-        favoriteStorageKey={STORAGE_KEY.favoriteMart}
+        favoriteStorageKey={'favoriteMarts'}
       />
     )
   );
