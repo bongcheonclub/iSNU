@@ -19,6 +19,7 @@ import {colors} from '../ui/colors';
 import {Cafe} from '../screens/Cafe';
 import {Mart} from '../screens/Mart';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {LOCAL_STORAGE} from '../helpers/localStorage';
 
 type AvailableItem = Cafe | Mart;
 
@@ -26,7 +27,7 @@ type Props<T> = {
   items: T[];
   checkOperating: (item: T) => boolean;
   initialFavoriteNames: string[];
-  favoriteStorageKey: string;
+  favoriteStorageKey: keyof LOCAL_STORAGE;
 };
 
 type ItemWithFlag<T> = T & {

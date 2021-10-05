@@ -44,8 +44,7 @@ import UnfilledStar from '../icons/unfilled-star.svg';
 import et from 'date-fns/esm/locale/et/index.js';
 import {ParamListBase} from '@react-navigation/native';
 import {check} from 'prettier';
-import {MealData} from '../helpers/initializeData';
-import {STORAGE_KEY} from '../constants';
+import {MealData} from '../InitializeData/ProcessMealData';
 
 type Props = BottomTabScreenProps<ParamListBase, '식당'> & {
   mealData: MealData;
@@ -168,7 +167,7 @@ export default function Meal({navigation, mealData}: Props) {
       return null;
     }
 
-    const tempItem = await AsyncStorage.getItem(STORAGE_KEY.favoriteMeal);
+    const tempItem = await AsyncStorage.getItem('favoriteMeals');
     const storedFavoriteMealList =
       tempItem === undefined || tempItem === null ? [] : JSON.parse(tempItem);
     const newFavoriteList = (await storedFavoriteMealList.includes(name))
@@ -178,7 +177,7 @@ export default function Meal({navigation, mealData}: Props) {
       item => !newFavoriteList.includes(item),
     );
     await AsyncStorage.setItem(
-      STORAGE_KEY.favoriteMeal,
+      'favoriteMeals',
       JSON.stringify(newFavoriteList),
     ).then(() => {
       setFavoriteList(newFavoriteList);

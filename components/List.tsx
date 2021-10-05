@@ -22,6 +22,7 @@ import {colors} from '../ui/colors';
 import {Shuttle} from '../screens/Shuttle';
 import {ItemClick} from 'native-base/lib/typescript/components/composites/Typeahead/useTypeahead/types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {LOCAL_STORAGE} from '../helpers/localStorage';
 
 type AvailableItem = Shuttle;
 
@@ -32,7 +33,7 @@ type Props<T extends AvailableItem> = {
     operating: T['operatings'][number] | null;
   };
   initialFavoriteNames: string[];
-  favoriteStorageKey: string;
+  favoriteStorageKey: keyof LOCAL_STORAGE;
 };
 
 type ItemWithFlag<T> = T & {

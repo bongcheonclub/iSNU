@@ -1,47 +1,9 @@
-import {STORAGE_KEY} from '../constants';
-import axios, {AxiosResponse} from 'axios';
+import {AxiosResponse} from 'axios';
+import {getTodaysDate} from '../helpers/getTodaysDate';
+
 import {chain, keyBy, map} from 'lodash';
 import {Node, parse} from 'node-html-parser';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {
-  compareAsc,
-  getDate,
-  getDay,
-  getMonth,
-  parse as parseTime,
-} from 'date-fns';
-
-function getTodaysDate() {
-  const now = new Date();
-  const month = getMonth(now) + 1;
-  const date = getDate(now);
-  const day = getDay(now);
-  const koreanDay = (() => {
-    if (day === 0) {
-      return '일';
-    }
-    if (day === 1) {
-      return '월';
-    }
-    if (day === 2) {
-      return '화';
-    }
-    if (day === 3) {
-      return '수';
-    }
-    if (day === 4) {
-      return '목';
-    }
-    if (day === 5) {
-      return '금';
-    }
-    if (day === 6) {
-      return '토';
-    }
-    throw Error('이럴리없다.');
-  })();
-  return {month, date, koreanDay, day};
-}
+import {setItem} from '../helpers/localStorage';
 
 export type TodaysMenu = {
   [name: string]: {
@@ -78,11 +40,11 @@ export type MealData = {
 };
 
 // 식단 정보(menu) 및 식당 운영 정보(info) 가져오기, 즐겨찾기 리스트 가져오기
-function processMealData(
+export function processMealData(
   mealListRes: AxiosResponse<any>,
   mealDormListRes: AxiosResponse<any>,
   mealMenuListRes: AxiosResponse<any>,
-  favoriteMealList: string | null,
+  favoriteList: string[],
 ) {
   const {month, date, koreanDay, day} = getTodaysDate();
   function fetchMenu() {
@@ -129,6 +91,7 @@ function processMealData(
 
     return data;
   }
+
   function fetchInfo() {
     // 식당 일반 운영정보 가져오는 함수
     const html = mealListRes.data;
@@ -217,28 +180,18 @@ function processMealData(
       .concat('대학원기숙사');
     processedData['공간'].weekday = '11:00-14:30 15:30-18:30';
 
-    function makeFavoriteInitStates(initialMealList: string[]) {
-      // 즐겨찾기 가져오는 함수
-      const favoriteList: string[] = favoriteMealList
-        ? JSON.parse(favoriteMealList)
-        : [];
-      const nonFavoriteList = initialMealList.filter(
-        mealName => !favoriteList.includes(mealName),
-      );
-      return {favoriteList, nonFavoriteList};
-    }
-    const {favoriteList, nonFavoriteList} =
-      makeFavoriteInitStates(refinedMealList);
+    const nonFavoriteList = refinedMealList.filter(
+      mealName => !favoriteList.includes(mealName),
+    );
 
     return {
       cafeteria: processedData,
       mealList: refinedMealList,
-      favoriteList,
       nonFavoriteList,
     };
   }
   const menu = fetchMenu();
-  const {cafeteria, mealList, favoriteList, nonFavoriteList} = fetchInfo();
+  const {cafeteria, mealList, nonFavoriteList} = fetchInfo();
 
   function processDormData() {
     const html = mealDormListRes.data;
@@ -308,136 +261,5 @@ function processMealData(
     month,
     date,
     koreanDay,
-  };
-}
-
-export async function initializeData() {
-  const now = Date.now();
-  const {month, date} = getTodaysDate();
-  const cachedItem = await AsyncStorage.getItem(STORAGE_KEY.initialize);
-
-  const nowDate = `${month}/${date}`;
-
-  if (cachedItem) {
-    const {cachedDate, cachedData}: {cachedDate: string; cachedData: any} =
-      JSON.parse(cachedItem);
-
-    if (cachedDate === nowDate) {
-      return cachedData;
-    }
-  }
-
-  const fetchedData = await fetchData();
-
-  await AsyncStorage.setItem(
-    STORAGE_KEY.initialize,
-    JSON.stringify({cachedData: fetchedData, cachedDate: nowDate}),
-  );
-
-  return fetchedData;
-}
-
-async function fetchData() {
-  const [
-    [res, martRes, mealListRes, mealDormListRes, mealMenuListRes],
-    [favoriteCafeList, favoriteMartList, favoriteShuttleList, favoriteMealList],
-  ] = await Promise.all([
-    Promise.all([
-      axios.get('https://snuco.snu.ac.kr/ko/node/21'),
-      axios.get('https://snuco.snu.ac.kr/ko/node/19'),
-      axios.get('https://snuco.snu.ac.kr/ko/node/20'),
-      axios.get('https://snudorm.snu.ac.kr/food-schedule/'),
-      axios.get('https://snuco.snu.ac.kr/ko/foodmenu'),
-    ]),
-    Promise.all(map(STORAGE_KEY, key => AsyncStorage.getItem(key))),
-  ]);
-
-  const mealData = processMealData(
-    mealListRes,
-    mealDormListRes,
-    mealMenuListRes,
-    favoriteMealList,
-  );
-
-  const initialFavoriteCafes = favoriteCafeList
-    ? JSON.parse(favoriteCafeList)
-    : [];
-
-  const initialFavoriteMarts = favoriteMartList
-    ? JSON.parse(favoriteMartList)
-    : [];
-
-  const initialFavoriteShuttles = favoriteShuttleList
-    ? JSON.parse(favoriteShuttleList)
-    : [];
-  const html = res.data;
-  const root = parse(html);
-  const cafes = chain(root.querySelector('tbody').childNodes)
-    .map(trNode => {
-      const trTexts = chain(trNode.childNodes)
-        .map(tdNode =>
-          tdNode.innerText
-            .split(/\s|\t|\n/)
-            .filter(item => item.length > 0)
-            .join(' '),
-        )
-        .filter(rows => rows.length > 0)
-        .value();
-      const [
-        nameWithContact,
-        location,
-        size,
-        items,
-        weekday,
-        saturday,
-        holiday,
-      ] = trTexts;
-      const [name, contact] = nameWithContact.split(/\(|\)/);
-      return {
-        name,
-        contact,
-        location,
-        size,
-        items,
-        weekday,
-        saturday,
-        holiday,
-      };
-    })
-    .value();
-  const martHtml = martRes.data;
-  const martRoot = parse(martHtml);
-  const marts = chain(martRoot.querySelector('tbody').childNodes)
-    .map(trNode => {
-      const trTexts = chain(trNode.childNodes)
-        .map(tdNode =>
-          tdNode.innerText
-            .split(/\s|\t|\n/)
-            .filter(item => item.length > 0)
-            .join(' '),
-        )
-        .filter(rows => rows.length > 0)
-        .value();
-      const [name, location, items, weekday, saturday, holiday, contact] =
-        trTexts;
-      return {
-        name,
-        location,
-        items,
-        weekday,
-        saturday,
-        holiday,
-        contact,
-      };
-    })
-    .value();
-
-  return {
-    mealData,
-    cafes,
-    marts,
-    initialFavoriteCafes,
-    initialFavoriteMarts,
-    initialFavoriteShuttles,
   };
 }
