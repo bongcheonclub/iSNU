@@ -97,9 +97,7 @@ export default function App() {
     setSelectedMoreTap(null);
     setSuggestInput('');
     try {
-      const ip = await getPublicIp();
-
-      const textLines = [`ip: ${ip}`, `내용: ${suggestInput}`];
+      const textLines = [`내용: ${suggestInput}`];
 
       await slack.post('', {
         blocks: [
