@@ -3,7 +3,7 @@ import {getItem, setItem} from '../helpers/localStorage';
 import {getTodaysDate} from '../helpers/getTodaysDate';
 import {processMealData} from './ProcessMealData';
 import {fetchCrawlData, fetchLocalStoreageData} from './FetchData';
-import {processCafeData, processMartData} from './processOthersData';
+import {processCafeData, processMartData} from './ProcessOthersData';
 
 export async function initializeData() {
   const {
