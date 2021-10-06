@@ -13,7 +13,6 @@ import {
 } from 'native-base';
 import {slack} from '../helpers/axios';
 export default function MoreModal() {
-  console.log('MoreModal');
   const [selectedMoreTap, setSelectedMoreTap] = useState<
     'tip' | 'suggest' | 'main' | null
   >(null);

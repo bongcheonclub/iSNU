@@ -845,7 +845,6 @@ export default function Meal({navigation, mealData}: Props) {
       return false;
     }
   }
-  console.log('rendering');
 
   return (
     <VStack>
