@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "profile-seung-geon-lee.jpeg",
+      "filename" : "splash-screen.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "profile-seung-geon-lee-1.jpeg",
+      "filename" : "splash-screen@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "profile-seung-geon-lee-2.jpeg",
+      "filename" : "splash-screen@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
