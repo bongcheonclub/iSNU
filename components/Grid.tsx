@@ -5,9 +5,7 @@ import {
   Center,
   HStack,
   ScrollView,
-  Text,
   VStack,
-  Button,
   Modal,
   Flex,
   Divider,
@@ -20,6 +18,8 @@ import {Cafe} from '../screens/Cafe';
 import {Mart} from '../screens/Mart';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {LOCAL_STORAGE} from '../helpers/localStorage';
+import Button from './Button';
+import Text from './Text';
 
 type AvailableItem = Cafe | Mart;
 
@@ -136,7 +136,7 @@ const Grid = <T extends AvailableItem>(props: Props<T>) => {
                         return (
                           <Button
                             key={name}
-                            flext={1}
+                            flex={1}
                             height="100%"
                             width="30%"
                             marginRight="5%"
