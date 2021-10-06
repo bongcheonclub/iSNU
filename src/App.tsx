@@ -27,7 +27,6 @@ import MoreModal from './components/MoreModal';
 const Tab = createBottomTabNavigator();
 
 export default function App() {
-  console.log('App');
   const [data, setData] = useState<Awaited<
     ReturnType<typeof initializeData>
   > | null>(null);
