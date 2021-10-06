@@ -1,7 +1,3 @@
-import React, {useCallback, useState} from 'react';
-import More from '../icons/more.svg';
-import Outlink from '../icons/outlink.svg';
-import getPublicIp from 'react-native-public-ip';
 import {
   Box,
   Button,
@@ -11,7 +7,14 @@ import {
   Text,
   TextArea,
 } from 'native-base';
+import React, {useCallback, useState} from 'react';
+import {Keyboard} from 'react-native';
+import getPublicIp from 'react-native-public-ip';
+
 import {slack} from '../helpers/axios';
+import More from '../icons/more.svg';
+import Outlink from '../icons/outlink.svg';
+
 export default function MoreModal() {
   const [selectedMoreTap, setSelectedMoreTap] = useState<
     'tip' | 'suggest' | 'main' | null
@@ -99,6 +102,7 @@ export default function MoreModal() {
         <More />
       </Button>
       <Modal
+        top="-10%"
         isOpen={!!selectedMoreTap}
         onClose={() => setSelectedMoreTap(null)}>
         <Modal.Content>
@@ -147,52 +151,56 @@ export default function MoreModal() {
             </Modal.Body>
           )}
           {selectedMoreTap === 'tip' && (
-            <Box>
-              <Modal.Header display="flex" flexDir="row">
-                <Pressable onPress={handleBack} marginRight={2}>
-                  <Outlink />
-                </Pressable>
-                <Text>잘못된 정보 제보하기</Text>
-                <Modal.CloseButton />
-              </Modal.Header>
-              <Modal.Body>
-                <TextArea
-                  height="200"
-                  value={tipInput}
-                  onChangeText={handleTipInput}
-                  placeholder="내용 입력하기"
-                />
-              </Modal.Body>
-              <Modal.Footer>
-                <Button onPress={handleSubmitTip}>
-                  <Text>제출하기</Text>
-                </Button>
-              </Modal.Footer>
-            </Box>
+            <Pressable onPress={Keyboard.dismiss}>
+              <Box>
+                <Modal.Header display="flex" flexDir="row">
+                  <Pressable onPress={handleBack} marginRight={2}>
+                    <Outlink />
+                  </Pressable>
+                  <Text>잘못된 정보 제보하기</Text>
+                  <Modal.CloseButton />
+                </Modal.Header>
+                <Modal.Body paddingTop="5">
+                  <TextArea
+                    height="100"
+                    value={tipInput}
+                    onChangeText={handleTipInput}
+                    placeholder="내용 입력하기"
+                  />
+                </Modal.Body>
+                <Modal.Footer>
+                  <Button onPress={handleSubmitTip}>
+                    <Text>제출하기</Text>
+                  </Button>
+                </Modal.Footer>
+              </Box>
+            </Pressable>
           )}
           {selectedMoreTap === 'suggest' && (
-            <Box>
-              <Modal.Header display="flex" flexDir="row">
-                <Pressable onPress={handleBack} marginRight={2}>
-                  <Outlink />
-                </Pressable>
-                <Text>기능 추가 건의하기</Text>
-                <Modal.CloseButton />
-              </Modal.Header>
-              <Modal.Body>
-                <TextArea
-                  height="200"
-                  value={suggestInput}
-                  onChangeText={handleSuggestInput}
-                  placeholder="내용 입력하기"
-                />
-              </Modal.Body>
-              <Modal.Footer>
-                <Button onPress={handleSubmitSuggest}>
-                  <Text>제출하기</Text>
-                </Button>
-              </Modal.Footer>
-            </Box>
+            <Pressable onPress={Keyboard.dismiss}>
+              <Box>
+                <Modal.Header display="flex" flexDir="row">
+                  <Pressable onPress={handleBack} marginRight={2}>
+                    <Outlink />
+                  </Pressable>
+                  <Text>기능 추가 건의하기</Text>
+                  <Modal.CloseButton />
+                </Modal.Header>
+                <Modal.Body>
+                  <TextArea
+                    height="100"
+                    value={suggestInput}
+                    onChangeText={handleSuggestInput}
+                    placeholder="내용 입력하기"
+                  />
+                </Modal.Body>
+                <Modal.Footer>
+                  <Button onPress={handleSubmitSuggest}>
+                    <Text>제출하기</Text>
+                  </Button>
+                </Modal.Footer>
+              </Box>
+            </Pressable>
           )}
         </Modal.Content>
       </Modal>
