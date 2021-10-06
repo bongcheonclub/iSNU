@@ -1,5 +1,3 @@
-import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
-import axios from 'axios';
 import {chain, map} from 'lodash';
 import {parse} from 'node-html-parser';
 import {
@@ -7,9 +5,7 @@ import {
   Center,
   HStack,
   ScrollView,
-  Text,
   VStack,
-  Button,
   Modal,
   Flex,
   Divider,
@@ -23,6 +19,8 @@ import {Shuttle} from '../screens/Shuttle';
 import {ItemClick} from 'native-base/lib/typescript/components/composites/Typeahead/useTypeahead/types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {LOCAL_STORAGE} from '../helpers/localStorage';
+import Button from './Button';
+import Text from './Text';
 
 type AvailableItem = Shuttle;
 

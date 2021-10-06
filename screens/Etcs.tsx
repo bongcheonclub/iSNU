@@ -1,16 +1,16 @@
 import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
 import {
-  Box,
   Center,
-  Button,
   ScrollView,
   VStack,
-  Text,
   Modal,
   Divider,
   HStack,
   Link,
+  Box,
 } from 'native-base';
+import Button from '../components/Button';
+import Text from '../components/Text';
 import {WebView} from 'react-native-webview';
 import React, {useState} from 'react';
 import {Keyboard, StyleSheet, Dimensions, Linking} from 'react-native';

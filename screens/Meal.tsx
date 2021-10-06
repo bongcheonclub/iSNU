@@ -8,10 +8,8 @@ import {
   HStack,
   ScrollView,
   View,
-  Text,
   VStack,
   Modal,
-  Button,
   Divider,
   Circle,
   AspectRatio,
@@ -45,6 +43,8 @@ import et from 'date-fns/esm/locale/et/index.js';
 import {ParamListBase} from '@react-navigation/native';
 import {check} from 'prettier';
 import {MealData} from '../InitializeData/ProcessMealData';
+import Text from '../components/Text';
+import Button from '../components/Button';
 
 type Props = BottomTabScreenProps<ParamListBase, '식당'> & {
   mealData: MealData;
