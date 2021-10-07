@@ -368,10 +368,15 @@ export default function Meal({navigation, mealData}: Props) {
       return matchedStrings
         .map((priceSymbol, priceIndex) => {
           if (priceSymbol.length === 1) {
+            const rawPrice = (priceSymbol.charCodeAt(0) - 65) * 500 + 2000;
+            const refinedPrice =
+              floor(rawPrice / 1000) +
+              ',' +
+              (rawPrice % 1000 === 0 ? '000' : rawPrice % 1000);
             return {
               parsedString:
                 string.split(/[A-Z]|\(\d,\d\d\d원\)/)[priceIndex + 1],
-              price: `${(priceSymbol.charCodeAt(0) - 65) * 500 + 2000}원`,
+              price: `${refinedPrice}원`,
             };
           } else {
             return {
@@ -655,10 +660,15 @@ export default function Meal({navigation, mealData}: Props) {
         return matchedStrings
           .map((priceSymbol, priceIndex) => {
             if (priceSymbol.length === 1) {
+              const rawPrice = (priceSymbol.charCodeAt(0) - 65) * 500 + 2000;
+              const refinedPrice =
+                floor(rawPrice / 1000) +
+                ',' +
+                (rawPrice % 1000 === 0 ? '000' : rawPrice % 1000);
               return {
                 parsedString:
                   string.split(/[A-Z]|\(\d,\d\d\d원\)/)[priceIndex + 1],
-                price: `${(priceSymbol.charCodeAt(0) - 65) * 500 + 2000}원`,
+                price: `${refinedPrice}원`,
               };
             } else {
               return {
