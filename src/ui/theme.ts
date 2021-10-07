@@ -35,7 +35,12 @@ export const theme = extendTheme({
       700: '#636363', //Normal Place Name
       800: '#505050', //Sub Content
     },
-    blue: '#0C146B', //Page Title
+    blue: {
+      100: '#4451DE', //Pressed
+      200: '#0C146B', //Page Title
+      300: '#070F64', //Tip Submit Button Border
+    },
+    white: '#FFFFFF',
   },
 
   components: {
@@ -45,7 +50,7 @@ export const theme = extendTheme({
       },
       variants: {
         pageTitle: {
-          color: 'blue',
+          color: 'blue.200',
           fontSize: '50px',
           fontWeight: '500',
         },
@@ -101,7 +106,7 @@ export const theme = extendTheme({
           fontWeight: '400',
         },
         modalTitle: {
-          color: 'blue',
+          color: 'blue.200',
           fontSize: '25px',
           fontWeight: '500',
         },
@@ -125,6 +130,16 @@ export const theme = extendTheme({
           fontSize: '13px',
           fontWeight: '400',
         },
+        submitButton: {
+          color: 'white',
+          fontSize: '15px',
+          fontWeight: '400',
+        },
+        pressedModalTitle: {
+          color: 'blue.100',
+          fontSize: '25px',
+          fontWeight: '500',
+        },
       },
     },
     Button: {
@@ -144,6 +159,12 @@ export const theme = extendTheme({
         place: {
           bg: 'gray.100',
           borderColor: 'gray.300',
+          borderWidth: '1px',
+          rounded: '10px',
+        },
+        submitButton: {
+          bg: 'blue.200',
+          borderColor: 'blue.300',
           borderWidth: '1px',
           rounded: '10px',
         },

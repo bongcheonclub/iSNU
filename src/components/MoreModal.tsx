@@ -1,19 +1,17 @@
-import {
-  Box,
-  Button,
-  Center,
-  Modal,
-  Pressable,
-  Text,
-  TextArea,
-} from 'native-base';
+import {Box, Center, Modal, Pressable, TextArea} from 'native-base';
 import React, {useCallback, useState} from 'react';
-import {Keyboard} from 'react-native';
+import {Keyboard, Dimensions} from 'react-native';
 import getPublicIp from 'react-native-public-ip';
+import Button from './Button';
+import Text from './Text';
 
 import {slack} from '../helpers/axios';
 import More from '../icons/more.svg';
 import Outlink from '../icons/outlink.svg';
+import OutlinkPressed from '../icons/outlink-pressed.svg';
+import Back from '../icons/back.svg';
+import BackPressed from '../icons/back-pressed.svg';
+import {theme} from '../ui/theme';
 
 export default function MoreModal() {
   const [selectedMoreTap, setSelectedMoreTap] = useState<
@@ -21,8 +19,13 @@ export default function MoreModal() {
   >(null);
   const [tipInput, setTipInput] = useState<string>('');
   const [suggestInput, setSuggestInput] = useState<string>('');
+  const windowWidth = Dimensions.get('window').width;
 
   const handleSubmitSuggest = useCallback(async () => {
+    if (suggestInput.trim() === '') {
+      setSuggestInput('');
+      return;
+    }
     setSelectedMoreTap(null);
     setSuggestInput('');
     try {
@@ -52,12 +55,14 @@ export default function MoreModal() {
   }, [suggestInput]);
 
   const handleSubmitTip = useCallback(async () => {
+    if (tipInput.trim() === '') {
+      setTipInput('');
+      return;
+    }
     setSelectedMoreTap(null);
     setTipInput('');
     try {
-      const ip = await getPublicIp();
-
-      const textLines = [`ip: ${ip}`, `내용: ${tipInput}`];
+      const textLines = [`내용: ${tipInput}`];
 
       await slack.post('', {
         blocks: [
@@ -96,81 +101,110 @@ export default function MoreModal() {
     <Box>
       <Button
         marginBottom="14px"
-        marginRight="3"
+        marginRight={windowWidth * 0.075}
+        padding="0"
         onPress={() => setSelectedMoreTap('main')}
         backgroundColor="transparent">
         <More />
       </Button>
       <Modal
-        top="-10%"
+        // top="-10%"
         isOpen={!!selectedMoreTap}
         onClose={() => setSelectedMoreTap(null)}>
-        <Modal.Content>
+        <Modal.Content
+          backgroundColor={theme.colors.white}
+          padding={0}
+          width="90%">
           {selectedMoreTap === 'main' && (
-            <Modal.Body width="100%" paddingTop="32px" paddingRight="32px">
+            <Modal.Body width="100%">
               <Modal.CloseButton />
-              <Pressable onPress={() => setSelectedMoreTap('tip')}>
-                <Center flexDirection="row">
-                  <Text
-                    marginLeft="auto"
-                    marginRight="5px"
-                    color="blue"
-                    fontSize="25px"
-                    fontWeight="extrabold">
-                    잘못된 정보 제보하기
-                  </Text>
-                  <Outlink />
-                </Center>
-              </Pressable>
-              <Pressable onPress={() => setSelectedMoreTap('suggest')}>
-                <Center flexDirection="row">
-                  <Text
-                    marginLeft="auto"
-                    marginRight="5px"
-                    color="blue"
-                    fontSize="25px"
-                    fontWeight="extrabold">
-                    기능 추가 건의하기
-                  </Text>
-                  <Outlink />
-                </Center>
-              </Pressable>
-              <Pressable>
-                <Center flexDirection="row">
-                  <Text
-                    marginLeft="auto"
-                    marginRight="5px"
-                    color="blue"
-                    fontSize="25px"
-                    fontWeight="extrabold">
-                    개발자들 보러 가기
-                  </Text>
-                  <Outlink />
-                </Center>
-              </Pressable>
+              <Box margin="auto" my="5" alignItems="flex-end">
+                <Pressable onPress={() => setSelectedMoreTap('tip')}>
+                  {({isPressed}) => {
+                    return (
+                      <Center flexDirection="row" my="3">
+                        <Text
+                          marginLeft="auto"
+                          marginRight="5px"
+                          variant={
+                            isPressed ? 'pressedModalTitle' : 'modalTitle'
+                          }>
+                          잘못된 정보 제보하기
+                        </Text>
+                        {isPressed ? <OutlinkPressed /> : <Outlink />}
+                      </Center>
+                    );
+                  }}
+                </Pressable>
+                <Pressable onPress={() => setSelectedMoreTap('suggest')}>
+                  {({isPressed}) => {
+                    return (
+                      <Center flexDirection="row" my="3">
+                        <Text
+                          marginLeft="auto"
+                          marginRight="5px"
+                          variant={
+                            isPressed ? 'pressedModalTitle' : 'modalTitle'
+                          }>
+                          기능 추가 건의하기
+                        </Text>
+                        {isPressed ? <OutlinkPressed /> : <Outlink />}
+                      </Center>
+                    );
+                  }}
+                </Pressable>
+                <Pressable>
+                  {({isPressed}) => {
+                    return (
+                      <Center flexDirection="row" my="3">
+                        <Text
+                          marginLeft="auto"
+                          marginRight="5px"
+                          variant={
+                            isPressed ? 'pressedModalTitle' : 'modalTitle'
+                          }>
+                          개발자들 보러 가기
+                        </Text>
+                        {isPressed ? <OutlinkPressed /> : <Outlink />}
+                      </Center>
+                    );
+                  }}
+                </Pressable>
+              </Box>
             </Modal.Body>
           )}
           {selectedMoreTap === 'tip' && (
             <Pressable onPress={Keyboard.dismiss}>
               <Box>
-                <Modal.Header display="flex" flexDir="row">
+                <Modal.CloseButton />
+                <Modal.Header
+                  borderColor={theme.colors.blue}
+                  paddingLeft="20px"
+                  display="flex"
+                  flexDir="row">
                   <Pressable onPress={handleBack} marginRight={2}>
-                    <Outlink />
+                    {({isPressed}) => {
+                      return isPressed ? <BackPressed /> : <Back />;
+                    }}
                   </Pressable>
-                  <Text>잘못된 정보 제보하기</Text>
-                  <Modal.CloseButton />
+                  <Text variant="modalSubContent">잘못된 정보 제보하기</Text>
                 </Modal.Header>
                 <Modal.Body paddingTop="5">
                   <TextArea
-                    height="100"
+                    height="102px"
                     value={tipInput}
                     onChangeText={handleTipInput}
+                    _focus={{
+                      borderColor: 'blue.100',
+                    }}
                     placeholder="내용 입력하기"
                   />
                 </Modal.Body>
-                <Modal.Footer>
-                  <Button onPress={handleSubmitTip}>
-                    <Text>제출하기</Text>
+                <Modal.Footer
+                  backgroundColor={theme.colors.white}
+                  paddingTop="0">
+                  <Button onPress={handleSubmitTip} variant="submitButton">
+                    <Text variant="submitButton">제출하기</Text>
                   </Button>
                 </Modal.Footer>
               </Box>
@@ -179,24 +213,35 @@ export default function MoreModal() {
           {selectedMoreTap === 'suggest' && (
             <Pressable onPress={Keyboard.dismiss}>
               <Box>
-                <Modal.Header display="flex" flexDir="row">
+                <Modal.CloseButton />
+                <Modal.Header
+                  borderColor={theme.colors.blue}
+                  paddingLeft="20px"
+                  display="flex"
+                  flexDir="row">
                   <Pressable onPress={handleBack} marginRight={2}>
-                    <Outlink />
+                    {({isPressed}) => {
+                      return isPressed ? <BackPressed /> : <Back />;
+                    }}
                   </Pressable>
-                  <Text>기능 추가 건의하기</Text>
-                  <Modal.CloseButton />
+                  <Text variant="modalSubContent">기능 추가 건의하기</Text>
                 </Modal.Header>
-                <Modal.Body>
+                <Modal.Body paddingTop="5">
                   <TextArea
-                    height="100"
+                    height="102px"
                     value={suggestInput}
                     onChangeText={handleSuggestInput}
+                    _focus={{
+                      borderColor: 'blue.100',
+                    }}
                     placeholder="내용 입력하기"
                   />
                 </Modal.Body>
-                <Modal.Footer>
-                  <Button onPress={handleSubmitSuggest}>
-                    <Text>제출하기</Text>
+                <Modal.Footer
+                  backgroundColor={theme.colors.white}
+                  paddingTop="0">
+                  <Button onPress={handleSubmitSuggest} variant="submitButton">
+                    <Text variant="submitButton">제출하기</Text>
                   </Button>
                 </Modal.Footer>
               </Box>
