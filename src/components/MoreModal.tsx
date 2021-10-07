@@ -1,6 +1,6 @@
 import {Box, Center, Modal, Pressable, TextArea} from 'native-base';
 import React, {useCallback, useState} from 'react';
-import {Keyboard, Dimensions} from 'react-native';
+import {Keyboard, Dimensions, Linking} from 'react-native';
 import getPublicIp from 'react-native-public-ip';
 import Button from './Button';
 import Text from './Text';
@@ -153,7 +153,12 @@ export default function MoreModal() {
                     );
                   }}
                 </Pressable>
-                <Pressable>
+                <Pressable
+                  onPress={() =>
+                    Linking.openURL(
+                      'https://wobby.notion.site/wobby/We-Work-as-a-Hobby-9c6a1081ecbf4885902962c0998bfd2c',
+                    )
+                  }>
                   {({isPressed}) => {
                     return (
                       <Center flexDirection="row" my="3">

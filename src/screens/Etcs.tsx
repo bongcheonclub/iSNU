@@ -6,7 +6,6 @@ import {
   Modal,
   Divider,
   HStack,
-  Link,
   Box,
 } from 'native-base';
 import Button from '../components/Button';
