@@ -1,4 +1,12 @@
-import {Box, Center, Modal, Pressable, TextArea} from 'native-base';
+import {
+  Box,
+  Center,
+  Modal,
+  Pressable,
+  TextArea,
+  VStack,
+  HStack,
+} from 'native-base';
 import React, {useCallback, useState} from 'react';
 import {Keyboard, Dimensions, Linking} from 'react-native';
 import getPublicIp from 'react-native-public-ip';
@@ -16,18 +24,18 @@ import {theme} from '../ui/theme';
 
 export default function MoreModal() {
   const [selectedMoreTap, setSelectedMoreTap] = useState<
-    'tip' | 'suggest' | 'main' | null
+    'tip' | 'suggest' | 'main' | 'submitTip' | 'submitSuggest' | null
   >(null);
+  const [nextState, setNextState] = useState<'main' | null>(null);
+  const [checkSubmit, setCheckSubmit] = useState<boolean>(false);
+  const [checkClose, setCheckClose] = useState<boolean>(false);
   const [tipInput, setTipInput] = useState<string>('');
   const [suggestInput, setSuggestInput] = useState<string>('');
   const windowWidth = Dimensions.get('window').width;
 
   const handleSubmitSuggest = useCallback(async () => {
-    if (suggestInput.trim() === '') {
-      setSuggestInput('');
-      return;
-    }
-    setSelectedMoreTap(null);
+    setCheckSubmit(false);
+    setSelectedMoreTap('submitSuggest');
     setSuggestInput('');
     try {
       const textLines = [`내용: ${suggestInput}`];
@@ -56,11 +64,8 @@ export default function MoreModal() {
   }, [suggestInput]);
 
   const handleSubmitTip = useCallback(async () => {
-    if (tipInput.trim() === '') {
-      setTipInput('');
-      return;
-    }
-    setSelectedMoreTap(null);
+    setCheckSubmit(false);
+    setSelectedMoreTap('submitTip');
     setTipInput('');
     try {
       const textLines = [`내용: ${tipInput}`];
@@ -87,9 +92,9 @@ export default function MoreModal() {
       console.error(e);
     }
   }, [tipInput]);
-  const handleBack = useCallback(() => {
-    setSelectedMoreTap('main');
-  }, []);
+  // const handleBack = useCallback(() => {
+  //   setSelectedMoreTap('main');
+  // }, []);
 
   const handleTipInput = useCallback((text: string) => {
     setTipInput(text);
@@ -98,6 +103,41 @@ export default function MoreModal() {
   const handleSuggestInput = useCallback((text: string) => {
     setSuggestInput(text);
   }, []);
+
+  function handleClose(preState: string) {
+    switch (preState) {
+      case 'main':
+        return setSelectedMoreTap(null);
+      case 'tip':
+        if (!tipInput.trim()) {
+          return setSelectedMoreTap(null);
+        } else {
+          setNextState(null);
+          return setCheckClose(true);
+        }
+      case 'suggest':
+        if (!suggestInput.trim()) {
+          return setSelectedMoreTap(null);
+        } else {
+          setNextState(null);
+          return setCheckClose(true);
+        }
+      case 'submitTip':
+        return setSelectedMoreTap(null);
+      case 'submitSuggest':
+        return setSelectedMoreTap(null);
+      case 'back':
+        setNextState('main');
+        if (selectedMoreTap === 'tip' && !!tipInput.trim()) {
+          return setCheckClose(true);
+        } else if (selectedMoreTap === 'suggest' && !!suggestInput.trim()) {
+          return setCheckClose(true);
+        } else {
+          return setSelectedMoreTap('main');
+        }
+    }
+  }
+
   return (
     <Box>
       <Pressable
@@ -112,15 +152,16 @@ export default function MoreModal() {
       </Pressable>
 
       <Modal
+        top="-10%"
         isOpen={!!selectedMoreTap}
-        onClose={() => setSelectedMoreTap(null)}>
+        onClose={() => handleClose(selectedMoreTap)}>
         <Modal.Content
           backgroundColor={theme.colors.white}
           padding={0}
           width="90%">
           {selectedMoreTap === 'main' && (
             <Modal.Body width="100%">
-              <Modal.CloseButton />
+              <Modal.CloseButton onPress={() => console.log(selectedMoreTap)} />
               <Box margin="auto" my="5" alignItems="flex-end">
                 <Pressable onPress={() => setSelectedMoreTap('tip')}>
                   {({isPressed}) => {
@@ -184,13 +225,15 @@ export default function MoreModal() {
           {selectedMoreTap === 'tip' && (
             <Pressable onPress={Keyboard.dismiss}>
               <Box>
-                <Modal.CloseButton />
+                <Modal.CloseButton onPress={() => handleClose('tip')} />
                 <Modal.Header
                   borderColor={theme.colors.blue}
                   paddingLeft="20px"
                   display="flex"
                   flexDir="row">
-                  <Pressable onPress={handleBack} marginRight={2}>
+                  <Pressable
+                    onPress={() => handleClose('back')}
+                    marginRight={2}>
                     {({isPressed}) => {
                       return isPressed ? <BackPressed /> : <Back />;
                     }}
@@ -211,7 +254,16 @@ export default function MoreModal() {
                 <Modal.Footer
                   backgroundColor={theme.colors.white}
                   paddingTop="0">
-                  <Button onPress={handleSubmitTip} variant="submitButton">
+                  {/* <Button
+                    onPress={() => handleClose('tip')}
+                    variant="closeButton"
+                    marginRight="10px">
+                    <Text variant="closeButton">닫기</Text>
+                  </Button> */}
+                  <Button
+                    onPress={() => setCheckSubmit(true)}
+                    variant="submitButton"
+                    isDisabled={!tipInput.trim()}>
                     <Text variant="submitButton">제출하기</Text>
                   </Button>
                 </Modal.Footer>
@@ -221,13 +273,15 @@ export default function MoreModal() {
           {selectedMoreTap === 'suggest' && (
             <Pressable onPress={Keyboard.dismiss}>
               <Box>
-                <Modal.CloseButton />
+                <Modal.CloseButton onPress={() => handleClose('suggest')} />
                 <Modal.Header
                   borderColor={theme.colors.blue}
                   paddingLeft="20px"
                   display="flex"
                   flexDir="row">
-                  <Pressable onPress={handleBack} marginRight={2}>
+                  <Pressable
+                    onPress={() => handleClose('back')}
+                    marginRight={2}>
                     {({isPressed}) => {
                       return isPressed ? <BackPressed /> : <Back />;
                     }}
@@ -248,13 +302,88 @@ export default function MoreModal() {
                 <Modal.Footer
                   backgroundColor={theme.colors.white}
                   paddingTop="0">
-                  <Button onPress={handleSubmitSuggest} variant="submitButton">
+                  {/* <Button
+                    onPress={() => handleClose('suggest')}
+                    variant="closeButton"
+                    marginRight="10px">
+                    <Text variant="closeButton">닫기</Text>
+                  </Button> */}
+                  <Button
+                    onPress={() => setCheckSubmit(true)}
+                    variant="submitButton"
+                    isDisabled={!suggestInput.trim()}>
                     <Text variant="submitButton">제출하기</Text>
                   </Button>
                 </Modal.Footer>
               </Box>
             </Pressable>
           )}
+          {selectedMoreTap === 'submitTip' && (
+            <Box>
+              <VStack>
+                <Text>ㄱㅅㄱㅅ</Text>
+                <Button onPress={() => setSelectedMoreTap(null)}>닫기</Button>
+              </VStack>
+            </Box>
+          )}
+          {selectedMoreTap === 'submitSuggest' && (
+            <Box>
+              <VStack>
+                <Text>ㄱㅅㄱㅅ</Text>
+                <Button onPress={() => setSelectedMoreTap(null)}>닫기</Button>
+              </VStack>
+            </Box>
+          )}
+        </Modal.Content>
+      </Modal>
+      <Modal
+        top="-10%"
+        isOpen={checkSubmit}
+        onClose={() => setCheckSubmit(false)}>
+        <Modal.Content>
+          <Modal.Body />
+          <VStack alignItems="center">
+            <Box>
+              <Text>제출할거임?</Text>
+            </Box>
+            <HStack>
+              <Button onPress={() => setCheckSubmit(false)}>놉</Button>
+              <Button
+                onPress={
+                  selectedMoreTap === 'suggest'
+                    ? handleSubmitSuggest
+                    : handleSubmitTip
+                }>
+                ㅇㅇ
+              </Button>
+            </HStack>
+          </VStack>
+        </Modal.Content>
+      </Modal>
+      <Modal
+        top="-10%"
+        isOpen={checkClose}
+        onClose={() => setCheckClose(false)}>
+        <Modal.Content>
+          <Modal.Body />
+          <VStack alignItems="center">
+            <Box>
+              <Text>뒤로 가시겠습니까?</Text>
+              <Text>작성중인 내용이 저장되지 않고 사라집니다.</Text>
+            </Box>
+            <HStack>
+              <Button
+                onPress={() => {
+                  setSelectedMoreTap(nextState);
+                  setTipInput('');
+                  setSuggestInput('');
+                  setCheckClose(false);
+                }}>
+                ㅇㅇ 나감
+              </Button>
+              <Button onPress={() => setCheckClose(false)}>ㄴㄴ 안나감</Button>
+            </HStack>
+          </VStack>
         </Modal.Content>
       </Modal>
     </Box>
