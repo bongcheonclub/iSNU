@@ -287,10 +287,11 @@ export default function Meal({navigation, mealData}: Props) {
           return item
             .split('&amp;')
             .join('&')
-            .replace(/ [/*|/&|/+]/, '+')
+            .replace(/ *[/*|/&|/+] */, '+')
             .split(' ');
         })
         .map(menuAndPrice => {
+          console.log(menuAndPrice);
           if (
             menuAndPrice.length !== 2 &&
             !menuAndPrice[0].includes('플러스메뉴')
@@ -583,7 +584,7 @@ export default function Meal({navigation, mealData}: Props) {
             return item
               .split('&amp;')
               .join('&')
-              .replace(/ [/*|/&|/+]/, '+')
+              .replace(/ *[/*|/&|/+] */, '+')
               .split(' ');
           })
           .map(menuAndPrice => {
