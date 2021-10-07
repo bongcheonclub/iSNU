@@ -252,9 +252,9 @@ export default function Meal({navigation, mealData}: Props) {
     if (cafeteriaName.includes('예술계')) {
       return string
         .split('▶')[0]
-        .split('원 ')
+        .split('원')
         .map(item => {
-          return item.split('&amp;').join('&\n').split(' : ');
+          return item.trim().split('&amp;').join('&\n').split(' : ');
         })
         .map(menuAndPrice => {
           if (menuAndPrice.length !== 2) {
@@ -284,16 +284,16 @@ export default function Meal({navigation, mealData}: Props) {
     if (cafeteriaName.includes('220동')) {
       return string
         .split('※')[0]
-        .split('원 ')
+        .split('원')
         .map(item => {
           return item
+            .trim()
             .split('&amp;')
             .join('&')
             .replace(/ *[/*|/&|/+] */, '+')
             .split(' ');
         })
         .map(menuAndPrice => {
-          console.log(menuAndPrice);
           if (
             menuAndPrice.length !== 2 &&
             !menuAndPrice[0].includes('플러스메뉴')
@@ -326,9 +326,10 @@ export default function Meal({navigation, mealData}: Props) {
     if (cafeteriaName.includes('감골')) {
       return string
         .split('※')[0]
-        .split('원 ')
+        .split('원')
         .map(item => {
           return item
+            .trim()
             .split('&amp;')
             .join('&\n')
             .split('&lt;')
@@ -469,9 +470,9 @@ export default function Meal({navigation, mealData}: Props) {
     }
 
     return string
-      .split('원 ')
+      .split('원')
       .map(text => {
-        return text.split('&amp;').join('&').split(' ');
+        return text.trim().split('&amp;').join('&').split(' ');
       })
       .map(menuAndPrice => {
         if (menuAndPrice[0].includes('※')) {
@@ -548,9 +549,9 @@ export default function Meal({navigation, mealData}: Props) {
       if (cafeteriaName.includes('예술계')) {
         return string
           .split('▶')[0]
-          .split('원 ')
+          .split('원')
           .map(item => {
-            return item.split('&amp;').join('&').trim().split(' : ');
+            return item.trim().split('&amp;').join('&').trim().split(' : ');
           })
           .map(menuAndPrice => {
             if (menuAndPrice.length !== 2) {
@@ -583,9 +584,10 @@ export default function Meal({navigation, mealData}: Props) {
       if (cafeteriaName.includes('220동')) {
         return string
           .split('※')[0]
-          .split('원 ')
+          .split('원')
           .map(item => {
             return item
+              .trim()
               .split('&amp;')
               .join('&')
               .replace(/ *[/*|/&|/+] */, '+')
@@ -624,9 +626,10 @@ export default function Meal({navigation, mealData}: Props) {
       if (cafeteriaName.includes('감골')) {
         return string
           .split('※')[0]
-          .split('원 ')
+          .split('원')
           .map(item => {
             return item
+              .trim()
               .split('&amp;')
               .join('&')
               .split('&lt;')
@@ -757,9 +760,9 @@ export default function Meal({navigation, mealData}: Props) {
         );
       }
       return string
-        .split('원 ')
+        .split('원')
         .map(text => {
-          return text.split('&amp;').join('&').split(' ');
+          return text.trim().split('&amp;').join('&').split(' ');
         })
         .map(menuAndPrice => {
           if (menuAndPrice[0].includes('※')) {
