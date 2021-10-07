@@ -800,7 +800,6 @@ export default function Meal({navigation, mealData}: Props) {
           );
         }
         if (nextTime === '추후') {
-          // 운영 정보 없음
           <Text variant="favoritePlaceTime" textAlign="center">
             운영 정보 없음
           </Text>;
@@ -814,16 +813,6 @@ export default function Meal({navigation, mealData}: Props) {
       }
     }
   }
-
-  // const [checkStatus, setCheckStatus] = useState<Dictionary<{
-  //   name: string;
-  //   status: string;
-  //   nextTime: string;
-  //   operatingInfo: Dictionary<{
-  //     when: string;
-  //     time: string;
-  //   }> | null;
-  // }> | null>(null);
 
   const checkStatus = useMemo(() => {
     return chain(mealList)
@@ -870,12 +859,7 @@ export default function Meal({navigation, mealData}: Props) {
             .map(name => (
               <Center
                 width="85%"
-                // height={isOperating(name) ? '132px' : '72px'}
                 minHeight="60px"
-                // paddingTop={2}
-                // paddingBottom={2}
-                // bg={isOperating(name) ? '#E9E7CE' : '#E2E2E2'}
-                // rounded={10}
                 position="relative"
                 marginBottom="15px"
                 key={name}>
