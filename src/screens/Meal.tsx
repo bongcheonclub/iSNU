@@ -228,7 +228,6 @@ export default function Meal({navigation, mealData}: Props) {
             .split(' ');
         })
         .map(menuAndPrice => {
-          console.log(menuAndPrice);
           if (menuAndPrice.length !== 2) {
             return;
           }
@@ -539,7 +538,6 @@ export default function Meal({navigation, mealData}: Props) {
               .split(' ');
           })
           .map(menuAndPrice => {
-            console.log(menuAndPrice);
             if (menuAndPrice.length !== 2) {
               return;
             }
@@ -799,7 +797,6 @@ export default function Meal({navigation, mealData}: Props) {
             .split(' ');
         })
         .map(menuAndPrice => {
-          console.log(menuAndPrice);
           if (menuAndPrice[0].includes('※')) {
             return;
           }
