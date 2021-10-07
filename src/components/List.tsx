@@ -172,7 +172,7 @@ const List = <T extends AvailableItem>(props: Props<T>) => {
                       평일만 운행
                     </Text>
                   </Box>
-                  <VStack>
+                  <VStack px="12px">
                     <HStack width="100%">
                       <Text
                         width="40%"

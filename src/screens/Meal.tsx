@@ -306,11 +306,7 @@ export default function Meal({navigation, mealData}: Props) {
               marginTop="6px"
               marginBottom="6px"
               key={menuName}>
-              <Text
-                textAlign="center"
-                width="70%"
-                marginTop={2}
-                variant="modalSubContent">
+              <Text textAlign="center" width="70%" variant="modalSubContent">
                 {menuName}
               </Text>
               <Text textAlign="right" width="30%" variant="modalMenuPrice">
@@ -411,7 +407,7 @@ export default function Meal({navigation, mealData}: Props) {
 
     if (cafeteriaName.includes('소담마루')) {
       return (
-        <Text textAlign="center" width="70%" variant="modalSubContent">
+        <Text textAlign="center" width="100%" variant="modalSubContent">
           {string}
         </Text>
       );
@@ -990,7 +986,7 @@ export default function Meal({navigation, mealData}: Props) {
                     </Text>
                   </Box>
                 ) : (
-                  <Text />
+                  <></>
                 )}
                 {selectedMeal !== null && menu[selectedMeal] !== undefined ? (
                   <ScrollView
@@ -1006,16 +1002,22 @@ export default function Meal({navigation, mealData}: Props) {
                             <Text textAlign="center" variant="modalSubContent">
                               아침
                             </Text>
-                            <Text textAlign="center" variant="modalMenuTime">
+                            <>
                               {checkStatus[selectedMeal].operatingInfo
-                                ?.beforeBreakfast
-                                ? checkStatus[selectedMeal].operatingInfo
+                                ?.beforeBreakfast ? (
+                                <Text
+                                  textAlign="center"
+                                  variant="modalMenuTime">
+                                  {checkStatus[selectedMeal].operatingInfo
                                     ?.beforeBreakfast.time +
-                                  '~' +
-                                  checkStatus[selectedMeal].operatingInfo
-                                    ?.breakfast.time
-                                : ''}
-                            </Text>
+                                    '~' +
+                                    checkStatus[selectedMeal].operatingInfo
+                                      ?.breakfast.time}
+                                </Text>
+                              ) : (
+                                <></>
+                              )}
+                            </>
                           </VStack>
                           <VStack width="75%">
                             {showMenu(selectedMeal, 'breakfast')}
@@ -1039,23 +1041,27 @@ export default function Meal({navigation, mealData}: Props) {
                           <Text textAlign="center" variant="modalSubContent">
                             점심
                           </Text>
-                          <Text textAlign="center" variant="modalMenuTime">
+                          <>
                             {checkStatus[selectedMeal].operatingInfo
-                              ?.beforeLunch
-                              ? checkStatus[selectedMeal].operatingInfo
+                              ?.beforeLunch ? (
+                              <Text textAlign="center" variant="modalMenuTime">
+                                {checkStatus[selectedMeal].operatingInfo
                                   ?.beforeLunch.time +
-                                '~' +
-                                checkStatus[selectedMeal].operatingInfo?.lunch
-                                  .time
-                              : ''}
-                          </Text>
+                                  '~' +
+                                  checkStatus[selectedMeal].operatingInfo?.lunch
+                                    .time}
+                              </Text>
+                            ) : (
+                              <></>
+                            )}
+                          </>
                         </VStack>
                         <VStack width="75%">
                           {showMenu(selectedMeal, 'lunch')}
                         </VStack>
                       </HStack>
                     ) : (
-                      <Text />
+                      <></>
                     )}
                     {menu[selectedMeal].dinner.length > 0 ? (
                       <>
@@ -1071,16 +1077,22 @@ export default function Meal({navigation, mealData}: Props) {
                             <Text textAlign="center" variant="modalSubContent">
                               저녁
                             </Text>
-                            <Text textAlign="center" variant="modalMenuTime">
+                            <>
                               {checkStatus[selectedMeal].operatingInfo
-                                ?.beforeDinner
-                                ? checkStatus[selectedMeal].operatingInfo
+                                ?.beforeDinner ? (
+                                <Text
+                                  textAlign="center"
+                                  variant="modalMenuTime">
+                                  {checkStatus[selectedMeal].operatingInfo
                                     ?.beforeDinner.time +
-                                  '~' +
-                                  checkStatus[selectedMeal].operatingInfo
-                                    ?.dinner.time
-                                : ''}
-                            </Text>
+                                    '~' +
+                                    checkStatus[selectedMeal].operatingInfo
+                                      ?.dinner.time}
+                                </Text>
+                              ) : (
+                                <></>
+                              )}
+                            </>
                           </VStack>
                           <VStack width="75%">
                             {showMenu(selectedMeal, 'dinner')}
@@ -1088,7 +1100,7 @@ export default function Meal({navigation, mealData}: Props) {
                         </HStack>
                       </>
                     ) : (
-                      <Text />
+                      <></>
                     )}
                   </ScrollView>
                 ) : (
@@ -1104,7 +1116,7 @@ export default function Meal({navigation, mealData}: Props) {
             </Modal.Content>
           </Modal>
         ) : (
-          <Text />
+          <></>
         )}
       </ScrollView>
     </VStack>
