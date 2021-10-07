@@ -221,7 +221,11 @@ export default function Meal({navigation, mealData}: Props) {
         .split('※')[0]
         .split('00원')
         .map(item => {
-          return item.trim().split('&amp;').join('&').split(' ');
+          return item
+            .trim()
+            .split(/ *&amp; */)
+            .join('&')
+            .split(' ');
         })
         .map(menuAndPrice => {
           console.log(menuAndPrice);
@@ -254,7 +258,11 @@ export default function Meal({navigation, mealData}: Props) {
         .split('▶')[0]
         .split('원')
         .map(item => {
-          return item.trim().split('&amp;').join('&\n').split(' : ');
+          return item
+            .trim()
+            .split(/ *&amp; */)
+            .join('&\n')
+            .split(' : ');
         })
         .map(menuAndPrice => {
           if (menuAndPrice.length !== 2) {
@@ -288,7 +296,8 @@ export default function Meal({navigation, mealData}: Props) {
         .map(item => {
           return item
             .trim()
-            .split('&amp;')
+            .split(/ *&amp; */)
+
             .join('&')
             .replace(/ *[/*|/&|/+] */, '+')
             .split(' ');
@@ -330,7 +339,8 @@ export default function Meal({navigation, mealData}: Props) {
         .map(item => {
           return item
             .trim()
-            .split('&amp;')
+            .split(/ *&amp; */)
+
             .join('&\n')
             .split('&lt;')
             .join('<')
@@ -431,7 +441,8 @@ export default function Meal({navigation, mealData}: Props) {
           {string
             .split('00원')
             .join('00원\n')
-            .split('&amp;')
+            .split(/ *&amp; */)
+
             .join('&\n')
             .split('&lt;')
             .join('\n<')
@@ -448,7 +459,8 @@ export default function Meal({navigation, mealData}: Props) {
             .join('00원\n')
             .split('소반')
             .join('\n소반')
-            .split('&amp;')
+            .split(/ *&amp; */)
+
             .join('&\n')
             .split('&lt;')
             .join('\n<')
@@ -473,7 +485,11 @@ export default function Meal({navigation, mealData}: Props) {
       .replace(/.파업/, '※')
       .split('원')
       .map(text => {
-        return text.trim().split('&amp;').join('&').split(' ');
+        return text
+          .trim()
+          .split(/ *&amp; */)
+          .join('&')
+          .split(' ');
       })
       .map(menuAndPrice => {
         if (menuAndPrice[0].includes('※')) {
@@ -516,7 +532,11 @@ export default function Meal({navigation, mealData}: Props) {
           .split('※')[0]
           .split('00원')
           .map(item => {
-            return item.trim().split('&amp;').join('&').split(' ');
+            return item
+              .trim()
+              .split(/ *&amp; */)
+              .join('&')
+              .split(' ');
           })
           .map(menuAndPrice => {
             console.log(menuAndPrice);
@@ -552,7 +572,12 @@ export default function Meal({navigation, mealData}: Props) {
           .split('▶')[0]
           .split('원')
           .map(item => {
-            return item.trim().split('&amp;').join('&').trim().split(' : ');
+            return item
+              .trim()
+              .split(/ *&amp; */)
+              .join('&')
+              .trim()
+              .split(' : ');
           })
           .map(menuAndPrice => {
             if (menuAndPrice.length !== 2) {
@@ -589,7 +614,8 @@ export default function Meal({navigation, mealData}: Props) {
           .map(item => {
             return item
               .trim()
-              .split('&amp;')
+              .split(/ *&amp; */)
+
               .join('&')
               .replace(/ *[/*|/&|/+] */, '+')
               .split(' ');
@@ -631,7 +657,8 @@ export default function Meal({navigation, mealData}: Props) {
           .map(item => {
             return item
               .trim()
-              .split('&amp;')
+              .split(/ *&amp; */)
+
               .join('&')
               .split('&lt;')
               .join('<')
@@ -740,7 +767,8 @@ export default function Meal({navigation, mealData}: Props) {
               .join('00원\n')
               .split('소반')
               .join('\n소반')
-              .split('&amp;')
+              .split(/ *&amp; */)
+
               .join('&\n')
               .split('&lt;')
               .join('\n<')
@@ -764,9 +792,14 @@ export default function Meal({navigation, mealData}: Props) {
         .replace(/.파업/, '※')
         .split('원')
         .map(text => {
-          return text.trim().split('&amp;').join('&').split(' ');
+          return text
+            .trim()
+            .split(/ *&amp; */)
+            .join('&')
+            .split(' ');
         })
         .map(menuAndPrice => {
+          console.log(menuAndPrice);
           if (menuAndPrice[0].includes('※')) {
             return;
           }
