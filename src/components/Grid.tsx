@@ -219,13 +219,13 @@ const Grid = <T extends AvailableItem>(props: Props<T>) => {
                   <VStack px="12px">
                     <HStack width="100%">
                       <Text
-                        width="40%"
+                        width="35%"
                         variant="modalSubContent"
                         textAlign="center">
                         평일
                       </Text>
                       <Text
-                        width="60%"
+                        width="65%"
                         variant="modalSubContent"
                         textAlign="center">
                         {refineTime(focusedItem.weekday)}
@@ -240,13 +240,13 @@ const Grid = <T extends AvailableItem>(props: Props<T>) => {
                     />
                     <HStack width="100%">
                       <Text
-                        width="40%"
+                        width="35%"
                         variant="modalSubContent"
                         textAlign="center">
                         토요일
                       </Text>
                       <Text
-                        width="60%"
+                        width="65%"
                         variant="modalSubContent"
                         textAlign="center">
                         {refineTime(focusedItem.saturday)}
@@ -261,13 +261,13 @@ const Grid = <T extends AvailableItem>(props: Props<T>) => {
                     />
                     <HStack width="100%">
                       <Text
-                        width="40%"
+                        width="35%"
                         variant="modalSubContent"
                         textAlign="center">
                         휴일
                       </Text>
                       <Text
-                        width="60%"
+                        width="65%"
                         variant="modalSubContent"
                         textAlign="center"
                         marginBottom="20px">
