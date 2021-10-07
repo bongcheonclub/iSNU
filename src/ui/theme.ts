@@ -59,7 +59,7 @@ export const theme = extendTheme({
         favoritePlaceNameBig: {
           // For Meal, Bus
           color: 'brown.300',
-          fontSize: '25px',
+          fontSize: '24px',
           fontWeight: '500',
         },
         favoritePlaceNameSmall: {

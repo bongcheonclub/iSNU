@@ -916,7 +916,7 @@ export default function Meal({navigation, mealData}: Props) {
                   px="0px"
                   onPress={() => setSelectedMeal(name)}>
                   <HStack position="relative" padding={0}>
-                    <Center width="35%" marginBottom={0} bg="transparent">
+                    <Center width="34%" marginBottom={0} bg="transparent">
                       <Text variant="favoritePlaceNameBig" textAlign="center">
                         {name === '대학원기숙사' ? '대학원\n기숙사' : name}
                       </Text>
@@ -934,7 +934,7 @@ export default function Meal({navigation, mealData}: Props) {
                     {menu !== null &&
                     name !== null &&
                     menu[name] !== undefined ? (
-                      <Center width="65%" padding={0}>
+                      <Center width="66%" padding={0}>
                         {showFavoriteMenu(name)}
                       </Center>
                     ) : (
