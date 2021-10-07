@@ -141,6 +141,11 @@ export const theme = extendTheme({
           fontSize: '15px',
           fontWeight: '400',
         },
+        closeButton: {
+          color: 'gray.700',
+          fontSize: '15px',
+          fontWeight: '400',
+        },
         pressedModalTitle: {
           color: 'blue.100',
           fontSize: '25px',
@@ -185,6 +190,19 @@ export const theme = extendTheme({
           _pressed: {
             bg: 'blue.100',
             borderColor: 'blue.100',
+          },
+          _disabled: {
+            bg: 'blue.200',
+            opacity: '40',
+          },
+        },
+        closeButton: {
+          bg: 'gray.100',
+          borderColor: 'gray.300',
+          borderWidth: '1px',
+          rounded: '10px',
+          _pressed: {
+            bg: 'gray.200',
           },
         },
       },
