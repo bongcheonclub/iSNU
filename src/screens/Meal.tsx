@@ -187,7 +187,6 @@ export default function Meal({navigation, mealData}: Props) {
 
   function refineMenuName(rawText: string) {
     const splitedText = rawText.split(/\+|&|\*/).map(item => item.trim());
-
     const refinedMenuNameArray: string[] = [];
     splitedText.forEach((item, idx) => {
       const lastIndex = refinedMenuNameArray.length - 1;
@@ -204,7 +203,7 @@ export default function Meal({navigation, mealData}: Props) {
         }
       }
     });
-    return refinedMenuNameArray.join('');
+    return refinedMenuNameArray.join('').trim();
   }
 
   function showMenu(
@@ -285,7 +284,11 @@ export default function Meal({navigation, mealData}: Props) {
         .split('※')[0]
         .split('원 ')
         .map(item => {
-          return item.split('&amp;').join('&\n').split(' ');
+          return item
+            .split('&amp;')
+            .join('&')
+            .replace(/ [/*|/&|/+]/, '+')
+            .split(' ');
         })
         .map(menuAndPrice => {
           if (
@@ -577,7 +580,11 @@ export default function Meal({navigation, mealData}: Props) {
           .split('※')[0]
           .split('원 ')
           .map(item => {
-            return item.split('&amp;').join('&').split(' ');
+            return item
+              .split('&amp;')
+              .join('&')
+              .replace(/ [/*|/&|/+]/, '+')
+              .split(' ');
           })
           .map(menuAndPrice => {
             if (
