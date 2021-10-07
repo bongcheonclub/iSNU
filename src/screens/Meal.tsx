@@ -217,18 +217,20 @@ export default function Meal({navigation, mealData}: Props) {
     const string = menu[cafeteriaName][whichMenu];
     if (cafeteriaName.includes('자하연')) {
       return string
+        .replace(/.파업/, '※')
         .split('※')[0]
-        .split('원 ')
+        .split('00원')
         .map(item => {
-          return item.split('&amp;').join('&').split(' ');
+          return item.trim().split('&amp;').join('&').split(' ');
         })
         .map(menuAndPrice => {
+          console.log(menuAndPrice);
           if (menuAndPrice.length !== 2) {
             return;
           }
           const [menuName, price] = [
             refineMenuName(menuAndPrice[0]),
-            menuAndPrice[1] + '원',
+            menuAndPrice[1] + '00원',
           ];
           return (
             <HStack
@@ -508,18 +510,20 @@ export default function Meal({navigation, mealData}: Props) {
       const string = menu[cafeteriaName][status];
       if (cafeteriaName.includes('자하연')) {
         return string
+          .replace(/.파업/, '※')
           .split('※')[0]
-          .split('원 ')
+          .split('00원')
           .map(item => {
-            return item.split('&amp;').join('&').split(' ');
+            return item.trim().split('&amp;').join('&').split(' ');
           })
           .map(menuAndPrice => {
+            console.log(menuAndPrice);
             if (menuAndPrice.length !== 2) {
               return;
             }
             const [menuName, price] = [
               refineMenuName(menuAndPrice[0]),
-              menuAndPrice[1] + '원',
+              menuAndPrice[1] + '00원',
             ];
             return (
               <HStack
