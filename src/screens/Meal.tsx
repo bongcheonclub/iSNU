@@ -29,7 +29,6 @@ import {
   last,
   Dictionary,
 } from 'lodash';
-import {colors} from '../ui/colors';
 import {
   compareAsc,
   getDate,
@@ -45,6 +44,7 @@ import {check} from 'prettier';
 import {MealData} from '../InitializeData/ProcessMealData';
 import Text from '../components/Text';
 import Button from '../components/Button';
+import {theme} from '../ui/theme';
 
 type Props = BottomTabScreenProps<ParamListBase, '식당'> & {
   mealData: MealData;
@@ -848,7 +848,7 @@ export default function Meal({navigation, mealData}: Props) {
 
   return (
     <VStack>
-      <ScrollView bgColor={colors.white} height="100%">
+      <ScrollView bgColor={theme.colors.white} height="100%">
         <Center marginTop={2.5}>
           {favoriteList
             .sort((a, b) => {
@@ -865,7 +865,6 @@ export default function Meal({navigation, mealData}: Props) {
                 // rounded={10}
                 position="relative"
                 marginBottom="15px"
-                shadow={0}
                 key={name}>
                 <Button
                   variant={
@@ -883,7 +882,7 @@ export default function Meal({navigation, mealData}: Props) {
                       </Text>
                       {isOperating(name) ? (
                         <Text
-                          color={colors.grey[400]}
+                          variant="favoritePlaceTime"
                           textAlign="center"
                           marginTop={1}>
                           ~{checkStatus[name].nextTime}
@@ -986,12 +985,7 @@ export default function Meal({navigation, mealData}: Props) {
                     <Text variant="modalSubInfo" left={-15} top={-20}>
                       {cafeteria[selectedMeal].location}
                     </Text>
-                    <Text
-                      color={colors.black}
-                      fontSize="15px"
-                      fontWeight="400"
-                      textAlign="center"
-                      marginTop={3}>
+                    <Text variant="modalToday" textAlign="center" marginTop={3}>
                       {month}월 {date}일 ({koreanDay})
                     </Text>
                   </Box>
@@ -1036,7 +1030,7 @@ export default function Meal({navigation, mealData}: Props) {
                         />
                       </>
                     ) : (
-                      <Text />
+                      <></>
                     )}
 
                     {menu[selectedMeal].lunch.length > 0 ? (

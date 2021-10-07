@@ -41,6 +41,7 @@ export const theme = extendTheme({
       300: '#070F64', //Tip Submit Button Border
     },
     white: '#FFFFFF',
+    black: '#000000',
   },
 
   components: {
@@ -110,6 +111,11 @@ export const theme = extendTheme({
           fontSize: '25px',
           fontWeight: '500',
         },
+        modalToday: {
+          color: 'black',
+          fontSize: '15px',
+          fontWeight: '400',
+        },
         modalSubInfo: {
           color: 'gray.500',
           fontSize: '15px',
@@ -149,24 +155,37 @@ export const theme = extendTheme({
           borderColor: 'brown.200',
           borderWidth: '1px',
           rounded: '10px',
+          _pressed: {
+            bg: 'brown.200',
+          },
         },
         favoriteClosedPlace: {
           bg: 'gray.200',
           borderColor: 'gray.300',
           borderWidth: '1px',
           rounded: '10px',
+          _pressed: {
+            bg: 'gray.300',
+          },
         },
         place: {
           bg: 'gray.100',
           borderColor: 'gray.300',
           borderWidth: '1px',
           rounded: '10px',
+          _pressed: {
+            bg: 'gray.200',
+          },
         },
         submitButton: {
           bg: 'blue.200',
           borderColor: 'blue.300',
           borderWidth: '1px',
           rounded: '10px',
+          _pressed: {
+            bg: 'blue.100',
+            borderColor: 'blue.100',
+          },
         },
       },
     },

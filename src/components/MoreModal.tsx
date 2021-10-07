@@ -100,19 +100,6 @@ export default function MoreModal() {
   }, []);
   return (
     <Box>
-      {/* <Button
-        width="35px"
-        height="35px"
-        marginBottom="14px"
-        marginRight={windowWidth * 0.075}
-        padding="0"
-        onPress={() => setSelectedMoreTap('main')}
-        backgroundColor="transparent">
-        {({isPressed}) => {
-          console.log(isPressed);
-          return isPressed ? <MorePressed /> : <More />;
-        }}
-      </Button> */}
       <Pressable
         marginBottom="14px"
         marginRight={windowWidth * 0.075}
@@ -120,13 +107,11 @@ export default function MoreModal() {
         onPress={() => setSelectedMoreTap('main')}
         backgroundColor="transparent">
         {({isPressed}) => {
-          console.log(isPressed);
           return isPressed ? <MorePressed /> : <More />;
         }}
       </Pressable>
 
       <Modal
-        // top="-10%"
         isOpen={!!selectedMoreTap}
         onClose={() => setSelectedMoreTap(null)}>
         <Modal.Content
