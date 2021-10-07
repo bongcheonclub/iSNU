@@ -1,4 +1,4 @@
-package com.[package_name]; // 패키지 이름 수정
+package com.snuinfo;
 
 import android.content.Intent;
 import android.os.Bundle;
