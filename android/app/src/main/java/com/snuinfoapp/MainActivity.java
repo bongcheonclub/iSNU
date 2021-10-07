@@ -1,4 +1,4 @@
-package com.snuinfo;
+package com.snuinfoapp;
 
 import com.facebook.react.ReactActivity;
 import org.devio.rn.splashscreen.SplashScreen;
