@@ -7,6 +7,7 @@ import Text from './Text';
 
 import {slack} from '../helpers/axios';
 import More from '../icons/more.svg';
+import MorePressed from '../icons/more-pressed.svg';
 import Outlink from '../icons/outlink.svg';
 import OutlinkPressed from '../icons/outlink-pressed.svg';
 import Back from '../icons/back.svg';
@@ -99,14 +100,31 @@ export default function MoreModal() {
   }, []);
   return (
     <Box>
-      <Button
+      {/* <Button
+        width="35px"
+        height="35px"
         marginBottom="14px"
         marginRight={windowWidth * 0.075}
         padding="0"
         onPress={() => setSelectedMoreTap('main')}
         backgroundColor="transparent">
-        <More />
-      </Button>
+        {({isPressed}) => {
+          console.log(isPressed);
+          return isPressed ? <MorePressed /> : <More />;
+        }}
+      </Button> */}
+      <Pressable
+        marginBottom="14px"
+        marginRight={windowWidth * 0.075}
+        padding="0"
+        onPress={() => setSelectedMoreTap('main')}
+        backgroundColor="transparent">
+        {({isPressed}) => {
+          console.log(isPressed);
+          return isPressed ? <MorePressed /> : <More />;
+        }}
+      </Pressable>
+
       <Modal
         // top="-10%"
         isOpen={!!selectedMoreTap}
