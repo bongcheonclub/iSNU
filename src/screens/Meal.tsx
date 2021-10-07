@@ -470,6 +470,7 @@ export default function Meal({navigation, mealData}: Props) {
     }
 
     return string
+      .replace(/.파업/, '※')
       .split('원')
       .map(text => {
         return text.trim().split('&amp;').join('&').split(' ');
@@ -760,6 +761,7 @@ export default function Meal({navigation, mealData}: Props) {
         );
       }
       return string
+        .replace(/.파업/, '※')
         .split('원')
         .map(text => {
           return text.trim().split('&amp;').join('&').split(' ');
