@@ -1,4 +1,4 @@
-package com.snuinfo;
+package com.snuinfoapp;
 
 import android.content.Intent;
 import android.os.Bundle;

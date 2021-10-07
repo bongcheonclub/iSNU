@@ -1,4 +1,4 @@
-package com.snuinfo;
+package com.snuinfoapp;
 
 import android.app.Application;
 import android.content.Context;

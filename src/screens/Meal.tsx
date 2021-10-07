@@ -63,8 +63,8 @@ function checkOperating(
         time: string;
       }>,
     ] {
-  // const now = new Date();
-  const now = new Date('Tue Sep 23 2021 12:24:15 GMT+0900');
+  const now = new Date();
+  // const now = new Date('Tue Sep 23 2021 12:24:15 GMT+0900');
   const spliter = cafeteriaName.includes('감골') ? '~' : '-';
   const today = (() => {
     switch (
