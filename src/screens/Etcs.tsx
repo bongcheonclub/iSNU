@@ -43,7 +43,7 @@ export default function Etcs({navigation}: Props) {
                     평일 09:00 ~ 16:00 운영
                   </Text>
                 </Box>
-                <VStack>
+                <VStack px="12px">
                   <HStack width="100%">
                     <Text width="20%" variant="modalSubInfo" textAlign="center">
                       은행
@@ -260,7 +260,7 @@ export default function Etcs({navigation}: Props) {
                     </Text>
                   </HStack>
                 </Box>
-                <VStack>
+                <VStack px="12px">
                   <HStack width="100%">
                     <Text
                       width="25%"
@@ -337,7 +337,7 @@ export default function Etcs({navigation}: Props) {
                     </Text>
                   </HStack>
                 </Box>
-                <VStack>
+                <VStack px="12px">
                   <HStack width="100%">
                     <Text
                       width="25%"

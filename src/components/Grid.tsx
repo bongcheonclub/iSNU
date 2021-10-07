@@ -126,7 +126,7 @@ const Grid = <T extends AvailableItem>(props: Props<T>) => {
                               key={'hi' + index}
                               width="30%"
                               height="100%"
-                              marginRight="5%"
+                              marginRight={index % 3 !== 2 ? '5%' : '0'}
                               flex={1}
                             />
                           );
@@ -139,7 +139,7 @@ const Grid = <T extends AvailableItem>(props: Props<T>) => {
                             flex={1}
                             height="100%"
                             width="30%"
-                            marginRight="5%"
+                            marginRight={index % 3 !== 2 ? '5%' : '0'}
                             padding={2}
                             onPress={() => setFocusedItem(item.name)}
                             variant={
@@ -216,7 +216,7 @@ const Grid = <T extends AvailableItem>(props: Props<T>) => {
                       {focusedItem.location}
                     </Text>
                   </Box>
-                  <VStack>
+                  <VStack px="12px">
                     <HStack width="100%">
                       <Text
                         width="40%"
