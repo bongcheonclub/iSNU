@@ -104,7 +104,7 @@ export default function MoreModal() {
     setSuggestInput(text);
   }, []);
 
-  function handleClose(preState: string) {
+  function handleClose(preState: string | null) {
     switch (preState) {
       case 'main':
         return setSelectedMoreTap(null);
@@ -243,11 +243,12 @@ export default function MoreModal() {
                 <Modal.Body paddingTop="5">
                   <TextArea
                     height="102px"
-                    value={tipInput}
+                    //value={tipInput}
                     onChangeText={handleTipInput}
                     _focus={{
                       borderColor: 'blue.100',
                     }}
+                    size="xl"
                     placeholder="내용 입력하기"
                   />
                 </Modal.Body>
@@ -291,11 +292,12 @@ export default function MoreModal() {
                 <Modal.Body paddingTop="5">
                   <TextArea
                     height="102px"
-                    value={suggestInput}
+                    // value={suggestInput}
                     onChangeText={handleSuggestInput}
                     _focus={{
                       borderColor: 'blue.100',
                     }}
+                    size="xl"
                     placeholder="내용 입력하기"
                   />
                 </Modal.Body>
