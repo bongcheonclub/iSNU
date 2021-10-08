@@ -14,8 +14,8 @@ import Button from './Button';
 import Text from './Text';
 
 import {slack} from '../helpers/axios';
-import More from '../icons/more.svg';
-import MorePressed from '../icons/more-pressed.svg';
+import More from '../icons/kebab.svg';
+import MorePressed from '../icons/kebab-pressed.svg';
 import Outlink from '../icons/outlink.svg';
 import OutlinkPressed from '../icons/outlink-pressed.svg';
 import Back from '../icons/back.svg';
@@ -320,17 +320,55 @@ export default function MoreModal() {
           )}
           {selectedMoreTap === 'submitTip' && (
             <Box>
-              <VStack>
-                <Text>ㄱㅅㄱㅅ</Text>
-                <Button onPress={() => setSelectedMoreTap(null)}>닫기</Button>
+              <VStack width="100%" marginTop="20px" alignItems="center">
+                <Text
+                  color={theme.colors.black}
+                  fontSize="20px"
+                  fontWeight="400">
+                  소중한 의견 감사합니다!
+                </Text>
+                <Text
+                  color={theme.colors.black}
+                  fontSize="15px"
+                  fontWeight="300"
+                  marginTop="10px">
+                  보내주신 부분은 빠른 시일내에 수정하겠습니다.
+                </Text>
+                <Button
+                  marginTop="20px"
+                  width="100%"
+                  variant="closeButton"
+                  borderTopWidth="1px"
+                  onPress={() => setSelectedMoreTap(null)}>
+                  <Text variant="closeButton">닫기</Text>
+                </Button>
               </VStack>
             </Box>
           )}
           {selectedMoreTap === 'submitSuggest' && (
             <Box>
-              <VStack>
-                <Text>ㄱㅅㄱㅅ</Text>
-                <Button onPress={() => setSelectedMoreTap(null)}>닫기</Button>
+              <VStack width="100%" marginTop="20px" alignItems="center">
+                <Text
+                  color={theme.colors.black}
+                  fontSize="20px"
+                  fontWeight="400">
+                  소중한 의견 감사합니다!
+                </Text>
+                <Text
+                  color={theme.colors.black}
+                  fontSize="15px"
+                  fontWeight="300"
+                  marginTop="10px">
+                  보내주신 의견은 논의 후 반영하겠습니다.
+                </Text>
+                <Button
+                  marginTop="20px"
+                  width="100%"
+                  variant="closeButton"
+                  borderTopWidth="1px"
+                  onPress={() => setSelectedMoreTap(null)}>
+                  <Text variant="closeButton">닫기</Text>
+                </Button>
               </VStack>
             </Box>
           )}
@@ -340,21 +378,41 @@ export default function MoreModal() {
         top="-10%"
         isOpen={checkSubmit}
         onClose={() => setCheckSubmit(false)}>
-        <Modal.Content>
-          <Modal.Body />
-          <VStack alignItems="center">
-            <Box>
-              <Text>제출할거임?</Text>
-            </Box>
-            <HStack>
-              <Button onPress={() => setCheckSubmit(false)}>놉</Button>
+        <Modal.Content width="80%" bg={theme.colors.gray[100]}>
+          <VStack width="100%" marginTop="20px" alignItems="center">
+            <Text color={theme.colors.black} fontSize="18px" fontWeight="400">
+              제출하시겠습니까?
+            </Text>
+            <Text color={theme.colors.black} fontSize="15px" fontWeight="300">
+              작성하신 내용이 개발자들에게 전달됩니다.
+            </Text>
+            <HStack
+              marginTop="20px"
+              width="100%"
+              justifyContent="space-between">
               <Button
+                width="50%"
+                variant="closeButton"
+                borderWidth="1px"
+                borderLeftWidth="0"
+                borderBottomWidth="0"
+                onPress={() => setCheckSubmit(false)}>
+                <Text variant="closeButton" fontWeight="300">
+                  취소
+                </Text>
+              </Button>
+              <Button
+                width="50%"
+                variant="closeButton"
+                borderTopWidth="1px"
                 onPress={
                   selectedMoreTap === 'suggest'
                     ? handleSubmitSuggest
                     : handleSubmitTip
                 }>
-                ㅇㅇ
+                <Text variant="closeButton" fontWeight="400">
+                  보내기
+                </Text>
               </Button>
             </HStack>
           </VStack>
@@ -364,24 +422,43 @@ export default function MoreModal() {
         top="-10%"
         isOpen={checkClose}
         onClose={() => setCheckClose(false)}>
-        <Modal.Content>
-          <Modal.Body />
-          <VStack alignItems="center">
-            <Box>
-              <Text>뒤로 가시겠습니까?</Text>
-              <Text>작성중인 내용이 저장되지 않고 사라집니다.</Text>
-            </Box>
-            <HStack>
+        <Modal.Content width="80%" bg={theme.colors.gray[100]}>
+          <VStack width="100%" marginTop="20px" alignItems="center">
+            <Text color={theme.colors.black} fontSize="18px" fontWeight="400">
+              나가시겠습니까?
+            </Text>
+            <Text color={theme.colors.black} fontSize="15px" fontWeight="300">
+              작성중인 내용이 저장되지 않고 사라집니다.
+            </Text>
+            <HStack
+              marginTop="20px"
+              width="100%"
+              justifyContent="space-between">
               <Button
+                width="50%"
+                variant="closeButton"
+                borderWidth="1px"
+                borderLeftWidth="0"
+                borderBottomWidth="0"
+                onPress={() => setCheckClose(false)}>
+                <Text variant="closeButton" fontWeight="400">
+                  취소
+                </Text>
+              </Button>
+              <Button
+                width="50%"
+                variant="closeButton"
+                borderTopWidth="1px"
                 onPress={() => {
                   setSelectedMoreTap(nextState);
                   setTipInput('');
                   setSuggestInput('');
                   setCheckClose(false);
                 }}>
-                ㅇㅇ 나감
+                <Text variant="closeButton" fontWeight="300">
+                  나가기
+                </Text>
               </Button>
-              <Button onPress={() => setCheckClose(false)}>ㄴㄴ 안나감</Button>
             </HStack>
           </VStack>
         </Modal.Content>
