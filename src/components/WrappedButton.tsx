@@ -128,6 +128,7 @@ const WrappedButton: WrappedButtonType = ({
 }) => {
   return (
     <Button
+      variant={variant as any}
       onPress={e => {
         amplitude.logEvent(label, tag);
         onPress?.(e);
