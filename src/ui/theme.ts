@@ -36,7 +36,8 @@ export const theme = extendTheme({
       800: '#505050', //Sub Content
     },
     blue: {
-      100: '#4451DE', //Pressed
+      // 100: '#4451DE', //Pressed
+      100: '#0085FF',
       200: '#0C146B', //Page Title
       300: '#070F64', //Tip Submit Button Border
     },
@@ -142,9 +143,8 @@ export const theme = extendTheme({
           fontWeight: '400',
         },
         closeButton: {
-          color: 'gray.700',
-          fontSize: '15px',
-          fontWeight: '400',
+          color: 'blue.100',
+          fontSize: '18px',
         },
         pressedModalTitle: {
           color: 'blue.100',
@@ -197,10 +197,9 @@ export const theme = extendTheme({
           },
         },
         closeButton: {
-          bg: 'gray.100',
+          bg: 'white',
           borderColor: 'gray.300',
-          borderWidth: '1px',
-          rounded: '10px',
+          rounded: '0',
           _pressed: {
             bg: 'gray.200',
           },
