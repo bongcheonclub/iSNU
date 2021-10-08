@@ -1,5 +1,7 @@
 
 secure.ts
+android/app/*.keystore
+android/gradle.properties
 # OSX
 #
 .DS_Store
