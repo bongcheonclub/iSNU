@@ -907,7 +907,7 @@ export default function Meal({navigation, mealData}: Props) {
                   key={name}>
                   <Button
                     tags={{name, isOpearting: isOperatingMeal, favorite: true}}
-                    label={'meal-detail'}
+                    label="meal-detail"
                     variant={
                       isOperatingMeal
                         ? 'favoriteOpenPlace'
@@ -977,7 +977,7 @@ export default function Meal({navigation, mealData}: Props) {
                         mx="2.5%"
                         marginBottom="5%">
                         <Button
-                          label={'meal-detail'}
+                          label="meal-detail"
                           tags={{
                             name,
                             isOpearting: isOperatingMeal,

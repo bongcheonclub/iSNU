@@ -23,6 +23,7 @@ import {slack} from './helpers/axios';
 import {MealData} from './InitializeData/ProcessMealData';
 import {Awaited} from './helpers/type';
 import MoreModal from './components/MoreModal';
+import amplitude from './helpers/amplitude';
 
 const Tab = createBottomTabNavigator();
 
@@ -61,6 +62,11 @@ export default function App() {
               name="식당"
               options={{
                 tabBarIcon: () => <MealIcon />,
+              }}
+              listeners={{
+                tabPress: e => {
+                  amplitude.logEvent('meal');
+                },
               }}>
               {props => <Meal {...props} mealData={data.mealData} />}
             </Tab.Screen>
@@ -69,6 +75,11 @@ export default function App() {
               name="카페"
               options={{
                 tabBarIcon: () => <CafeIcon />,
+              }}
+              listeners={{
+                tabPress: e => {
+                  amplitude.logEvent('cafe');
+                },
               }}>
               {props => (
                 <Cafe
@@ -82,6 +93,11 @@ export default function App() {
               name="편의점"
               options={{
                 tabBarIcon: () => <MartIcon />,
+              }}
+              listeners={{
+                tabPress: e => {
+                  amplitude.logEvent('mart');
+                },
               }}>
               {props => (
                 <Mart
@@ -95,6 +111,11 @@ export default function App() {
               name="셔틀"
               options={{
                 tabBarIcon: () => <ShuttleIcon />,
+              }}
+              listeners={{
+                tabPress: e => {
+                  amplitude.logEvent('shuttle');
+                },
               }}>
               {props => (
                 <Shuttle
@@ -108,6 +129,11 @@ export default function App() {
               component={Etcs}
               options={{
                 tabBarIcon: () => <EtcsIcon />,
+              }}
+              listeners={{
+                tabPress: e => {
+                  amplitude.logEvent('etcs');
+                },
               }}
             />
           </Tab.Navigator>
