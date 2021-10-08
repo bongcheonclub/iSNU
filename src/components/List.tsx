@@ -19,12 +19,13 @@ import {Shuttle} from '../screens/Shuttle';
 import {ItemClick} from 'native-base/lib/typescript/components/composites/Typeahead/useTypeahead/types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {LOCAL_STORAGE} from '../helpers/localStorage';
-import Button from './Button';
+import Button from './WrappedButton';
 import Text from './Text';
 
 type AvailableItem = Shuttle;
 
 type Props<T extends AvailableItem> = {
+  itemType: string;
   items: T[];
   checkOperating: (item: T) => {
     isOperating: boolean;
@@ -41,8 +42,13 @@ type ItemWithFlag<T> = T & {
 };
 
 const List = <T extends AvailableItem>(props: Props<T>) => {
-  const {items, checkOperating, initialFavoriteNames, favoriteStorageKey} =
-    props;
+  const {
+    items,
+    checkOperating,
+    initialFavoriteNames,
+    favoriteStorageKey,
+    itemType,
+  } = props;
   const syncFavoritesToStorage = (favorites: string[]) => {
     AsyncStorage.setItem(favoriteStorageKey, JSON.stringify(favorites));
   };
@@ -90,6 +96,8 @@ const List = <T extends AvailableItem>(props: Props<T>) => {
                   return (
                     <Center key={item.name} marginY={2.5}>
                       <Button
+                        label={`${itemType}-click-button`}
+                        tags={{itemType, name, isOperating, favoriteRate}}
                         key={name}
                         width="100%"
                         height="72px"
@@ -143,6 +151,13 @@ const List = <T extends AvailableItem>(props: Props<T>) => {
                         {focusedItem.name}
                       </Text>
                       <Button
+                        label={`${itemType}-toggle-favorite`}
+                        tags={{
+                          itemType,
+                          name: focusedItem.name,
+                          isOperating: focusedItem.isOperating,
+                          favoriteRate: focusedItem.favoriteRate,
+                        }}
                         bgColor="transparent"
                         left={-6}
                         top={-1}

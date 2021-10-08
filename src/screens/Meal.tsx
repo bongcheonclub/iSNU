@@ -43,8 +43,8 @@ import {ParamListBase} from '@react-navigation/native';
 import {check} from 'prettier';
 import {MealData} from '../InitializeData/ProcessMealData';
 import Text from '../components/Text';
-import Button from '../components/Button';
 import {theme} from '../ui/theme';
+import Button from '../components/WrappedButton';
 
 type Props = BottomTabScreenProps<ParamListBase, '식당'> & {
   mealData: MealData;
@@ -896,57 +896,62 @@ export default function Meal({navigation, mealData}: Props) {
             .sort((a, b) => {
               return Number(isOperating(b)) - Number(isOperating(a));
             })
-            .map(name => (
-              <Center
-                width="85%"
-                minHeight="60px"
-                position="relative"
-                marginBottom="15px"
-                key={name}>
-                <Button
-                  variant={
-                    isOperating(name)
-                      ? 'favoriteOpenPlace'
-                      : 'favoriteClosedPlace'
-                  }
-                  py="10px"
-                  px="0px"
-                  onPress={() => setSelectedMeal(name)}>
-                  <HStack position="relative" padding={0}>
-                    <Center width="34%" marginBottom={0} bg="transparent">
-                      <Text variant="favoritePlaceNameBig" textAlign="center">
-                        {name === '대학원기숙사' ? '대학원\n기숙사' : name}
-                      </Text>
-                      {isOperating(name) ? (
+            .map(name => {
+              const isOperatingMeal = isOperating(name);
+              return (
+                <Center
+                  width="85%"
+                  minHeight="60px"
+                  position="relative"
+                  marginBottom="15px"
+                  key={name}>
+                  <Button
+                    tags={{name, isOpearting: isOperatingMeal, favorite: true}}
+                    label={'meal-detail'}
+                    variant={
+                      isOperatingMeal
+                        ? 'favoriteOpenPlace'
+                        : 'favoriteClosedPlace'
+                    }
+                    py="10px"
+                    px="0px"
+                    onPress={() => setSelectedMeal(name)}>
+                    <HStack position="relative" padding={0}>
+                      <Center width="34%" marginBottom={0} bg="transparent">
+                        <Text variant="favoritePlaceNameBig" textAlign="center">
+                          {name === '대학원기숙사' ? '대학원\n기숙사' : name}
+                        </Text>
+                        {isOperatingMeal ? (
+                          <Text
+                            variant="favoritePlaceTime"
+                            textAlign="center"
+                            marginTop={1}>
+                            ~{checkStatus[name].nextTime}
+                          </Text>
+                        ) : (
+                          <Box height="0px" />
+                        )}
+                      </Center>
+                      {menu !== null &&
+                      name !== null &&
+                      menu[name] !== undefined ? (
+                        <Center width="66%" padding={0}>
+                          {showFavoriteMenu(name)}
+                        </Center>
+                      ) : (
                         <Text
+                          width="65%"
                           variant="favoritePlaceTime"
                           textAlign="center"
-                          marginTop={1}>
-                          ~{checkStatus[name].nextTime}
+                          margin="auto">
+                          운영 정보 없음
                         </Text>
-                      ) : (
-                        <Box height="0px" />
                       )}
-                    </Center>
-                    {menu !== null &&
-                    name !== null &&
-                    menu[name] !== undefined ? (
-                      <Center width="66%" padding={0}>
-                        {showFavoriteMenu(name)}
-                      </Center>
-                    ) : (
-                      <Text
-                        width="65%"
-                        variant="favoritePlaceTime"
-                        textAlign="center"
-                        margin="auto">
-                        운영 정보 없음
-                      </Text>
-                    )}
-                  </HStack>
-                </Button>
-              </Center>
-            ))}
+                    </HStack>
+                  </Button>
+                </Center>
+              );
+            })}
         </Center>
         <Center marginTop={0} width="85%" alignSelf="center">
           <VStack width="100%">
@@ -963,6 +968,7 @@ export default function Meal({navigation, mealData}: Props) {
                   width="100%"
                   marginLeft="-2.5%">
                   {subnonFavoriteListInfoArray.map(name => {
+                    const isOperatingMeal = isOperating(name);
                     return (
                       <AspectRatio
                         key={name}
@@ -971,6 +977,12 @@ export default function Meal({navigation, mealData}: Props) {
                         mx="2.5%"
                         marginBottom="5%">
                         <Button
+                          label={'meal-detail'}
+                          tags={{
+                            name,
+                            isOpearting: isOperatingMeal,
+                            favorite: false,
+                          }}
                           onPress={() => setSelectedMeal(name)}
                           width="100%"
                           margin={0}
@@ -979,7 +991,7 @@ export default function Meal({navigation, mealData}: Props) {
                           key={name}>
                           <Text
                             variant={
-                              isOperating(name)
+                              isOperatingMeal
                                 ? 'normalOpenPlaceSmall'
                                 : 'normalClosedPlaceSmall'
                             }>
@@ -1008,6 +1020,11 @@ export default function Meal({navigation, mealData}: Props) {
                         {selectedMeal}
                       </Text>
                       <Button
+                        label="meal-toggle-favorite"
+                        tags={{
+                          name: selectedMeal,
+                          isFavorite: favoriteList.includes(selectedMeal),
+                        }}
                         bgColor="transparent"
                         left={-6}
                         top={-1}

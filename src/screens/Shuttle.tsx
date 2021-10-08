@@ -187,6 +187,7 @@ function checkOperating(suttle: Shuttle): {
 export default function Shuttle({navigation, initialFavoriteNames}: Props) {
   return (
     <List
+      itemType="shuttle"
       items={SHUTTLES}
       checkOperating={checkOperating}
       initialFavoriteNames={initialFavoriteNames}

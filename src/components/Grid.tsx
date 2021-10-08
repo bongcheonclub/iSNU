@@ -18,12 +18,13 @@ import {Cafe} from '../screens/Cafe';
 import {Mart} from '../screens/Mart';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {LOCAL_STORAGE} from '../helpers/localStorage';
-import Button from './Button';
+import Button from './WrappedButton';
 import Text from './Text';
 
 type AvailableItem = Cafe | Mart;
 
 type Props<T> = {
+  itemType: string;
   items: T[];
   checkOperating: (item: T) => boolean;
   initialFavoriteNames: string[];
@@ -37,8 +38,13 @@ type ItemWithFlag<T> = T & {
 
 const Grid = <T extends AvailableItem>(props: Props<T>) => {
   const windowWidth = Dimensions.get('window').width;
-  const {items, checkOperating, initialFavoriteNames, favoriteStorageKey} =
-    props;
+  const {
+    items,
+    checkOperating,
+    initialFavoriteNames,
+    favoriteStorageKey,
+    itemType,
+  } = props;
   const syncFavoritesToStorage = (favorites: string[]) => {
     AsyncStorage.setItem(favoriteStorageKey, JSON.stringify(favorites));
   };
@@ -135,6 +141,8 @@ const Grid = <T extends AvailableItem>(props: Props<T>) => {
 
                         return (
                           <Button
+                            label={`${itemType}-click-button`}
+                            tags={{itemType, name, isOperating, favoriteRate}}
                             key={name}
                             flex={1}
                             height="100%"
@@ -187,6 +195,13 @@ const Grid = <T extends AvailableItem>(props: Props<T>) => {
                           .trim()}
                       </Text>
                       <Button
+                        label={`${itemType}-toggle-favorite`}
+                        tags={{
+                          itemType,
+                          name: focusedItem.name,
+                          isOperating: focusedItem.isOperating,
+                          favoriteRate: focusedItem.favoriteRate,
+                        }}
                         bgColor="transparent"
                         left={-6}
                         top={-1}

@@ -8,7 +8,7 @@ import {
   HStack,
   Box,
 } from 'native-base';
-import Button from '../components/Button';
+import Button from '../components/WrappedButton';
 import Text from '../components/Text';
 import {WebView} from 'react-native-webview';
 import React, {useState} from 'react';
@@ -410,6 +410,7 @@ export default function Etcs({navigation}: Props) {
         <VStack>
           <Center marginTop={2.5} marginBottom={2.5}>
             <Button
+              label="etcs-bank"
               onPress={() => setFocusedEtc('Bank')}
               rounded="10px"
               width="85%"
@@ -420,6 +421,7 @@ export default function Etcs({navigation}: Props) {
           </Center>
           <Center marginTop={2.5} marginBottom={2.5}>
             <Button
+              label="etcs-post-office"
               onPress={() => setFocusedEtc('Post')}
               rounded="10px"
               width="85%"
@@ -430,6 +432,7 @@ export default function Etcs({navigation}: Props) {
           </Center>
           <Center marginTop={2.5} marginBottom={2.5}>
             <Button
+              label="etcs-bookstore"
               onPress={() => setFocusedEtc('Book')}
               rounded="10px"
               width="85%"
@@ -440,6 +443,7 @@ export default function Etcs({navigation}: Props) {
           </Center>
           <Center marginTop={2.5} marginBottom={2.5}>
             <Button
+              label="etcs-library"
               onPress={() => Linking.openURL('https://lib.snu.ac.kr/hours')}
               rounded="10px"
               width="85%"
@@ -450,6 +454,7 @@ export default function Etcs({navigation}: Props) {
           </Center>
           <Center marginTop={2.5} marginBottom={2.5}>
             <Button
+              label="etcs-public-health"
               onPress={() =>
                 Linking.openURL(
                   'https://m.health4u.snu.ac.kr/medicalTreatment/PracticeSchedule/_/view.do',
@@ -464,6 +469,7 @@ export default function Etcs({navigation}: Props) {
           </Center>
           <Center marginTop={2.5} marginBottom={2.5}>
             <Button
+              label="etcs-dormitory"
               onPress={() =>
                 Linking.openURL(
                   'https://snudorm.snu.ac.kr/%ec%83%9d%ed%99%9c%ec%95%88%eb%82%b4/%ed%8e%b8%ec%9d%98%ec%8b%9c%ec%84%a4/%ec%9d%8c%ec%8b%9d/',
