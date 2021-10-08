@@ -1,4 +1,4 @@
-import type React from 'react';
+import React from 'react';
 import {ITextProps, Text} from 'native-base';
 
 type TypeOverridedText = React.MemoExoticComponent<

@@ -1,4 +1,4 @@
-import type React from 'react';
+import React from 'react';
 import {Button, IPressableProps, ITextProps} from 'native-base';
 import type {ResponsiveValue} from 'native-base/lib/typescript/components/types';
 import type {ISizes} from 'native-base/lib/typescript/theme/base/sizes';
