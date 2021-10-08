@@ -1,18 +1,9 @@
-import {
-  Box,
-  Center,
-  Modal,
-  Pressable,
-  TextArea,
-  VStack,
-  HStack,
-} from 'native-base';
+import {Box, Center, Modal, TextArea, VStack, HStack} from 'native-base';
 import React, {useCallback, useState} from 'react';
 import {Keyboard, Dimensions, Linking} from 'react-native';
-import getPublicIp from 'react-native-public-ip';
-import Button from './Button';
 import Text from './Text';
-
+import Button from './WrappedButton';
+import Pressable from './WrappedPressable';
 import {slack} from '../helpers/axios';
 import More from '../icons/kebab.svg';
 import MorePressed from '../icons/kebab-pressed.svg';
@@ -141,6 +132,7 @@ export default function MoreModal() {
   return (
     <Box>
       <Pressable
+        label="more"
         marginBottom="14px"
         marginRight={windowWidth * 0.075}
         padding="0"
@@ -163,7 +155,9 @@ export default function MoreModal() {
             <Modal.Body width="100%">
               <Modal.CloseButton onPress={() => console.log(selectedMoreTap)} />
               <Box margin="auto" my="5" alignItems="flex-end">
-                <Pressable onPress={() => setSelectedMoreTap('tip')}>
+                <Pressable
+                  label="more-tip"
+                  onPress={() => setSelectedMoreTap('tip')}>
                   {({isPressed}) => {
                     return (
                       <Center flexDirection="row" my="3">
@@ -180,7 +174,9 @@ export default function MoreModal() {
                     );
                   }}
                 </Pressable>
-                <Pressable onPress={() => setSelectedMoreTap('suggest')}>
+                <Pressable
+                  label="more-suggest"
+                  onPress={() => setSelectedMoreTap('suggest')}>
                   {({isPressed}) => {
                     return (
                       <Center flexDirection="row" my="3">
@@ -198,6 +194,7 @@ export default function MoreModal() {
                   }}
                 </Pressable>
                 <Pressable
+                  label="more-developer-introduce"
                   onPress={() =>
                     Linking.openURL(
                       'https://wobby.notion.site/wobby/We-Work-as-a-Hobby-9c6a1081ecbf4885902962c0998bfd2c',
@@ -223,7 +220,9 @@ export default function MoreModal() {
             </Modal.Body>
           )}
           {selectedMoreTap === 'tip' && (
-            <Pressable onPress={Keyboard.dismiss}>
+            <Pressable
+              label="more-tip-keyboard-dismiss"
+              onPress={Keyboard.dismiss}>
               <Box>
                 <Modal.CloseButton onPress={() => handleClose('tip')} />
                 <Modal.Header
@@ -232,6 +231,7 @@ export default function MoreModal() {
                   display="flex"
                   flexDir="row">
                   <Pressable
+                    label="more-tip-back"
                     onPress={() => handleClose('back')}
                     marginRight={2}>
                     {({isPressed}) => {
@@ -262,6 +262,7 @@ export default function MoreModal() {
                     <Text variant="closeButton">닫기</Text>
                   </Button> */}
                   <Button
+                    label="more-tip-submit"
                     onPress={() => setCheckSubmit(true)}
                     variant="submitButton"
                     isDisabled={!tipInput.trim()}>
@@ -272,7 +273,9 @@ export default function MoreModal() {
             </Pressable>
           )}
           {selectedMoreTap === 'suggest' && (
-            <Pressable onPress={Keyboard.dismiss}>
+            <Pressable
+              label="more-suggest-keyboard-dismiss"
+              onPress={Keyboard.dismiss}>
               <Box>
                 <Modal.CloseButton onPress={() => handleClose('suggest')} />
                 <Modal.Header
@@ -281,6 +284,7 @@ export default function MoreModal() {
                   display="flex"
                   flexDir="row">
                   <Pressable
+                    label="more-suggest-back"
                     onPress={() => handleClose('back')}
                     marginRight={2}>
                     {({isPressed}) => {
@@ -311,6 +315,7 @@ export default function MoreModal() {
                     <Text variant="closeButton">닫기</Text>
                   </Button> */}
                   <Button
+                    label="more-suggest-submit"
                     onPress={() => setCheckSubmit(true)}
                     variant="submitButton"
                     isDisabled={!suggestInput.trim()}>
@@ -337,6 +342,7 @@ export default function MoreModal() {
                   보내주신 부분은 빠른 시일내에 수정하겠습니다.
                 </Text>
                 <Button
+                  label="more-tip-submit-close"
                   marginTop="20px"
                   width="100%"
                   variant="closeButton"
@@ -364,6 +370,7 @@ export default function MoreModal() {
                   보내주신 의견은 논의 후 반영하겠습니다.
                 </Text>
                 <Button
+                  label="more-suggest-submit-close"
                   marginTop="20px"
                   width="100%"
                   variant="closeButton"
@@ -393,6 +400,7 @@ export default function MoreModal() {
               width="100%"
               justifyContent="space-between">
               <Button
+                label="more-submit-cancel"
                 width="50%"
                 variant="closeButton"
                 borderWidth="1px"
@@ -404,6 +412,7 @@ export default function MoreModal() {
                 </Text>
               </Button>
               <Button
+                label="more-submit-accept"
                 width="50%"
                 variant="closeButton"
                 borderTopWidth="1px"
@@ -437,6 +446,7 @@ export default function MoreModal() {
               width="100%"
               justifyContent="space-between">
               <Button
+                label="more-exit-modal-cancel"
                 width="50%"
                 variant="closeButton"
                 borderWidth="1px"
@@ -448,6 +458,7 @@ export default function MoreModal() {
                 </Text>
               </Button>
               <Button
+                label="more-exit-modal-accept"
                 width="50%"
                 variant="closeButton"
                 borderTopWidth="1px"

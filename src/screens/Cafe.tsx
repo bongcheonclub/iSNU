@@ -73,6 +73,7 @@ function checkOperating(cafe: Cafe): boolean {
 export default function Cafe({navigation, cafes, initialFavoriteNames}: Props) {
   return (
     <Grid
+      itemType="cafe"
       items={cafes}
       checkOperating={checkOperating}
       initialFavoriteNames={initialFavoriteNames}

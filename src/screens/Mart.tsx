@@ -68,6 +68,7 @@ export default function Mart({navigation, marts, initialFavoriteNames}: Props) {
   return (
     marts && (
       <Grid
+        itemType="mart"
         items={marts}
         checkOperating={checkOperating}
         initialFavoriteNames={initialFavoriteNames}

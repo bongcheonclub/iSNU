@@ -4,7 +4,11 @@ import type {ResponsiveValue} from 'native-base/lib/typescript/components/types'
 import type {ISizes} from 'native-base/lib/typescript/theme/base/sizes';
 import type {IStackProps} from 'native-base/lib/typescript/components/primitives';
 import type {MutableRefObject} from 'react-native/node_modules/@types/react';
+import amplitude from '../helpers/amplitude';
 export interface IButtonProps extends IPressableProps {
+  label: string;
+
+  tags?: Record<string, unknown>;
   /**
    * The color of the radio when it's checked. This should be one of the color keys in the theme (e.g."green", "red").
    * @default 'primary'
@@ -109,18 +113,28 @@ export interface IButtonGroupProps extends IStackProps {
    */
   isAttached?: boolean;
 }
-export declare type IButtonComponentType = ((
+export declare type WrappedButtonType = (
   props: IButtonProps & {
     ref?: MutableRefObject<any>;
   },
-) => React.ReactElement) & {
-  Group: React.MemoExoticComponent<
-    (
-      props: IButtonGroupProps & {
-        ref?: MutableRefObject<any>;
-      },
-    ) => React.ReactElement
-  >;
+) => React.ReactElement;
+
+const WrappedButton: WrappedButtonType = ({
+  label,
+  tags: tag,
+  onPress,
+  variant,
+  ...props
+}) => {
+  return (
+    <Button
+      onPress={e => {
+        amplitude.logEvent(label, tag);
+        onPress?.(e);
+      }}
+      {...props}
+    />
+  );
 };
 
-export default Button as IButtonComponentType;
+export default WrappedButton as WrappedButtonType;
