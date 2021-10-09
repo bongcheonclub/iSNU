@@ -54,19 +54,6 @@ export default function App() {
                 initialRouteName={'Mart'}
                 tabBarPosition="bottom"
                 screenOptions={({route}) => ({
-                  // console.log(route)
-                  // headerStatusBarHeight: 100,
-                  // headerTitleStyle: {
-                  //   color: colors.blue,
-                  //   fontSize: 40,
-                  //   marginLeft: 12,
-                  //   top: '0%',
-                  //   height: '150%',
-                  // },
-                  // headerTitleAlign: 'left',
-                  // headerStyle: {borderBottomWidth: 0, height: 140},
-                  // headerTitleContainerStyle: {paddingBottom: 10},
-                  // headerRight: () => <MoreModal />,
                   tabBarStyle: {
                     height: 60,
                     borderTopColor: '#DCDCDC',
