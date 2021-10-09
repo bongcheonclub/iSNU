@@ -51,7 +51,7 @@ function checkOperating(cafe: Cafe): boolean {
     return true;
   }
 
-  if (operatingTime.includes('-') || operatingTime.includes('-')) {
+  if (operatingTime.includes('-') || operatingTime.includes('~')) {
     const spliter = /-|~/;
     const [startAtString, endedAtString] = operatingTime.split(spliter);
 
