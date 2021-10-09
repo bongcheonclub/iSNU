@@ -69,12 +69,14 @@ const List = <T extends AvailableItem>(props: Props<T>) => {
       };
     })
     .sortBy(({isOperating, favoriteRate}) => {
-      if (favoriteRate > 0) {
+      if (favoriteRate > 0 && isOperating) {
         return favoriteRate;
+      } else if (favoriteRate > 0) {
+        return 100 + favoriteRate;
       } else if (isOperating) {
-        return 100;
-      } else {
         return 200;
+      } else {
+        return 300;
       }
     })
     .value();
