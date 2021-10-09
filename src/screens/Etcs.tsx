@@ -27,19 +27,23 @@ export default function Etcs() {
           <Modal
             isOpen={focusedEtc === 'Bank'}
             onClose={() => setFocusedEtc(null)}>
-            <Modal.Content padding={0} width="90%">
+            <Modal.Content
+              paddingTop="8px"
+              px="12px"
+              paddingBottom="12px"
+              width="90%">
               <Modal.CloseButton />
-              <Modal.Body>
-                <Box margin={6} marginBottom={1}>
-                  <HStack left={-15} top={-15}>
-                    <Text variant="modalTitle" marginBottom={1}>
-                      은행
-                    </Text>
-                  </HStack>
-                  <Text variant="modalSubInfo" left={-15} top={-20}>
-                    평일 09:00 ~ 16:00 운영
+              <Box margin={6} marginBottom={1}>
+                <HStack left={-15} top={-15}>
+                  <Text variant="modalTitle" marginBottom={1}>
+                    은행
                   </Text>
-                </Box>
+                </HStack>
+                <Text variant="modalSubInfo" left={-15} top={-20}>
+                  평일 09:00 ~ 16:00 운영
+                </Text>
+              </Box>
+              <ScrollView bounces={false}>
                 <VStack px="12px">
                   <HStack width="100%">
                     <Text width="20%" variant="modalSubInfo" textAlign="center">
@@ -241,164 +245,168 @@ export default function Etcs() {
                     </Text>
                   </HStack>
                 </VStack>
-              </Modal.Body>
+              </ScrollView>
             </Modal.Content>
           </Modal>
           <Modal
             isOpen={focusedEtc === 'Post'}
             onClose={() => setFocusedEtc(null)}>
-            <Modal.Content width="90%">
+            <Modal.Content
+              paddingTop="8px"
+              px="12px"
+              paddingBottom="12px"
+              width="90%">
               <Modal.CloseButton />
-              <Modal.Body>
-                <Box margin={6} marginBottom={1}>
-                  <HStack left={-15} top={-15}>
-                    <Text variant="modalTitle" marginBottom={1}>
-                      우체국
+              <Box margin={6} marginBottom={1}>
+                <HStack left={-15} top={-15}>
+                  <Text variant="modalTitle" marginBottom={1}>
+                    우체국
+                  </Text>
+                </HStack>
+              </Box>
+              <VStack px="12px">
+                <HStack width="100%">
+                  <Text
+                    width="25%"
+                    variant="modalSubContent"
+                    textAlign="center">
+                    위치
+                  </Text>
+                  <Text
+                    width="75%"
+                    variant="modalSubContent"
+                    textAlign="center">
+                    행정관 1층 (학생회관 식당 앞)
+                  </Text>
+                </HStack>
+                <Divider
+                  my={2}
+                  bg="black"
+                  width="100%"
+                  marginTop="14px"
+                  marginBottom="14px"
+                />
+                <HStack width="100%" alignItems="center">
+                  <Text
+                    width="25%"
+                    variant="modalSubContent"
+                    textAlign="center">
+                    운영시간
+                  </Text>
+                  <VStack width="75%">
+                    <Text variant="modalSubContent" textAlign="center">
+                      평일 09:00 ~ 18:00
                     </Text>
-                  </HStack>
-                </Box>
-                <VStack px="12px">
-                  <HStack width="100%">
-                    <Text
-                      width="25%"
-                      variant="modalSubContent"
-                      textAlign="center">
-                      위치
+                    <Text variant="modalSubContent" textAlign="center">
+                      (금융서비스: 09:00 ~ 16:30)
                     </Text>
-                    <Text
-                      width="75%"
-                      variant="modalSubContent"
-                      textAlign="center">
-                      행정관 1층 (학생회관 식당 앞)
-                    </Text>
-                  </HStack>
-                  <Divider
-                    my={2}
-                    bg="black"
-                    width="100%"
-                    marginTop="14px"
-                    marginBottom="14px"
-                  />
-                  <HStack width="100%" alignItems="center">
-                    <Text
-                      width="25%"
-                      variant="modalSubContent"
-                      textAlign="center">
-                      운영시간
-                    </Text>
-                    <VStack width="75%">
-                      <Text variant="modalSubContent" textAlign="center">
-                        평일 09:00 ~ 18:00
-                      </Text>
-                      <Text variant="modalSubContent" textAlign="center">
-                        (금융서비스: 09:00 ~ 16:30)
-                      </Text>
-                    </VStack>
-                  </HStack>
-                  <Divider
-                    my={2}
-                    bg="black"
-                    width="100%"
-                    marginTop="14px"
-                    marginBottom="14px"
-                  />
-                  <HStack width="100%">
-                    <Text
-                      width="25%"
-                      variant="modalSubContent"
-                      textAlign="center">
-                      연락처
-                    </Text>
-                    <Text
-                      width="75%"
-                      variant="modalSubContent"
-                      textAlign="center"
-                      marginBottom="20px">
-                      02-889-0205
-                    </Text>
-                  </HStack>
-                </VStack>
-              </Modal.Body>
+                  </VStack>
+                </HStack>
+                <Divider
+                  my={2}
+                  bg="black"
+                  width="100%"
+                  marginTop="14px"
+                  marginBottom="14px"
+                />
+                <HStack width="100%">
+                  <Text
+                    width="25%"
+                    variant="modalSubContent"
+                    textAlign="center">
+                    연락처
+                  </Text>
+                  <Text
+                    width="75%"
+                    variant="modalSubContent"
+                    textAlign="center"
+                    marginBottom="20px">
+                    02-889-0205
+                  </Text>
+                </HStack>
+              </VStack>
             </Modal.Content>
           </Modal>
           <Modal
             isOpen={focusedEtc === 'Book'}
             onClose={() => setFocusedEtc(null)}>
-            <Modal.Content width="90%">
+            <Modal.Content
+              paddingTop="8px"
+              px="12px"
+              paddingBottom="12px"
+              width="90%">
               <Modal.CloseButton />
-              <Modal.Body>
-                <Box margin={6} marginBottom={1}>
-                  <HStack left={-15} top={-15}>
-                    <Text variant="modalTitle" marginBottom={1}>
-                      교보문고
+              <Box margin={6} marginBottom={1}>
+                <HStack left={-15} top={-15}>
+                  <Text variant="modalTitle" marginBottom={1}>
+                    교보문고
+                  </Text>
+                </HStack>
+              </Box>
+              <VStack px="12px">
+                <HStack width="100%">
+                  <Text
+                    width="25%"
+                    variant="modalSubContent"
+                    textAlign="center">
+                    위치
+                  </Text>
+                  <Text
+                    width="75%"
+                    variant="modalSubContent"
+                    textAlign="center">
+                    학생회관 1층
+                  </Text>
+                </HStack>
+                <Divider
+                  my={2}
+                  bg="black"
+                  width="100%"
+                  marginTop="14px"
+                  marginBottom="14px"
+                />
+                <HStack width="100%" alignItems="center">
+                  <Text
+                    width="25%"
+                    variant="modalSubContent"
+                    textAlign="center">
+                    운영시간
+                  </Text>
+                  <VStack width="75%">
+                    <Text variant="modalSubContent" textAlign="center">
+                      평일 08:30 ~ 19:00
                     </Text>
-                  </HStack>
-                </Box>
-                <VStack px="12px">
-                  <HStack width="100%">
-                    <Text
-                      width="25%"
-                      variant="modalSubContent"
-                      textAlign="center">
-                      위치
+                    <Text variant="modalSubContent" textAlign="center">
+                      토요일 10:00 ~ 17:00
                     </Text>
-                    <Text
-                      width="75%"
-                      variant="modalSubContent"
-                      textAlign="center">
-                      학생회관 1층
+                    <Text variant="modalSubContent" textAlign="center">
+                      (일요일, 공휴일 휴무)
                     </Text>
-                  </HStack>
-                  <Divider
-                    my={2}
-                    bg="black"
-                    width="100%"
-                    marginTop="14px"
-                    marginBottom="14px"
-                  />
-                  <HStack width="100%" alignItems="center">
-                    <Text
-                      width="25%"
-                      variant="modalSubContent"
-                      textAlign="center">
-                      운영시간
-                    </Text>
-                    <VStack width="75%">
-                      <Text variant="modalSubContent" textAlign="center">
-                        평일 08:30 ~ 19:00
-                      </Text>
-                      <Text variant="modalSubContent" textAlign="center">
-                        토요일 10:00 ~ 17:00
-                      </Text>
-                      <Text variant="modalSubContent" textAlign="center">
-                        (일요일, 공휴일 휴무)
-                      </Text>
-                    </VStack>
-                  </HStack>
-                  <Divider
-                    my={2}
-                    bg="black"
-                    width="100%"
-                    marginTop="14px"
-                    marginBottom="14px"
-                  />
-                  <HStack width="100%">
-                    <Text
-                      width="25%"
-                      variant="modalSubContent"
-                      textAlign="center">
-                      연락처
-                    </Text>
-                    <Text
-                      width="75%"
-                      variant="modalSubContent"
-                      textAlign="center"
-                      marginBottom="20px">
-                      02-880-8581
-                    </Text>
-                  </HStack>
-                </VStack>
-              </Modal.Body>
+                  </VStack>
+                </HStack>
+                <Divider
+                  my={2}
+                  bg="black"
+                  width="100%"
+                  marginTop="14px"
+                  marginBottom="14px"
+                />
+                <HStack width="100%">
+                  <Text
+                    width="25%"
+                    variant="modalSubContent"
+                    textAlign="center">
+                    연락처
+                  </Text>
+                  <Text
+                    width="75%"
+                    variant="modalSubContent"
+                    textAlign="center"
+                    marginBottom="20px">
+                    02-880-8581
+                  </Text>
+                </HStack>
+              </VStack>
             </Modal.Content>
           </Modal>
         </>
