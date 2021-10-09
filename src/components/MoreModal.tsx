@@ -151,8 +151,7 @@ export default function MoreModal(props: IBoxProps<null>) {
       <Pressable
         label="more"
         marginBottom="14px"
-        // marginRight={windowWidth * 0.075}
-        padding="0"
+        paddingRight={windowWidth * 0.075}
         onPress={() => setSelectedMoreTap('main')}
         backgroundColor="transparent">
         {({isPressed}) => {

@@ -92,7 +92,7 @@ export default function App() {
                         paddingTop="15px"
                         borderBottomWidth="1px"
                         borderColor={theme.colors.gray[300]}
-                        px={windowWidth * 0.075}>
+                        paddingLeft={windowWidth * 0.075}>
                         <Text variant="pageTitle">식당</Text>
                         <MoreModal />
                       </HStack>
@@ -123,7 +123,7 @@ export default function App() {
                         paddingTop="15px"
                         borderBottomWidth="1px"
                         borderColor={theme.colors.gray[300]}
-                        px={windowWidth * 0.075}>
+                        paddingLeft={windowWidth * 0.075}>
                         <Text variant="pageTitle">카페</Text>
                         <MoreModal />
                       </HStack>
@@ -157,7 +157,7 @@ export default function App() {
                         paddingTop="15px"
                         borderBottomWidth="1px"
                         borderColor={theme.colors.gray[300]}
-                        px={windowWidth * 0.075}>
+                        paddingLeft={windowWidth * 0.075}>
                         <Text variant="pageTitle">편의점</Text>
                         <MoreModal />
                       </HStack>
@@ -191,7 +191,7 @@ export default function App() {
                         paddingTop="15px"
                         borderBottomWidth="1px"
                         borderColor={theme.colors.gray[300]}
-                        px={windowWidth * 0.075}>
+                        paddingLeft={windowWidth * 0.075}>
                         <Text variant="pageTitle">셔틀</Text>
                         <MoreModal />
                       </HStack>
@@ -224,7 +224,7 @@ export default function App() {
                         paddingTop="15px"
                         borderBottomWidth="1px"
                         borderColor={theme.colors.gray[300]}
-                        px={windowWidth * 0.075}>
+                        paddingLeft={windowWidth * 0.075}>
                         <Text variant="pageTitle">기타</Text>
                         <MoreModal />
                       </HStack>
