@@ -1,4 +1,3 @@
-
 secure.ts
 # OSX
 #
@@ -43,6 +42,7 @@ buck-out/
 \.buckd/
 *.keystore
 !debug.keystore
+android/gradle.properties
 
 # fastlane
 #
