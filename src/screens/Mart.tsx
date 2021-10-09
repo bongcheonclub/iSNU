@@ -1,10 +1,9 @@
-import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
 import React, {useEffect, useState} from 'react';
 import {compareAsc, getDay, parse as parseTime} from 'date-fns';
 import Grid from '../components/Grid';
 import {ParamListBase} from '@react-navigation/native';
 
-type Props = BottomTabScreenProps<ParamListBase, '편의점'> & {
+type Props = {
   marts: Mart[];
   initialFavoriteNames: string[];
 };
@@ -65,7 +64,7 @@ function checkOperating(mart: Mart): boolean {
   return true;
 }
 
-export default function Mart({navigation, marts, initialFavoriteNames}: Props) {
+export default function Mart({marts, initialFavoriteNames}: Props) {
   return (
     marts && (
       <Grid

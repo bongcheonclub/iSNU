@@ -1,10 +1,8 @@
-import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
 import React, {useEffect, useState} from 'react';
 import {compareAsc, getDay, parse as parseTime} from 'date-fns';
 import Grid from '../components/Grid';
-import {ParamListBase} from '@react-navigation/routers';
 
-type Props = BottomTabScreenProps<ParamListBase, '카페'> & {
+type Props = {
   cafes: Cafe[];
   initialFavoriteNames: string[];
 };
@@ -72,7 +70,7 @@ function checkOperating(cafe: Cafe): boolean {
   return true;
 }
 
-export default function Cafe({navigation, cafes, initialFavoriteNames}: Props) {
+export default function Cafe({cafes, initialFavoriteNames}: Props) {
   return (
     <Grid
       itemType="cafe"

@@ -1,6 +1,5 @@
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {NavigationContainer} from '@react-navigation/native';
-import {NativeBaseProvider} from 'native-base';
+import {Box, Flex, NativeBaseProvider} from 'native-base';
 import React, {useCallback, useEffect, useState} from 'react';
 import Cafe from './screens/Cafe';
 import type {Cafe as CafeType} from './screens/Cafe';
@@ -25,7 +24,10 @@ import {Awaited} from './helpers/type';
 import MoreModal from './components/MoreModal';
 import amplitude from './helpers/amplitude';
 
-const Tab = createBottomTabNavigator();
+import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
+import Text from './components/Text';
+
+const Tab = createMaterialTopTabNavigator();
 
 export default function App() {
   const [data, setData] = useState<Awaited<
@@ -44,20 +46,23 @@ export default function App() {
         <NavigationContainer>
           <Tab.Navigator
             initialRouteName={'Mart'}
-            screenOptions={{
-              headerStatusBarHeight: 100,
-              headerTitleStyle: {
-                color: colors.blue,
-                fontSize: 40,
-                marginLeft: 12,
-                top: '0%',
-                height: '150%',
-              },
-              headerTitleAlign: 'left',
-              headerStyle: {borderBottomWidth: 0, height: 140},
-              headerTitleContainerStyle: {paddingBottom: 10},
-              headerRight: () => <MoreModal />,
-            }}>
+            tabBarPosition="bottom"
+            screenOptions={
+              {
+                // headerStatusBarHeight: 100,
+                // headerTitleStyle: {
+                //   color: colors.blue,
+                //   fontSize: 40,
+                //   marginLeft: 12,
+                //   top: '0%',
+                //   height: '150%',
+                // },
+                // headerTitleAlign: 'left',
+                // headerStyle: {borderBottomWidth: 0, height: 140},
+                // headerTitleContainerStyle: {paddingBottom: 10},
+                // headerRight: () => <MoreModal />,
+              }
+            }>
             <Tab.Screen
               name="식당"
               options={{
@@ -68,7 +73,17 @@ export default function App() {
                   amplitude.logEvent('meal');
                 },
               }}>
-              {props => <Meal {...props} mealData={data.mealData} />}
+              {props => (
+                <Box>
+                  <Flex height="20%" flexDir="row">
+                    <Text flex={1} variant="pageTitle">
+                      식당
+                    </Text>
+                    <MoreModal flex={1} />
+                  </Flex>
+                  <Meal {...props} mealData={data.mealData} />
+                </Box>
+              )}
             </Tab.Screen>
 
             <Tab.Screen

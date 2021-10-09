@@ -1,5 +1,4 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
 import React, {useState, useEffect, useMemo} from 'react';
 import {StyleSheet, useWindowDimensions} from 'react-native';
 import {
@@ -7,46 +6,21 @@ import {
   Center,
   HStack,
   ScrollView,
-  View,
   VStack,
   Modal,
   Divider,
-  Circle,
   AspectRatio,
 } from 'native-base';
-import {
-  size,
-  chain,
-  split,
-  partition,
-  chunk,
-  cloneDeep,
-  keyBy,
-  floor,
-  fromPairs,
-  keys,
-  trim,
-  last,
-  Dictionary,
-} from 'lodash';
-import {
-  compareAsc,
-  getDate,
-  getDay,
-  getMonth,
-  parse as parseTime,
-} from 'date-fns';
+import {chain, chunk, Dictionary} from 'lodash';
+import {compareAsc, getDay, parse as parseTime} from 'date-fns';
 import FilledStar from '../icons/filled-star.svg';
 import UnfilledStar from '../icons/unfilled-star.svg';
-import et from 'date-fns/esm/locale/et/index.js';
-import {ParamListBase} from '@react-navigation/native';
-import {check} from 'prettier';
 import {MealData} from '../InitializeData/ProcessMealData';
 import Text from '../components/Text';
 import {theme} from '../ui/theme';
 import Button from '../components/WrappedButton';
 
-type Props = BottomTabScreenProps<ParamListBase, '식당'> & {
+type Props = {
   mealData: MealData;
 };
 
@@ -139,7 +113,7 @@ function checkOperating(
   }
 }
 
-export default function Meal({navigation, mealData}: Props) {
+export default function Meal({mealData}: Props) {
   const window = useWindowDimensions();
 
   const {

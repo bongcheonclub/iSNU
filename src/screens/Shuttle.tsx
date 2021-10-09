@@ -1,11 +1,9 @@
-import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
 import {chain, find, map} from 'lodash';
 import React, {useEffect, useState} from 'react';
 import {compareAsc, getDay, parse as parseTime, subDays} from 'date-fns';
 import List from '../components/List';
-import {ParamListBase} from '@react-navigation/native';
 
-type Props = BottomTabScreenProps<ParamListBase, '셔틀'> & {
+type Props = {
   initialFavoriteNames: string[];
 };
 
@@ -184,7 +182,7 @@ function checkOperating(suttle: Shuttle): {
   }
 }
 
-export default function Shuttle({navigation, initialFavoriteNames}: Props) {
+export default function Shuttle({initialFavoriteNames}: Props) {
   return (
     <List
       itemType="shuttle"
