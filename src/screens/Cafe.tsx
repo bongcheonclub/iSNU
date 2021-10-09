@@ -69,7 +69,7 @@ function checkOperating(cafe: Cafe): boolean {
   return true;
 }
 
-export default function Cafe({flex, cafes, initialFavoriteNames}: Props) {
+export default function Cafe({cafes, initialFavoriteNames}: Props) {
   return (
     <Grid
       itemType="cafe"
