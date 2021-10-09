@@ -114,21 +114,16 @@ const Grid = <T extends AvailableItem>(props: Props<T>) => {
                 )
                 .map(itemsInARow => {
                   return (
-                    <Flex
+                    <HStack
                       key={itemsInARow[0]?.name}
                       height={windowWidth * 0.85 * 0.3}
+                      width="100%"
                       marginBottom={windowWidth * 0.85 * 0.05}
-                      flexDirection="row">
+                      justifyContent="space-between">
                       {itemsInARow.map((item, index) => {
                         if (!item) {
                           return (
-                            <Box
-                              key={'hi' + index}
-                              width="30%"
-                              height="100%"
-                              marginRight={index % 3 !== 2 ? '5%' : '0'}
-                              flex={1}
-                            />
+                            <Box key={'hi' + index} width="30%" height="100%" />
                           );
                         }
                         const {name, isOperating, favoriteRate} = item;
@@ -136,10 +131,8 @@ const Grid = <T extends AvailableItem>(props: Props<T>) => {
                         return (
                           <Button
                             key={name}
-                            flex={1}
                             height="100%"
                             width="30%"
-                            marginRight={index % 3 !== 2 ? '5%' : '0'}
                             padding={2}
                             onPress={() => setFocusedItem(item.name)}
                             variant={
@@ -166,7 +159,7 @@ const Grid = <T extends AvailableItem>(props: Props<T>) => {
                           </Button>
                         );
                       })}
-                    </Flex>
+                    </HStack>
                   );
                 })
                 .value()}
