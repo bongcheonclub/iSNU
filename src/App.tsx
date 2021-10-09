@@ -59,6 +59,9 @@ export default function App() {
                     borderTopColor: '#DCDCDC',
                     borderTopWidth: 1,
                   },
+                  tabBarLabelStyle: {
+                    fontFamily: 'Noto Sans KR',
+                  },
                   tabBarIconStyle: {
                     alignItems: 'center',
                   },
