@@ -90,6 +90,8 @@ export default function App() {
                         alignItems="flex-end"
                         justifyContent="space-between"
                         paddingTop="15px"
+                        borderBottomWidth="1px"
+                        borderColor={theme.colors.gray[300]}
                         px={windowWidth * 0.075}>
                         <Text variant="pageTitle">식당</Text>
                         <MoreModal />
@@ -119,6 +121,8 @@ export default function App() {
                         alignItems="flex-end"
                         justifyContent="space-between"
                         paddingTop="15px"
+                        borderBottomWidth="1px"
+                        borderColor={theme.colors.gray[300]}
                         px={windowWidth * 0.075}>
                         <Text variant="pageTitle">카페</Text>
                         <MoreModal />
@@ -151,6 +155,8 @@ export default function App() {
                         alignItems="flex-end"
                         justifyContent="space-between"
                         paddingTop="15px"
+                        borderBottomWidth="1px"
+                        borderColor={theme.colors.gray[300]}
                         px={windowWidth * 0.075}>
                         <Text variant="pageTitle">편의점</Text>
                         <MoreModal />
@@ -183,6 +189,8 @@ export default function App() {
                         alignItems="flex-end"
                         justifyContent="space-between"
                         paddingTop="15px"
+                        borderBottomWidth="1px"
+                        borderColor={theme.colors.gray[300]}
                         px={windowWidth * 0.075}>
                         <Text variant="pageTitle">셔틀</Text>
                         <MoreModal />
@@ -214,6 +222,8 @@ export default function App() {
                         alignItems="flex-end"
                         justifyContent="space-between"
                         paddingTop="15px"
+                        borderBottomWidth="1px"
+                        borderColor={theme.colors.gray[300]}
                         px={windowWidth * 0.075}>
                         <Text variant="pageTitle">기타</Text>
                         <MoreModal />
@@ -224,18 +234,6 @@ export default function App() {
                     </Flex>
                   )}
                 </Tab.Screen>
-                {/* <Tab.Screen
-                  name="기타"
-                  component={Etcs}
-                  options={{
-                    tabBarIcon: () => <EtcsIcon />,
-                  }}
-                  listeners={{
-                    tabPress: e => {
-                      amplitude.logEvent('etcs');
-                    },
-                  }}
-                /> */}
               </Tab.Navigator>
             </NavigationContainer>
           </>
