@@ -66,11 +66,12 @@ export default function App() {
                     fontFamily: 'Noto Sans KR',
                   },
                   tabBarIconStyle: {
+                    height: 30,
+                    width: 30,
                     alignItems: 'center',
-                    top: -5,
                   },
                   tabBarItemStyle: {
-                    top: 0,
+                    top: -5,
                   },
                   tabBarIndicatorStyle: {
                     height: 0,
