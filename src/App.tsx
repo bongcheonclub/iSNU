@@ -28,6 +28,7 @@ import amplitude from './helpers/amplitude';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import Text from './components/Text';
 import {gridAutoColumns} from 'styled-system';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 const Tab = createMaterialTopTabNavigator();
 
