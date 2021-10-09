@@ -142,104 +142,95 @@ const List = <T extends AvailableItem>(props: Props<T>) => {
             <Modal
               isOpen={focusedName !== null}
               onClose={() => setFocusedItem(null)}>
-              <Modal.Content width="90%">
+              <Modal.Content
+                paddingTop="8px"
+                px="12px"
+                paddingBottom="12px"
+                width="90%">
                 <Modal.CloseButton />
-                <Modal.Body>
-                  <Box margin={6} marginBottom={1}>
-                    <HStack left={-15} top={-15}>
-                      <Text variant="modalTitle" marginBottom={1}>
-                        {focusedItem.name}
-                      </Text>
-                      <Button
-                        label={`${itemType}-toggle-favorite`}
-                        tags={{
-                          itemType,
-                          name: focusedItem.name,
-                          isOperating: focusedItem.isOperating,
-                          favoriteRate: focusedItem.favoriteRate,
-                        }}
-                        bgColor="transparent"
-                        left={-6}
-                        top={-1}
-                        onPress={() => {
-                          setFavoriteNames(prev => {
-                            if (prev.find(name => name === focusedItem.name)) {
-                              const next = prev.filter(
-                                name => name !== focusedItem.name,
-                              );
-                              syncFavoritesToStorage(next);
-                              return next;
-                            } else {
-                              const next = prev.concat(focusedItem.name);
-                              syncFavoritesToStorage(next);
-                              return next;
-                            }
-                          });
-                        }}>
-                        {focusedItem.favoriteRate > 0 ? (
-                          <FilledStar />
-                        ) : (
-                          <UnfilledStar />
-                        )}
-                      </Button>
-                    </HStack>
-                    <Text variant="modalSubInfo" left={-15} top={-20}>
-                      평일만 운행
+                <Box margin={6} marginBottom={1}>
+                  <HStack left={-15} top={-15}>
+                    <Text variant="modalTitle" marginBottom={1}>
+                      {focusedItem.name}
                     </Text>
-                  </Box>
-                  <VStack px="12px">
-                    <HStack width="100%">
-                      <Text
-                        width="40%"
-                        variant="modalSubInfo"
-                        textAlign="center"
-                      />
-                      <Text
-                        width="30%"
-                        variant="modalSubInfo"
-                        textAlign="center">
-                        배차간격
-                      </Text>
-                      <Text
-                        width="30%"
-                        variant="modalSubInfo"
-                        textAlign="center">
-                        대수
-                      </Text>
-                    </HStack>
-                    {focusedItem.operatings.map(item => (
-                      <Box key={item.time}>
-                        <Divider
-                          my={2}
-                          bg="black"
-                          width="100%"
-                          marginY="14px"
-                        />
-                        <HStack key={item.time} width="100%">
-                          <Text
-                            width="40%"
-                            variant="modalSubContent"
-                            textAlign="center">
-                            {item.time}
-                          </Text>
-                          <Text
-                            width="30%"
-                            variant="modalSubContent"
-                            textAlign="center">
-                            {item.interval}
-                          </Text>
-                          <Text
-                            width="30%"
-                            variant="modalSubContent"
-                            textAlign="center">
-                            {item.numbers}
-                          </Text>
-                        </HStack>
-                      </Box>
-                    ))}
-                  </VStack>
-                  <Text marginBottom="2px" />
-                </Modal.Body>
+                    <Button
+                      label={`${itemType}-toggle-favorite`}
+                      tags={{
+                        itemType,
+                        name: focusedItem.name,
+                        isOperating: focusedItem.isOperating,
+                        favoriteRate: focusedItem.favoriteRate,
+                      }}
+                      bgColor="transparent"
+                      left={-6}
+                      top={-1}
+                      onPress={() => {
+                        setFavoriteNames(prev => {
+                          if (prev.find(name => name === focusedItem.name)) {
+                            const next = prev.filter(
+                              name => name !== focusedItem.name,
+                            );
+                            syncFavoritesToStorage(next);
+                            return next;
+                          } else {
+                            const next = prev.concat(focusedItem.name);
+                            syncFavoritesToStorage(next);
+                            return next;
+                          }
+                        });
+                      }}>
+                      {focusedItem.favoriteRate > 0 ? (
+                        <FilledStar />
+                      ) : (
+                        <UnfilledStar />
+                      )}
+                    </Button>
+                  </HStack>
+                  <Text variant="modalSubInfo" left={-15} top={-20}>
+                    평일만 운행
+                  </Text>
+                </Box>
+                <VStack px="12px">
+                  <HStack width="100%">
+                    <Text
+                      width="40%"
+                      variant="modalSubInfo"
+                      textAlign="center"
+                    />
+                    <Text width="30%" variant="modalSubInfo" textAlign="center">
+                      배차간격
+                    </Text>
+                    <Text width="30%" variant="modalSubInfo" textAlign="center">
+                      대수
+                    </Text>
+                  </HStack>
+                  {focusedItem.operatings.map(item => (
+                    <Box key={item.time}>
+                      <Divider my={2} bg="black" width="100%" marginY="14px" />
+                      <HStack key={item.time} width="100%">
+                        <Text
+                          width="40%"
+                          variant="modalSubContent"
+                          textAlign="center">
+                          {item.time}
+                        </Text>
+                        <Text
+                          width="30%"
+                          variant="modalSubContent"
+                          textAlign="center">
+                          {item.interval}
+                        </Text>
+                        <Text
+                          width="30%"
+                          variant="modalSubContent"
+                          textAlign="center">
+                          {item.numbers}
+                        </Text>
+                      </HStack>
+                    </Box>
+                  ))}
+                </VStack>
+                <Text marginBottom="2px" />
               </Modal.Content>
             </Modal>
           ) : null}
