@@ -55,7 +55,7 @@ export default function App() {
                 tabBarPosition="bottom"
                 screenOptions={({route}) => ({
                   tabBarStyle: {
-                    height: 60,
+                    height: 65,
                     borderTopColor: '#DCDCDC',
                     borderTopWidth: 1,
                   },
@@ -64,9 +64,10 @@ export default function App() {
                   },
                   tabBarIconStyle: {
                     alignItems: 'center',
+                    top: -5,
                   },
                   tabBarItemStyle: {
-                    top: -5,
+                    top: 0,
                   },
                   tabBarIndicatorStyle: {
                     height: 0,
@@ -75,7 +76,7 @@ export default function App() {
                 <Tab.Screen
                   name="식당"
                   options={{
-                    tabBarIcon: () => <MealIcon />,
+                    tabBarIcon: () => <MealIcon width="30px" height="30px" />,
                   }}
                   listeners={{
                     tabPress: e => {
@@ -106,7 +107,7 @@ export default function App() {
                 <Tab.Screen
                   name="카페"
                   options={{
-                    tabBarIcon: () => <CafeIcon />,
+                    tabBarIcon: () => <CafeIcon width="30px" height="30px" />,
                   }}
                   listeners={{
                     tabPress: e => {
@@ -140,7 +141,7 @@ export default function App() {
                 <Tab.Screen
                   name="편의점"
                   options={{
-                    tabBarIcon: () => <MartIcon />,
+                    tabBarIcon: () => <MartIcon width="25px" height="25px" />,
                   }}
                   listeners={{
                     tabPress: e => {
@@ -174,7 +175,9 @@ export default function App() {
                 <Tab.Screen
                   name="셔틀"
                   options={{
-                    tabBarIcon: () => <ShuttleIcon />,
+                    tabBarIcon: () => (
+                      <ShuttleIcon width="25px" height="25px" />
+                    ),
                   }}
                   listeners={{
                     tabPress: e => {
@@ -207,7 +210,7 @@ export default function App() {
                 <Tab.Screen
                   name="기타"
                   options={{
-                    tabBarIcon: () => <EtcsIcon />,
+                    tabBarIcon: () => <EtcsIcon width="30px" height="30px" />,
                   }}
                   listeners={{
                     tabPress: e => {
