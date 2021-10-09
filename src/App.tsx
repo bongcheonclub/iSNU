@@ -24,7 +24,6 @@ import {MealData} from './InitializeData/ProcessMealData';
 import {Awaited} from './helpers/type';
 import MoreModal from './components/MoreModal';
 import amplitude from './helpers/amplitude';
-import {Icon} from 'react-native-vector-icons';
 
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import Text from './components/Text';
