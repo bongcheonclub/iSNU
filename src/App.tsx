@@ -129,7 +129,7 @@ export default function App() {
                         justifyContent="space-between"
                         paddingTop="15px"
                         px={windowWidth * 0.075}>
-                        <Text variant="pageTitle">식당</Text>
+                        <Text variant="pageTitle">카페</Text>
                         <MoreModal />
                       </HStack>
                       <Cafe
@@ -159,7 +159,7 @@ export default function App() {
                         justifyContent="space-between"
                         paddingTop="15px"
                         px={windowWidth * 0.075}>
-                        <Text variant="pageTitle">식당</Text>
+                        <Text variant="pageTitle">편의점</Text>
                         <MoreModal />
                       </HStack>
                       <Mart
@@ -189,7 +189,7 @@ export default function App() {
                         justifyContent="space-between"
                         paddingTop="15px"
                         px={windowWidth * 0.075}>
-                        <Text variant="pageTitle">식당</Text>
+                        <Text variant="pageTitle">셔틀</Text>
                         <MoreModal />
                       </HStack>
                       <Shuttle
