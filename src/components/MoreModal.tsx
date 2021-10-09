@@ -170,7 +170,7 @@ export default function MoreModal(props: IBoxProps<null>) {
           width="90%">
           {selectedMoreTap === 'main' && (
             <Modal.Body width="100%">
-              <Modal.CloseButton onPress={() => console.log(selectedMoreTap)} />
+              <Modal.CloseButton />
               <Box margin="auto" my="5" alignItems="flex-end">
                 <Pressable
                   label="more-tip"

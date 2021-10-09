@@ -34,7 +34,6 @@ function checkOperating(cafe: Cafe): boolean {
         return weekday;
     }
   })();
-  console.log(cafe.name, operatingTime);
 
   if (
     operatingTime.includes('휴무') ||
