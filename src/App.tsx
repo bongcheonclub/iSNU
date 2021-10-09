@@ -55,6 +55,8 @@ export default function App() {
                 initialRouteName={'Mart'}
                 tabBarPosition="bottom"
                 screenOptions={({route}) => ({
+                  tabBarActiveTintColor: '#0085FF',
+                  tabBarInactiveTintColor: '#000000',
                   tabBarStyle: {
                     height: 65,
                     borderTopColor: '#DCDCDC',
