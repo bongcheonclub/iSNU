@@ -12,6 +12,7 @@ import OutlinkPressed from '../icons/outlink-pressed.svg';
 import Back from '../icons/back.svg';
 import BackPressed from '../icons/back-pressed.svg';
 import {theme} from '../ui/theme';
+import amplitude from '../helpers/amplitude';
 
 export default function MoreModal() {
   const [selectedMoreTap, setSelectedMoreTap] = useState<
@@ -28,9 +29,17 @@ export default function MoreModal() {
     setCheckSubmit(false);
     setSelectedMoreTap('submitSuggest');
     setSuggestInput('');
-    try {
-      const textLines = [`내용: ${suggestInput}`];
 
+    const [deviceId, sessionId] = await Promise.all([
+      amplitude.getDeviceId(),
+      amplitude.getSessionId(),
+    ]);
+    try {
+      const textLines = [
+        `deviceId: ${deviceId}`,
+        `sessionId: ${sessionId}`,
+        `내용: ${suggestInput}`,
+      ];
       await slack.post('', {
         blocks: [
           {
