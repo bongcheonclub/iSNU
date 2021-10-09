@@ -36,6 +36,7 @@ function checkOperating(cafe: Cafe): boolean {
         return weekday;
     }
   })();
+  console.log(cafe.name, operatingTime);
 
   if (
     operatingTime.includes('휴무') ||
@@ -50,8 +51,9 @@ function checkOperating(cafe: Cafe): boolean {
     return true;
   }
 
-  if (operatingTime.includes('~')) {
-    const [startAtString, endedAtString] = operatingTime.split('~');
+  if (operatingTime.includes('-') || operatingTime.includes('-')) {
+    const spliter = /-|~/;
+    const [startAtString, endedAtString] = operatingTime.split(spliter);
 
     const startAt = parseTime(
       startAtString === '24:00' ? '23:59' : startAtString,
