@@ -177,113 +177,115 @@ const Grid = <T extends AvailableItem>(props: Props<T>) => {
             <Modal
               isOpen={focusedName !== null}
               onClose={() => setFocusedItem(null)}>
-              <Modal.Content width="90%">
+              <Modal.Content
+                paddingTop="8px"
+                px="12px"
+                paddingBottom="12px"
+                width="90%">
                 <Modal.CloseButton />
-                <Modal.Body>
-                  <Box margin={6} marginBottom={1}>
-                    <HStack left={-15} top={-15}>
-                      <Text variant="modalTitle" marginBottom={1}>
-                        {refineName(focusedItem.name)
-                          .replace('편의점', '')
-                          .trim()}
-                      </Text>
-                      <Button
-                        label={`${itemType}-toggle-favorite`}
-                        tags={{
-                          itemType,
-                          name: focusedItem.name,
-                          isOperating: focusedItem.isOperating,
-                          favoriteRate: focusedItem.favoriteRate,
-                        }}
-                        bgColor="transparent"
-                        left={-6}
-                        top={-1}
-                        onPress={() => {
-                          setFavoriteNames(prev => {
-                            if (prev.find(name => name === focusedItem.name)) {
-                              const next = prev.filter(
-                                name => name !== focusedItem.name,
-                              );
-                              syncFavoritesToStorage(next);
-                              return next;
-                            } else {
-                              const next = prev.concat(focusedItem.name);
-                              syncFavoritesToStorage(next);
-                              return next;
-                            }
-                          });
-                        }}>
-                        {focusedItem.favoriteRate > 0 ? (
-                          <FilledStar />
-                        ) : (
-                          <UnfilledStar />
-                        )}
-                      </Button>
-                    </HStack>
-                    <Text variant="modalSubInfo" left={-15} top={-20}>
-                      {focusedItem.location}
+                <Box margin={6} marginBottom={1}>
+                  <HStack left={-15} top={-15}>
+                    <Text variant="modalTitle" marginBottom={1}>
+                      {refineName(focusedItem.name)
+                        .replace('편의점', '')
+                        .trim()}
                     </Text>
-                  </Box>
-                  <VStack px="12px">
-                    <HStack width="100%">
-                      <Text
-                        width="35%"
-                        variant="modalSubContent"
-                        textAlign="center">
-                        평일
-                      </Text>
-                      <Text
-                        width="65%"
-                        variant="modalSubContent"
-                        textAlign="center">
-                        {refineTime(focusedItem.weekday)}
-                      </Text>
-                    </HStack>
-                    <Divider
-                      my={2}
-                      bg="black"
-                      width="100%"
-                      marginTop="14px"
-                      marginBottom="14px"
-                    />
-                    <HStack width="100%">
-                      <Text
-                        width="35%"
-                        variant="modalSubContent"
-                        textAlign="center">
-                        토요일
-                      </Text>
-                      <Text
-                        width="65%"
-                        variant="modalSubContent"
-                        textAlign="center">
-                        {refineTime(focusedItem.saturday)}
-                      </Text>
-                    </HStack>
-                    <Divider
-                      my={2}
-                      bg="black"
-                      width="100%"
-                      marginTop="14px"
-                      marginBottom="14px"
-                    />
-                    <HStack width="100%">
-                      <Text
-                        width="35%"
-                        variant="modalSubContent"
-                        textAlign="center">
-                        휴일
-                      </Text>
-                      <Text
-                        width="65%"
-                        variant="modalSubContent"
-                        textAlign="center"
-                        marginBottom="20px">
-                        {refineTime(focusedItem.holiday)}
-                      </Text>
-                    </HStack>
-                  </VStack>
-                </Modal.Body>
+                    <Button
+                      label={`${itemType}-toggle-favorite`}
+                      tags={{
+                        itemType,
+                        name: focusedItem.name,
+                        isOperating: focusedItem.isOperating,
+                        favoriteRate: focusedItem.favoriteRate,
+                      }}
+                      bgColor="transparent"
+                      left={-6}
+                      top={-1}
+                      onPress={() => {
+                        setFavoriteNames(prev => {
+                          if (prev.find(name => name === focusedItem.name)) {
+                            const next = prev.filter(
+                              name => name !== focusedItem.name,
+                            );
+                            syncFavoritesToStorage(next);
+                            return next;
+                          } else {
+                            const next = prev.concat(focusedItem.name);
+                            syncFavoritesToStorage(next);
+                            return next;
+                          }
+                        });
+                      }}>
+                      {focusedItem.favoriteRate > 0 ? (
+                        <FilledStar />
+                      ) : (
+                        <UnfilledStar />
+                      )}
+                    </Button>
+                  </HStack>
+                  <Text variant="modalSubInfo" left={-15} top={-20}>
+                    {focusedItem.location}
+                  </Text>
+                </Box>
+                <VStack px="12px">
+                  <HStack width="100%">
+                    <Text
+                      width="35%"
+                      variant="modalSubContent"
+                      textAlign="center">
+                      평일
+                    </Text>
+                    <Text
+                      width="65%"
+                      variant="modalSubContent"
+                      textAlign="center">
+                      {refineTime(focusedItem.weekday)}
+                    </Text>
+                  </HStack>
+                  <Divider
+                    my={2}
+                    bg="black"
+                    width="100%"
+                    marginTop="14px"
+                    marginBottom="14px"
+                  />
+                  <HStack width="100%">
+                    <Text
+                      width="35%"
+                      variant="modalSubContent"
+                      textAlign="center">
+                      토요일
+                    </Text>
+                    <Text
+                      width="65%"
+                      variant="modalSubContent"
+                      textAlign="center">
+                      {refineTime(focusedItem.saturday)}
+                    </Text>
+                  </HStack>
+                  <Divider
+                    my={2}
+                    bg="black"
+                    width="100%"
+                    marginTop="14px"
+                    marginBottom="14px"
+                  />
+                  <HStack width="100%">
+                    <Text
+                      width="35%"
+                      variant="modalSubContent"
+                      textAlign="center">
+                      휴일
+                    </Text>
+                    <Text
+                      width="65%"
+                      variant="modalSubContent"
+                      textAlign="center"
+                      marginBottom="20px">
+                      {refineTime(focusedItem.holiday)}
+                    </Text>
+                  </HStack>
+                </VStack>
               </Modal.Content>
             </Modal>
           ) : null}

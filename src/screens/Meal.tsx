@@ -984,104 +984,68 @@ export default function Meal({mealData}: Props) {
           <Modal // modal 구현
             isOpen={selectedMeal !== null}
             onClose={() => setSelectedMeal(null)}>
-            <Modal.Content padding={0} width="90%">
+            <Modal.Content
+              paddingTop="8px"
+              px="12px"
+              paddingBottom="12px"
+              width="90%">
               <Modal.CloseButton />
-              <Modal.Body>
-                {selectedMeal !== null ? (
-                  <Box margin={6} marginBottom={1}>
-                    <HStack left={-15} top={-15}>
-                      <Text marginBottom={1} variant="modalTitle">
-                        {selectedMeal}
-                      </Text>
-                      <Button
-                        label="meal-toggle-favorite"
-                        tags={{
-                          name: selectedMeal,
-                          isFavorite: favoriteList.includes(selectedMeal),
-                        }}
-                        bgColor="transparent"
-                        left={-6}
-                        top={-1}
-                        onPress={() => editFavoriteList(String(selectedMeal))}>
-                        {favoriteList.includes(selectedMeal) ? (
-                          <FilledStar />
-                        ) : (
-                          <UnfilledStar />
-                        )}
-                      </Button>
-                    </HStack>
-                    <Text variant="modalSubInfo" left={-15} top={-20}>
-                      {cafeteria[selectedMeal].location}
+              {selectedMeal !== null ? (
+                <Box margin={6} marginBottom={1}>
+                  <HStack left={-15} top={-15}>
+                    <Text marginBottom={1} variant="modalTitle">
+                      {selectedMeal}
                     </Text>
-                    <Text variant="modalToday" textAlign="center" marginTop={3}>
-                      {month}월 {date}일 ({koreanDay})
-                    </Text>
-                  </Box>
-                ) : (
-                  <></>
-                )}
-                {selectedMeal !== null && menu[selectedMeal] !== undefined ? (
-                  <ScrollView
-                    margin={5}
-                    marginLeft={1}
-                    marginRight={1}
-                    maxHeight="420px"
-                    bounces={false}>
-                    {menu[selectedMeal].breakfast.length > 0 ? (
-                      <>
-                        <HStack>
-                          <VStack width="25%" justifyContent="center">
-                            <Text textAlign="center" variant="modalSubContent">
-                              아침
-                            </Text>
-                            <>
-                              {checkStatus[selectedMeal].operatingInfo
-                                ?.beforeBreakfast ? (
-                                <Text
-                                  textAlign="center"
-                                  variant="modalMenuTime">
-                                  {checkStatus[selectedMeal].operatingInfo
-                                    ?.beforeBreakfast.time +
-                                    '~' +
-                                    checkStatus[selectedMeal].operatingInfo
-                                      ?.breakfast.time}
-                                </Text>
-                              ) : (
-                                <></>
-                              )}
-                            </>
-                          </VStack>
-                          <VStack width="75%">
-                            {showMenu(selectedMeal, 'breakfast')}
-                          </VStack>
-                        </HStack>
-                        <Divider
-                          my={2}
-                          bg="black"
-                          width="100%"
-                          marginTop={5}
-                          marginBottom={5}
-                        />
-                      </>
-                    ) : (
-                      <></>
-                    )}
-
-                    {menu[selectedMeal].lunch.length > 0 ? (
+                    <Button
+                      label="meal-toggle-favorite"
+                      tags={{
+                        name: selectedMeal,
+                        isFavorite: favoriteList.includes(selectedMeal),
+                      }}
+                      bgColor="transparent"
+                      left={-6}
+                      top={-1}
+                      onPress={() => editFavoriteList(String(selectedMeal))}>
+                      {favoriteList.includes(selectedMeal) ? (
+                        <FilledStar />
+                      ) : (
+                        <UnfilledStar />
+                      )}
+                    </Button>
+                  </HStack>
+                  <Text variant="modalSubInfo" left={-15} top={-20}>
+                    {cafeteria[selectedMeal].location}
+                  </Text>
+                  <Text variant="modalToday" textAlign="center" marginTop={3}>
+                    {month}월 {date}일 ({koreanDay})
+                  </Text>
+                </Box>
+              ) : (
+                <></>
+              )}
+              {selectedMeal !== null && menu[selectedMeal] !== undefined ? (
+                <ScrollView
+                  margin={5}
+                  marginLeft={1}
+                  marginRight={1}
+                  maxHeight="420px"
+                  bounces={false}>
+                  {menu[selectedMeal].breakfast.length > 0 ? (
+                    <>
                       <HStack>
                         <VStack width="25%" justifyContent="center">
                           <Text textAlign="center" variant="modalSubContent">
-                            점심
+                            아침
                           </Text>
                           <>
                             {checkStatus[selectedMeal].operatingInfo
-                              ?.beforeLunch ? (
+                              ?.beforeBreakfast ? (
                               <Text textAlign="center" variant="modalMenuTime">
                                 {checkStatus[selectedMeal].operatingInfo
-                                  ?.beforeLunch.time +
+                                  ?.beforeBreakfast.time +
                                   '~' +
-                                  checkStatus[selectedMeal].operatingInfo?.lunch
-                                    .time}
+                                  checkStatus[selectedMeal].operatingInfo
+                                    ?.breakfast.time}
                               </Text>
                             ) : (
                               <></>
@@ -1089,62 +1053,96 @@ export default function Meal({mealData}: Props) {
                           </>
                         </VStack>
                         <VStack width="75%">
-                          {showMenu(selectedMeal, 'lunch')}
+                          {showMenu(selectedMeal, 'breakfast')}
                         </VStack>
                       </HStack>
-                    ) : (
-                      <></>
-                    )}
-                    {menu[selectedMeal].dinner.length > 0 ? (
-                      <>
-                        <Divider
-                          my={2}
-                          bg="black"
-                          width="100%"
-                          marginTop={5}
-                          marginBottom={5}
-                        />
-                        <HStack>
-                          <VStack width="25%" justifyContent="center">
-                            <Text textAlign="center" variant="modalSubContent">
-                              저녁
-                            </Text>
-                            <>
+                      <Divider
+                        my={2}
+                        bg="black"
+                        width="100%"
+                        marginTop={5}
+                        marginBottom={5}
+                      />
+                    </>
+                  ) : (
+                    <></>
+                  )}
+
+                  {menu[selectedMeal].lunch.length > 0 ? (
+                    <HStack>
+                      <VStack width="25%" justifyContent="center">
+                        <Text textAlign="center" variant="modalSubContent">
+                          점심
+                        </Text>
+                        <>
+                          {checkStatus[selectedMeal].operatingInfo
+                            ?.beforeLunch ? (
+                            <Text textAlign="center" variant="modalMenuTime">
                               {checkStatus[selectedMeal].operatingInfo
-                                ?.beforeDinner ? (
-                                <Text
-                                  textAlign="center"
-                                  variant="modalMenuTime">
-                                  {checkStatus[selectedMeal].operatingInfo
-                                    ?.beforeDinner.time +
-                                    '~' +
-                                    checkStatus[selectedMeal].operatingInfo
-                                      ?.dinner.time}
-                                </Text>
-                              ) : (
-                                <></>
-                              )}
-                            </>
-                          </VStack>
-                          <VStack width="75%">
-                            {showMenu(selectedMeal, 'dinner')}
-                          </VStack>
-                        </HStack>
-                      </>
-                    ) : (
-                      <></>
-                    )}
-                  </ScrollView>
-                ) : (
-                  <Text
-                    height={20}
-                    marginTop={10}
-                    textAlign="center"
-                    variant="modalSubContent">
-                    운영 정보 없음
-                  </Text>
-                )}
-              </Modal.Body>
+                                ?.beforeLunch.time +
+                                '~' +
+                                checkStatus[selectedMeal].operatingInfo?.lunch
+                                  .time}
+                            </Text>
+                          ) : (
+                            <></>
+                          )}
+                        </>
+                      </VStack>
+                      <VStack width="75%">
+                        {showMenu(selectedMeal, 'lunch')}
+                      </VStack>
+                    </HStack>
+                  ) : (
+                    <></>
+                  )}
+                  {menu[selectedMeal].dinner.length > 0 ? (
+                    <>
+                      <Divider
+                        my={2}
+                        bg="black"
+                        width="100%"
+                        marginTop={5}
+                        marginBottom={5}
+                      />
+                      <HStack>
+                        <VStack width="25%" justifyContent="center">
+                          <Text textAlign="center" variant="modalSubContent">
+                            저녁
+                          </Text>
+                          <>
+                            {checkStatus[selectedMeal].operatingInfo
+                              ?.beforeDinner ? (
+                              <Text textAlign="center" variant="modalMenuTime">
+                                {checkStatus[selectedMeal].operatingInfo
+                                  ?.beforeDinner.time +
+                                  '~' +
+                                  checkStatus[selectedMeal].operatingInfo
+                                    ?.dinner.time}
+                              </Text>
+                            ) : (
+                              <></>
+                            )}
+                          </>
+                        </VStack>
+                        <VStack width="75%">
+                          {showMenu(selectedMeal, 'dinner')}
+                        </VStack>
+                      </HStack>
+                    </>
+                  ) : (
+                    <></>
+                  )}
+                </ScrollView>
+              ) : (
+                <Text
+                  height={20}
+                  marginTop={10}
+                  textAlign="center"
+                  variant="modalSubContent">
+                  운영 정보 없음
+                </Text>
+              )}
             </Modal.Content>
           </Modal>
         ) : (

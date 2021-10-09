@@ -94,7 +94,7 @@ export default function App() {
                     },
                   }}>
                   {props => (
-                    <Box>
+                    <Flex height="100%">
                       <HStack
                         flexDir="row"
                         bg={theme.colors.white}
@@ -105,8 +105,10 @@ export default function App() {
                         <Text variant="pageTitle">식당</Text>
                         <MoreModal />
                       </HStack>
-                      <Meal {...props} mealData={data.mealData} />
-                    </Box>
+                      <Box flex={1}>
+                        <Meal {...props} mealData={data.mealData} />
+                      </Box>
+                    </Flex>
                   )}
                 </Tab.Screen>
 
@@ -121,7 +123,7 @@ export default function App() {
                     },
                   }}>
                   {props => (
-                    <Box>
+                    <Flex height="100%">
                       <HStack
                         flexDir="row"
                         bg={theme.colors.white}
@@ -132,12 +134,14 @@ export default function App() {
                         <Text variant="pageTitle">카페</Text>
                         <MoreModal />
                       </HStack>
-                      <Cafe
-                        {...props}
-                        cafes={data.cafeData}
-                        initialFavoriteNames={data.favoriteCafes}
-                      />
-                    </Box>
+                      <Box flex={1}>
+                        <Cafe
+                          {...props}
+                          cafes={data.cafeData}
+                          initialFavoriteNames={data.favoriteCafes}
+                        />
+                      </Box>
+                    </Flex>
                   )}
                 </Tab.Screen>
                 <Tab.Screen
@@ -151,7 +155,7 @@ export default function App() {
                     },
                   }}>
                   {props => (
-                    <Box>
+                    <Flex height="100%">
                       <HStack
                         flexDir="row"
                         bg={theme.colors.white}
@@ -162,12 +166,14 @@ export default function App() {
                         <Text variant="pageTitle">편의점</Text>
                         <MoreModal />
                       </HStack>
-                      <Mart
-                        {...props}
-                        marts={data.martData}
-                        initialFavoriteNames={data.favoriteMarts}
-                      />
-                    </Box>
+                      <Box flex={1}>
+                        <Mart
+                          {...props}
+                          marts={data.martData}
+                          initialFavoriteNames={data.favoriteMarts}
+                        />
+                      </Box>
+                    </Flex>
                   )}
                 </Tab.Screen>
                 <Tab.Screen
@@ -181,7 +187,7 @@ export default function App() {
                     },
                   }}>
                   {props => (
-                    <Box>
+                    <Flex height="100%">
                       <HStack
                         flexDir="row"
                         bg={theme.colors.white}
@@ -192,11 +198,13 @@ export default function App() {
                         <Text variant="pageTitle">셔틀</Text>
                         <MoreModal />
                       </HStack>
-                      <Shuttle
-                        {...props}
-                        initialFavoriteNames={data.favoriteShuttles}
-                      />
-                    </Box>
+                      <Box flex={1}>
+                        <Shuttle
+                          {...props}
+                          initialFavoriteNames={data.favoriteShuttles}
+                        />
+                      </Box>
+                    </Flex>
                   )}
                 </Tab.Screen>
                 <Tab.Screen
@@ -210,7 +218,7 @@ export default function App() {
                     },
                   }}>
                   {props => (
-                    <Box>
+                    <Flex height="100%">
                       <HStack
                         flexDir="row"
                         bg={theme.colors.white}
@@ -221,8 +229,10 @@ export default function App() {
                         <Text variant="pageTitle">기타</Text>
                         <MoreModal />
                       </HStack>
-                      <Etcs />
-                    </Box>
+                      <Box flex={1}>
+                        <Etcs />
+                      </Box>
+                    </Flex>
                   )}
                 </Tab.Screen>
                 {/* <Tab.Screen
