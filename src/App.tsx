@@ -46,7 +46,7 @@ export default function App() {
   }, []);
   return (
     <NativeBaseProvider theme={theme}>
-      <Box width="100%" height="100%" safeArea>
+      <Box width="100%" height="100%" safeArea backgroundColor="white">
         {data ? (
           <>
             <NavigationContainer>
