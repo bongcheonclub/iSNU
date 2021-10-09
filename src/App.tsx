@@ -56,14 +56,14 @@ export default function App() {
                 tabBarPosition="bottom"
                 screenOptions={({route}) => ({
                   tabBarActiveTintColor: '#0085FF',
-                  tabBarInactiveTintColor: '#000000',
+                  tabBarInactiveTintColor: '#636363',
                   tabBarStyle: {
                     height: 65,
                     borderTopColor: '#DCDCDC',
                     borderTopWidth: 1,
                   },
                   tabBarLabelStyle: {
-                    fontFamily: 'Noto Sans KR',
+                    fontFamily: 'NotoSansKR-Medium',
                   },
                   tabBarIconStyle: {
                     height: 30,
