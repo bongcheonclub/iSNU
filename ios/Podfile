@@ -12,6 +12,7 @@ target 'snuinfoapp' do
     :hermes_enabled => false
   )
 
+
   target 'snuinfoappTests' do
     inherit! :complete
     # Pods for testing
