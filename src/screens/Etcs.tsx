@@ -1,4 +1,3 @@
-import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
 import {
   Center,
   ScrollView,
@@ -16,9 +15,7 @@ import {Keyboard, StyleSheet, Dimensions, Linking} from 'react-native';
 import {colors} from '../ui/colors';
 import {ParamListBase} from '@react-navigation/native';
 
-type Props = BottomTabScreenProps<ParamListBase, '기타'>;
-
-export default function Etcs({navigation}: Props) {
+export default function Etcs() {
   const [focusedEtc, setFocusedEtc] = useState<string | null>(null);
   const windowHeight = Dimensions.get('window').height;
   const windowWidth = Dimensions.get('window').width;

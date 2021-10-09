@@ -1,4 +1,12 @@
-import {Box, Center, Modal, TextArea, VStack, HStack} from 'native-base';
+import {
+  Box,
+  Center,
+  Modal,
+  TextArea,
+  VStack,
+  HStack,
+  IBoxProps,
+} from 'native-base';
 import React, {useCallback, useState} from 'react';
 import {Keyboard, Dimensions, Linking} from 'react-native';
 import Text from './Text';
@@ -13,7 +21,7 @@ import Back from '../icons/back.svg';
 import BackPressed from '../icons/back-pressed.svg';
 import {theme} from '../ui/theme';
 
-export default function MoreModal() {
+export default function MoreModal(props: IBoxProps<null>) {
   const [selectedMoreTap, setSelectedMoreTap] = useState<
     'tip' | 'suggest' | 'main' | 'submitTip' | 'submitSuggest' | null
   >(null);
