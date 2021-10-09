@@ -11,7 +11,7 @@ import {
   Divider,
   AspectRatio,
 } from 'native-base';
-import {chain, chunk, Dictionary} from 'lodash';
+import {chain, chunk, Dictionary, floor} from 'lodash';
 import {compareAsc, getDay, parse as parseTime} from 'date-fns';
 import FilledStar from '../icons/filled-star.svg';
 import UnfilledStar from '../icons/unfilled-star.svg';
@@ -349,7 +349,6 @@ export default function Meal({mealData}: Props) {
           );
         });
     }
-
     if (cafeteriaName.includes('대학원')) {
       const matchedStrings = string.match(/[A-Z]|\(\d,\d\d\d원\)/gi);
       if (!matchedStrings) {
