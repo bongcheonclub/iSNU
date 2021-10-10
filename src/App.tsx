@@ -54,7 +54,7 @@ export default function App() {
           <>
             <NavigationContainer>
               <Tab.Navigator
-                initialRouteName={'Mart'}
+                initialRouteName={'식당'}
                 tabBarPosition="bottom"
                 screenOptions={({route}) => ({
                   tabBarActiveTintColor: '#0085FF',
