@@ -1,7 +1,7 @@
 import {NavigationContainer} from '@react-navigation/native';
 import {Box, Flex, NativeBaseProvider, HStack, StatusBar} from 'native-base';
 import React, {useCallback, useEffect, useState} from 'react';
-import {SafeAreaView, Dimensions} from 'react-native';
+import {SafeAreaView, Dimensions, Platform} from 'react-native';
 import Cafe from './screens/Cafe';
 import type {Cafe as CafeType} from './screens/Cafe';
 import type {Mart as MartType} from './screens/Mart';
@@ -66,6 +66,7 @@ export default function App() {
                   },
                   tabBarLabelStyle: {
                     fontFamily: 'NotoSansKR-Medium',
+                    top: Platform.OS === 'android' ? -10 : 0,
                   },
                   tabBarIconStyle: {
                     height: 30,
