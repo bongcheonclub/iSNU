@@ -84,11 +84,6 @@ export default function App() {
                   name="식당"
                   options={{
                     tabBarIcon: () => <MealIcon width="30px" height="30px" />,
-                  }}
-                  listeners={{
-                    tabPress: e => {
-                      amplitude.logEvent('meal');
-                    },
                   }}>
                   {props => (
                     <Flex height="100%">
@@ -115,11 +110,6 @@ export default function App() {
                   name="카페"
                   options={{
                     tabBarIcon: () => <CafeIcon width="30px" height="30px" />,
-                  }}
-                  listeners={{
-                    tabPress: e => {
-                      amplitude.logEvent('cafe');
-                    },
                   }}>
                   {props => (
                     <Flex height="100%">
@@ -149,11 +139,6 @@ export default function App() {
                   name="편의점"
                   options={{
                     tabBarIcon: () => <MartIcon width="25px" height="25px" />,
-                  }}
-                  listeners={{
-                    tabPress: e => {
-                      amplitude.logEvent('mart');
-                    },
                   }}>
                   {props => (
                     <Flex height="100%">
@@ -185,11 +170,6 @@ export default function App() {
                     tabBarIcon: () => (
                       <ShuttleIcon width="25px" height="25px" />
                     ),
-                  }}
-                  listeners={{
-                    tabPress: e => {
-                      amplitude.logEvent('shuttle');
-                    },
                   }}>
                   {props => (
                     <Flex height="100%">
@@ -218,11 +198,6 @@ export default function App() {
                   name="기타"
                   options={{
                     tabBarIcon: () => <EtcsIcon width="30px" height="30px" />,
-                  }}
-                  listeners={{
-                    tabPress: e => {
-                      amplitude.logEvent('etcs');
-                    },
                   }}>
                   {props => (
                     <Flex height="100%">
