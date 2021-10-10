@@ -1,5 +1,5 @@
 import {NavigationContainer} from '@react-navigation/native';
-import {Box, Flex, NativeBaseProvider, HStack} from 'native-base';
+import {Box, Flex, NativeBaseProvider, HStack, StatusBar} from 'native-base';
 import React, {useCallback, useEffect, useState} from 'react';
 import {SafeAreaView, Dimensions} from 'react-native';
 import Cafe from './screens/Cafe';
@@ -48,6 +48,8 @@ export default function App() {
   return (
     <NativeBaseProvider theme={theme}>
       <Box width="100%" height="100%" safeArea backgroundColor="white">
+        <StatusBar barStyle="dark-content" />
+
         {data ? (
           <>
             <NavigationContainer>
