@@ -10,7 +10,7 @@ import Mart from './screens/Mart';
 import Meal from './screens/Meal';
 import Shuttle from './screens/Shuttle';
 import CafeIcon from './icons/cafe.svg';
-import EtcsIcon from './icons/etcs.svg';
+import EtcsIcon from './icons/etc.svg';
 import MartIcon from './icons/mart.svg';
 import MealIcon from './icons/meal.svg';
 import ShuttleIcon from './icons/shuttle.svg';
@@ -28,7 +28,6 @@ import amplitude from './helpers/amplitude';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import Text from './components/Text';
 import {gridAutoColumns} from 'styled-system';
-import Icon from 'react-native-vector-icons/Ionicons';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -66,19 +65,15 @@ export default function App() {
                   },
                   tabBarLabelStyle: {
                     fontFamily: 'NotoSansKR-Medium',
-                    top: Platform.OS === 'android' ? -10 : 0,
+                    top: Platform.OS === 'android' ? -10 : -2,
+                    paddingBottom: 5,
                   },
                   tabBarIconStyle: {
                     height: 30,
-                    width: 30,
+                    width: 45,
                     alignItems: 'center',
                   },
-                  tabBarItemStyle: {
-                    top: -5,
-                  },
-                  tabBarIndicatorStyle: {
-                    height: 0,
-                  },
+                  showIcon: true,
                 })}>
                 <Tab.Screen
                   name="식당"
@@ -138,7 +133,7 @@ export default function App() {
                 <Tab.Screen
                   name="편의점"
                   options={{
-                    tabBarIcon: () => <MartIcon width="25px" height="25px" />,
+                    tabBarIcon: () => <MartIcon width="30px" height="30px" />,
                   }}>
                   {props => (
                     <Flex height="100%">
@@ -168,7 +163,7 @@ export default function App() {
                   name="셔틀"
                   options={{
                     tabBarIcon: () => (
-                      <ShuttleIcon width="25px" height="25px" />
+                      <ShuttleIcon width="30px" height="30px" />
                     ),
                   }}>
                   {props => (
@@ -197,7 +192,7 @@ export default function App() {
                 <Tab.Screen
                   name="기타"
                   options={{
-                    tabBarIcon: () => <EtcsIcon width="30px" height="30px" />,
+                    tabBarIcon: () => <EtcsIcon width="35px" height="35px" />,
                   }}>
                   {props => (
                     <Flex height="100%">
