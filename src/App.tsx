@@ -41,7 +41,7 @@ export default function App() {
   }, []);
   return (
     <NativeBaseProvider theme={theme}>
-      <Box width="100%" height="100%" safeAreaTop backgroundColor="white">
+      <Box width="100%" height="100%" safeArea backgroundColor="white">
         <StatusBar barStyle="dark-content" />
 
         {data ? (
@@ -54,13 +54,17 @@ export default function App() {
                   tabBarActiveTintColor: '#0085FF',
                   tabBarInactiveTintColor: '#636363',
                   tabBarStyle: {
-                    height: 90,
+                    paddingTop: Platform.OS === 'android' ? 12 : 0,
+                    paddingBottom: 0,
+                    height: 65,
                     borderTopColor: '#DCDCDC',
                     borderTopWidth: 1,
+                    borderBottomColor: '#DCDCDC',
+                    borderBottomWidth: Platform.OS === 'android' ? 1 : 0,
                   },
                   tabBarLabelStyle: {
                     fontFamily: 'NotoSansKR-Medium',
-                    top: Platform.OS === 'android' ? -10 : -2,
+                    top: Platform.OS === 'android' ? 7 : 0,
                     paddingBottom: 5,
                   },
                   tabBarIconStyle: {
