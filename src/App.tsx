@@ -54,9 +54,9 @@ export default function App() {
                   tabBarActiveTintColor: '#0085FF',
                   tabBarInactiveTintColor: '#636363',
                   tabBarStyle: {
-                    paddingTop: Platform.OS === 'android' ? 12 : 0,
+                    paddingTop: Platform.OS === 'android' ? 16 : 2,
                     paddingBottom: 0,
-                    height: 65,
+                    height: 52,
                     borderTopColor: '#DCDCDC',
                     borderTopWidth: 1,
                     borderBottomColor: '#DCDCDC',
@@ -64,20 +64,20 @@ export default function App() {
                   },
                   tabBarLabelStyle: {
                     fontFamily: 'NotoSansKR-Medium',
-                    top: Platform.OS === 'android' ? 7 : 0,
-                    paddingBottom: 5,
+                    top: Platform.OS === 'android' ? 4 : -3,
+                    // paddingBottom: 5,
                   },
                   tabBarIconStyle: {
-                    height: 30,
-                    width: 45,
-                    alignItems: 'center',
+                    // height: 30
+                    // width: 45,
+                    // alignItems: 'center',
                   },
                   showIcon: true,
                 })}>
                 <Tab.Screen
                   name="식당"
                   options={{
-                    tabBarIcon: () => <MealIcon width="30px" height="30px" />,
+                    tabBarIcon: () => <MealIcon width="24px" height="24px" />,
                   }}>
                   {props => (
                     <Flex height="100%">
@@ -103,7 +103,7 @@ export default function App() {
                 <Tab.Screen
                   name="카페"
                   options={{
-                    tabBarIcon: () => <CafeIcon width="30px" height="30px" />,
+                    tabBarIcon: () => <CafeIcon width="24px" height="24px" />,
                   }}>
                   {props => (
                     <Flex height="100%">
@@ -132,7 +132,7 @@ export default function App() {
                 <Tab.Screen
                   name="편의점"
                   options={{
-                    tabBarIcon: () => <MartIcon width="30px" height="30px" />,
+                    tabBarIcon: () => <MartIcon width="24px" height="24px" />,
                   }}>
                   {props => (
                     <Flex height="100%">
@@ -162,7 +162,7 @@ export default function App() {
                   name="셔틀"
                   options={{
                     tabBarIcon: () => (
-                      <ShuttleIcon width="30px" height="30px" />
+                      <ShuttleIcon width="24px" height="24px" />
                     ),
                   }}>
                   {props => (
