@@ -18,18 +18,13 @@ import {colors} from './ui/colors';
 import SplashScreen from 'react-native-splash-screen';
 import {theme} from './ui/theme';
 import {initializeData} from './InitializeData';
-import {NativeSyntheticEvent, TextInputChangeEventData} from 'react-native';
-import {slack} from './helpers/axios';
-import {MealData} from './InitializeData/ProcessMealData';
 import {Awaited} from './helpers/type';
 import MoreModal from './components/MoreModal';
-import amplitude from './helpers/amplitude';
-
-import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import Text from './components/Text';
-import {gridAutoColumns} from 'styled-system';
 
-const Tab = createMaterialTopTabNavigator();
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+
+const Tab = createBottomTabNavigator();
 
 export default function App() {
   const windowHeight = Dimensions.get('window').height;
@@ -46,7 +41,7 @@ export default function App() {
   }, []);
   return (
     <NativeBaseProvider theme={theme}>
-      <Box width="100%" height="100%" safeArea backgroundColor="white">
+      <Box width="100%" height="100%" safeAreaTop backgroundColor="white">
         <StatusBar barStyle="dark-content" />
 
         {data ? (
@@ -54,12 +49,12 @@ export default function App() {
             <NavigationContainer>
               <Tab.Navigator
                 initialRouteName={'식당'}
-                tabBarPosition="bottom"
                 screenOptions={({route}) => ({
+                  headerShown: false,
                   tabBarActiveTintColor: '#0085FF',
                   tabBarInactiveTintColor: '#636363',
                   tabBarStyle: {
-                    height: 65,
+                    height: 90,
                     borderTopColor: '#DCDCDC',
                     borderTopWidth: 1,
                   },
