@@ -124,7 +124,7 @@ export const theme = extendTheme({
         },
         modalSubContent: {
           color: 'gray.800',
-          fontSize: '15px',
+          fontSize: '18px',
           fontWeight: '400',
         },
         modalMenuTime: {
