@@ -184,7 +184,7 @@ export default function MoreModal(props: IBoxProps<null>) {
                   onPress={() => setSelectedMoreTap('tip')}>
                   {({isPressed}) => {
                     return (
-                      <Center flexDirection="row" my="3" w="80%" marginX="10%">
+                      <Center flexDirection="row" my="3" w="72%" marginX="14%">
                         <Text
                           w="88%"
                           textAlign="left"
@@ -203,7 +203,7 @@ export default function MoreModal(props: IBoxProps<null>) {
                   onPress={() => setSelectedMoreTap('suggest')}>
                   {({isPressed}) => {
                     return (
-                      <Center flexDirection="row" my="3" w="80%" marginX="10%">
+                      <Center flexDirection="row" my="3" w="72%" marginX="14%">
                         <Text
                           w="88%"
                           textAlign="left"
@@ -226,7 +226,7 @@ export default function MoreModal(props: IBoxProps<null>) {
                   }>
                   {({isPressed}) => {
                     return (
-                      <Center flexDirection="row" my="3" w="80%" marginX="10%">
+                      <Center flexDirection="row" my="3" w="72%" marginX="14%">
                         <Text
                           w="88%"
                           textAlign="left"
