@@ -109,6 +109,11 @@ export const theme = extendTheme({
         },
         modalTitle: {
           color: 'blue.200',
+          fontSize: '25px',
+          fontWeight: '500',
+        },
+        moreModalTitle: {
+          color: 'blue.200',
           fontSize: '20px',
           fontWeight: '500',
         },
