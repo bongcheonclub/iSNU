@@ -190,7 +190,7 @@ export default function MoreModal(props: IBoxProps<null>) {
                           w="88%"
                           textAlign="left"
                           variant={
-                            isPressed ? 'pressedModalTitle' : 'modalTitle'
+                            isPressed ? 'pressedModalTitle' : 'moreModalTitle'
                           }>
                           잘못된 정보 제보하기
                         </Text>
@@ -209,7 +209,7 @@ export default function MoreModal(props: IBoxProps<null>) {
                           w="88%"
                           textAlign="left"
                           variant={
-                            isPressed ? 'pressedModalTitle' : 'modalTitle'
+                            isPressed ? 'pressedModalTitle' : 'moreModalTitle'
                           }>
                           기능 추가 건의하기
                         </Text>
@@ -232,7 +232,7 @@ export default function MoreModal(props: IBoxProps<null>) {
                           w="88%"
                           textAlign="left"
                           variant={
-                            isPressed ? 'pressedModalTitle' : 'modalTitle'
+                            isPressed ? 'pressedModalTitle' : 'moreModalTitle'
                           }>
                           개발자들 보러 가기
                         </Text>
