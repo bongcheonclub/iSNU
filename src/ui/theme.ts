@@ -59,7 +59,7 @@ export const theme = extendTheme({
         favoritePlaceNameBig: {
           // For Meal, Bus
           color: 'brown.300',
-          fontSize: '24px',
+          fontSize: '22px',
           fontWeight: '500',
         },
         favoritePlaceNameSmall: {
@@ -86,7 +86,7 @@ export const theme = extendTheme({
         normalOpenPlaceBig: {
           // For Bus, Etc
           color: 'gray.700',
-          fontSize: '25px',
+          fontSize: '22px',
           fontWeight: '400',
         },
         normalOpenPlaceSmall: {
@@ -98,7 +98,7 @@ export const theme = extendTheme({
         normalClosedPlaceBig: {
           // For Bus
           color: 'gray.400',
-          fontSize: '25px',
+          fontSize: '22px',
           fontWeight: '400',
         },
         normalClosedPlaceSmall: {

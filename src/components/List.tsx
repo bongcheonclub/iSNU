@@ -115,7 +115,7 @@ const List = <T extends AvailableItem>(props: Props<T>) => {
                         <Center flexDirection="row">
                           <Row height="100%" width="100%" alignItems="center">
                             <Text
-                              width="60%"
+                              width="64%"
                               variant={
                                 favoriteRate > 0
                                   ? 'favoritePlaceNameBig'
@@ -127,7 +127,7 @@ const List = <T extends AvailableItem>(props: Props<T>) => {
                             </Text>
                             <Text
                               textAlign="center"
-                              width="40%"
+                              width="36%"
                               variant="favoritePlaceTime">
                               {interval ? `배차간격: ${interval}` : '미운행중'}
                             </Text>
