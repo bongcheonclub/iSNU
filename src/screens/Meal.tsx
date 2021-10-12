@@ -349,6 +349,7 @@ export default function Meal({mealData}: Props) {
           );
         });
     }
+
     if (cafeteriaName.includes('대학원')) {
       const matchedStrings = string.match(/[A-Z]|\(\d,\d\d\d원\)/gi);
       if (!matchedStrings) {
@@ -426,18 +427,35 @@ export default function Meal({mealData}: Props) {
     if (cafeteriaName.includes('301')) {
       return (
         <Text textAlign="center" width="100%" variant="modalSubContent">
-          {string
-            .split('00원')
-            .join('00원\n')
-            .split('소반')
-            .join('\n소반')
-            .split(/ *&amp; */)
-
-            .join('&\n')
-            .split('&lt;')
-            .join('\n<')
-            .split('&gt;')
-            .join('>\n')}
+          {
+            string
+              .trim()
+              .split('00원')
+              .join('00원\n')
+              .split('소반')
+              .join('\n소반')
+              .split(/ *&amp; */)
+              .join('&')
+              .split('&lt;')
+              .join('<')
+              .split('&gt;')
+              .join('>\n')
+              .split('*')[0]
+          }
+          {console.log(
+            string
+              .split('00원')
+              .join('00원\n')
+              .split('소반')
+              .join('\n소반')
+              .split(/ *&amp; */)
+              .join('&')
+              .split('&lt;')
+              .join('\n<')
+              .split('&gt;')
+              .join('>\n')
+              .split('*')[0],
+          )}
         </Text>
       );
     }
@@ -808,7 +826,7 @@ export default function Meal({mealData}: Props) {
         if (cafeteriaName.includes('301')) {
           return (
             <Text variant="favoritePlaceTime" textAlign="center">
-              교직원 식당만 운영
+              교직원 식당만 운영{'\n'}11:30-13:10
             </Text>
           );
         }
