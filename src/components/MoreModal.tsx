@@ -174,9 +174,10 @@ export default function MoreModal(props: IBoxProps<null>) {
         <Modal.Content
           backgroundColor={theme.colors.white}
           padding={0}
+          height="203px"
           width="90%">
           {selectedMoreTap === 'main' && (
-            <Modal.Body width="100%">
+            <>
               <Modal.CloseButton />
               <Box margin="auto" my="5" alignItems="flex-end">
                 <Pressable
@@ -241,7 +242,7 @@ export default function MoreModal(props: IBoxProps<null>) {
                   }}
                 </Pressable>
               </Box>
-            </Modal.Body>
+            </>
           )}
           {selectedMoreTap === 'tip' && (
             <Pressable
@@ -253,6 +254,7 @@ export default function MoreModal(props: IBoxProps<null>) {
                   borderColor={theme.colors.blue}
                   paddingLeft="20px"
                   display="flex"
+                  alignItems="center"
                   flexDir="row">
                   <Pressable
                     label="more-tip-back"
@@ -264,21 +266,19 @@ export default function MoreModal(props: IBoxProps<null>) {
                   </Pressable>
                   <Text variant="modalSubContent">잘못된 정보 제보하기</Text>
                 </Modal.Header>
-                <Modal.Body paddingTop="5">
-                  <TextArea
-                    height="102px"
-                    //value={tipInput}
-                    onChangeText={handleTipInput}
-                    _focus={{
-                      borderColor: 'blue.100',
-                    }}
-                    size="xl"
-                    placeholder="내용 입력하기"
-                  />
-                </Modal.Body>
+                <TextArea
+                  height="102px"
+                  //value={tipInput}
+                  onChangeText={handleTipInput}
+                  _focus={{
+                    borderColor: 'blue.100',
+                  }}
+                  size="xl"
+                  placeholder="내용 입력하기"
+                />
                 <Modal.Footer
                   backgroundColor={theme.colors.white}
-                  paddingTop="0">
+                  paddingTop="0px">
                   {/* <Button
                     onPress={() => handleClose('tip')}
                     variant="closeButton"
@@ -306,6 +306,7 @@ export default function MoreModal(props: IBoxProps<null>) {
                   borderColor={theme.colors.blue}
                   paddingLeft="20px"
                   display="flex"
+                  alignItems="center"
                   flexDir="row">
                   <Pressable
                     label="more-suggest-back"
@@ -317,21 +318,19 @@ export default function MoreModal(props: IBoxProps<null>) {
                   </Pressable>
                   <Text variant="modalSubContent">기능 추가 건의하기</Text>
                 </Modal.Header>
-                <Modal.Body paddingTop="5">
-                  <TextArea
-                    height="102px"
-                    // value={suggestInput}
-                    onChangeText={handleSuggestInput}
-                    _focus={{
-                      borderColor: 'blue.100',
-                    }}
-                    size="xl"
-                    placeholder="내용 입력하기"
-                  />
-                </Modal.Body>
+                <TextArea
+                  height="102px"
+                  // value={suggestInput}
+                  onChangeText={handleSuggestInput}
+                  _focus={{
+                    borderColor: 'blue.100',
+                  }}
+                  size="xl"
+                  placeholder="내용 입력하기"
+                />
                 <Modal.Footer
                   backgroundColor={theme.colors.white}
-                  paddingTop="0">
+                  paddingTop="0px">
                   {/* <Button
                     onPress={() => handleClose('suggest')}
                     variant="closeButton"
@@ -411,7 +410,7 @@ export default function MoreModal(props: IBoxProps<null>) {
         top="-10%"
         isOpen={checkSubmit}
         onClose={() => setCheckSubmit(false)}>
-        <Modal.Content width="80%" bg={theme.colors.gray[100]}>
+        <Modal.Content width="80%" padding="5px" bg={theme.colors.gray[100]}>
           <VStack width="100%" marginTop="20px" alignItems="center">
             <Text color={theme.colors.black} fontSize="18px" fontWeight="400">
               제출하시겠습니까?
@@ -457,7 +456,7 @@ export default function MoreModal(props: IBoxProps<null>) {
         top="-10%"
         isOpen={checkClose}
         onClose={() => setCheckClose(false)}>
-        <Modal.Content width="80%" bg={theme.colors.gray[100]}>
+        <Modal.Content width="80%" padding="5px" bg={theme.colors.gray[100]}>
           <VStack width="100%" marginTop="20px" alignItems="center">
             <Text color={theme.colors.black} fontSize="18px" fontWeight="400">
               나가시겠습니까?
