@@ -916,7 +916,10 @@ export default function Meal({mealData}: Props) {
                     onPress={() => setSelectedMeal(name)}>
                     <HStack position="relative" padding={0}>
                       <Center width="34%" marginBottom={0} bg="transparent">
-                        <Text variant="favoritePlaceNameBig" textAlign="center">
+                        <Text
+                          variant="favoritePlaceNameBig"
+                          textAlign="center"
+                          paddingLeft="16px">
                           {name === '대학원기숙사' ? '대학원\n기숙사' : name}
                         </Text>
                         {isOperatingMeal ? (
