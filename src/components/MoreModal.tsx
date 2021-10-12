@@ -75,8 +75,16 @@ export default function MoreModal(props: IBoxProps<null>) {
     setCheckSubmit(false);
     setSelectedMoreTap('submitTip');
     setTipInput('');
+    const [deviceId, sessionId] = await Promise.all([
+      amplitude.getDeviceId(),
+      amplitude.getSessionId(),
+    ]);
     try {
-      const textLines = [`내용: ${tipInput}`];
+      const textLines = [
+        `deviceId: ${deviceId}`,
+        `sessionId: ${sessionId}`,
+        `내용: ${tipInput}`,
+      ];
 
       await slack.post('', {
         blocks: [
