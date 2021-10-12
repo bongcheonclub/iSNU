@@ -412,15 +412,22 @@ export default function Meal({mealData}: Props) {
       return (
         <Text textAlign="center" width="100%" variant="modalSubContent">
           {string
+            .trim()
+            .split('※')[0]
             .split('00원')
             .join('00원\n')
             .split(/ *&amp; */)
-
             .join('&\n')
+            .split('*')
+            .join('\n*')
             .split('&lt;')
             .join('\n<')
-            .split('&gt;')
-            .join('>\n')}
+            .split(/&gt;/)
+            .join('>\n')
+            .split(/<단품 메뉴>/)
+            .join('\n<단품 메뉴>')
+            .split(/<셋트 *메뉴>\n/)
+            .join('<셋트메뉴>')}
         </Text>
       );
     }
