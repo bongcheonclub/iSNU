@@ -251,8 +251,9 @@ export default function MoreModal(props: IBoxProps<null>) {
               <Box>
                 <Modal.CloseButton onPress={() => handleClose('tip')} />
                 <Modal.Header
-                  borderColor={theme.colors.blue}
-                  paddingLeft="20px"
+                  borderColor={theme.colors.blue[100]}
+                  paddingLeft="16px"
+                  py="12px"
                   display="flex"
                   alignItems="center"
                   flexDir="row">
@@ -267,7 +268,8 @@ export default function MoreModal(props: IBoxProps<null>) {
                   <Text variant="modalSubContent">잘못된 정보 제보하기</Text>
                 </Modal.Header>
                 <TextArea
-                  height="102px"
+                  height="90px"
+                  rounded="0"
                   onChangeText={handleTipInput}
                   _focus={{
                     borderColor: 'blue.100',
@@ -277,7 +279,7 @@ export default function MoreModal(props: IBoxProps<null>) {
                 />
                 <Modal.Footer
                   backgroundColor={theme.colors.white}
-                  paddingTop="0px">
+                  paddingTop="10px">
                   <Button
                     label="more-tip-submit"
                     onPress={() => setCheckSubmit(true)}
@@ -296,8 +298,9 @@ export default function MoreModal(props: IBoxProps<null>) {
               <Box>
                 <Modal.CloseButton onPress={() => handleClose('suggest')} />
                 <Modal.Header
-                  borderColor={theme.colors.blue}
-                  paddingLeft="20px"
+                  borderColor={theme.colors.blue[100]}
+                  paddingLeft="16px"
+                  py="12px"
                   display="flex"
                   alignItems="center"
                   flexDir="row">
@@ -312,7 +315,8 @@ export default function MoreModal(props: IBoxProps<null>) {
                   <Text variant="modalSubContent">기능 추가 건의하기</Text>
                 </Modal.Header>
                 <TextArea
-                  height="102px"
+                  height="90px"
+                  rounded="0"
                   onChangeText={handleSuggestInput}
                   _focus={{
                     borderColor: 'blue.100',
@@ -322,7 +326,7 @@ export default function MoreModal(props: IBoxProps<null>) {
                 />
                 <Modal.Footer
                   backgroundColor={theme.colors.white}
-                  paddingTop="0px">
+                  paddingTop="10px">
                   <Button
                     label="more-suggest-submit"
                     onPress={() => setCheckSubmit(true)}
