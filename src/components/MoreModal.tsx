@@ -268,7 +268,6 @@ export default function MoreModal(props: IBoxProps<null>) {
                 </Modal.Header>
                 <TextArea
                   height="102px"
-                  //value={tipInput}
                   onChangeText={handleTipInput}
                   _focus={{
                     borderColor: 'blue.100',
@@ -279,12 +278,6 @@ export default function MoreModal(props: IBoxProps<null>) {
                 <Modal.Footer
                   backgroundColor={theme.colors.white}
                   paddingTop="0px">
-                  {/* <Button
-                    onPress={() => handleClose('tip')}
-                    variant="closeButton"
-                    marginRight="10px">
-                    <Text variant="closeButton">닫기</Text>
-                  </Button> */}
                   <Button
                     label="more-tip-submit"
                     onPress={() => setCheckSubmit(true)}
@@ -320,7 +313,6 @@ export default function MoreModal(props: IBoxProps<null>) {
                 </Modal.Header>
                 <TextArea
                   height="102px"
-                  // value={suggestInput}
                   onChangeText={handleSuggestInput}
                   _focus={{
                     borderColor: 'blue.100',
@@ -331,12 +323,6 @@ export default function MoreModal(props: IBoxProps<null>) {
                 <Modal.Footer
                   backgroundColor={theme.colors.white}
                   paddingTop="0px">
-                  {/* <Button
-                    onPress={() => handleClose('suggest')}
-                    variant="closeButton"
-                    marginRight="10px">
-                    <Text variant="closeButton">닫기</Text>
-                  </Button> */}
                   <Button
                     label="more-suggest-submit"
                     onPress={() => setCheckSubmit(true)}
