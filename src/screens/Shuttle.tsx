@@ -155,7 +155,10 @@ function checkOperating(suttle: Shuttle): {
 
   const day = getDay(now);
 
-  if (day === 0 || day === 6) {
+  if (!suttle.name.includes('심야') && (day === 0 || day === 6)) {
+    return {isOperating: false, operating: null};
+  }
+  if (suttle.name.includes('심야') && (day === 0 || day === 1)) {
     return {isOperating: false, operating: null};
   }
 
