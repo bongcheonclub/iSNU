@@ -85,17 +85,17 @@ const Grid = <T extends AvailableItem>(props: Props<T>) => {
       case '투썸플레이스':
         return '투썸';
       case '카페이야기':
-        return '카페\n이야기';
+        return '카페 이야기';
       case '라운지스낵':
-        return '라운지\n스낵';
+        return '라운지 스낵';
       case '수의대스낵':
-        return '수의대\n스낵';
+        return '수의대 스낵';
       case '스누플렉스 (복합매장)':
-        return '스누\n플렉스';
+        return '스누 플렉스';
       case '글로벌생활관 편의점':
-        return '글로벌\n생활관';
+        return '글로벌 생활관';
       case '기숙사GS25':
-        return '기숙사\nGS25';
+        return '기숙사 GS25';
       default:
         return name;
     }
