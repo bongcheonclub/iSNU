@@ -477,7 +477,7 @@ export default function Etcs() {
               label="etcs-dormitory"
               onPress={() =>
                 Linking.openURL(
-                  'https://snudorm.snu.ac.kr/%ec%83%9d%ed%99%9c%ec%95%88%eb%82%b4/%ed%8e%b8%ec%9d%98%ec%8b%9c%ec%84%a4/%ec%9d%8c%ec%8b%9d/',
+                  'https://snudorm.snu.ac.kr/%ec%83%9d%ed%99%9c%ec%95%88%eb%82%b4/%ed%8e%b8%ec%9d%98%ec%8b%9c%ec%84%a4/%ea%b8%b0%ed%83%80/',
                 )
               }
               rounded="10px"
