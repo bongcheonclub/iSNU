@@ -109,7 +109,7 @@ export const theme = extendTheme({
         },
         modalTitle: {
           color: 'blue.200',
-          fontSize: '25px',
+          fontSize: '20px',
           fontWeight: '500',
         },
         modalToday: {
@@ -148,7 +148,7 @@ export const theme = extendTheme({
         },
         pressedModalTitle: {
           color: 'blue.100',
-          fontSize: '25px',
+          fontSize: '20px',
           fontWeight: '500',
         },
       },
