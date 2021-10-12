@@ -1050,8 +1050,8 @@ export default function Meal({mealData}: Props) {
               {selectedMeal !== null && menu[selectedMeal] !== undefined ? (
                 <ScrollView
                   margin={5}
-                  marginLeft={1}
-                  marginRight={1}
+                  marginLeft={3}
+                  marginRight={3}
                   maxHeight="420px"
                   bounces={false}>
                   {menu[selectedMeal].breakfast.length > 0 ? (
