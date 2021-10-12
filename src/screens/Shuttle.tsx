@@ -137,7 +137,7 @@ const SHUTTLES: Shuttle[] = [
     name: '심야 셔틀',
     operatings: [
       {
-        time: '24:00~02:00',
+        time: '00:00~02:00',
         interval: '30분',
         numbers: '1대',
       },
