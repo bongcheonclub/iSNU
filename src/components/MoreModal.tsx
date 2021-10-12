@@ -155,7 +155,7 @@ export default function MoreModal(props: IBoxProps<null>) {
   }
 
   return (
-    <Box>
+    <Box bottom="8px">
       <Pressable
         label="more"
         marginBottom="14px"
