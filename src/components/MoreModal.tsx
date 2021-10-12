@@ -184,10 +184,10 @@ export default function MoreModal(props: IBoxProps<null>) {
                   onPress={() => setSelectedMoreTap('tip')}>
                   {({isPressed}) => {
                     return (
-                      <Center flexDirection="row" my="3">
+                      <Center flexDirection="row" my="3" w="80%" marginX="10%">
                         <Text
-                          marginLeft="auto"
-                          marginRight="5px"
+                          w="88%"
+                          textAlign="left"
                           variant={
                             isPressed ? 'pressedModalTitle' : 'modalTitle'
                           }>
@@ -203,10 +203,10 @@ export default function MoreModal(props: IBoxProps<null>) {
                   onPress={() => setSelectedMoreTap('suggest')}>
                   {({isPressed}) => {
                     return (
-                      <Center flexDirection="row" my="3">
+                      <Center flexDirection="row" my="3" w="80%" marginX="10%">
                         <Text
-                          marginLeft="auto"
-                          marginRight="5px"
+                          w="88%"
+                          textAlign="left"
                           variant={
                             isPressed ? 'pressedModalTitle' : 'modalTitle'
                           }>
@@ -226,10 +226,10 @@ export default function MoreModal(props: IBoxProps<null>) {
                   }>
                   {({isPressed}) => {
                     return (
-                      <Center flexDirection="row" my="3">
+                      <Center flexDirection="row" my="3" w="80%" marginX="10%">
                         <Text
-                          marginLeft="auto"
-                          marginRight="5px"
+                          w="88%"
+                          textAlign="left"
                           variant={
                             isPressed ? 'pressedModalTitle' : 'modalTitle'
                           }>
