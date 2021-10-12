@@ -97,11 +97,13 @@ export default function App() {
                         bg={theme.colors.white}
                         alignItems="flex-end"
                         justifyContent="space-between"
-                        paddingTop="15px"
+                        paddingTop="18px"
                         borderBottomWidth="1px"
                         borderColor={theme.colors.gray[300]}
                         paddingLeft={windowWidth * 0.075}>
-                        <Text variant="pageTitle">식당</Text>
+                        <Text bottom="8px" variant="pageTitle">
+                          식당
+                        </Text>
                         <MoreModal />
                       </HStack>
                       <Box flex={1}>
