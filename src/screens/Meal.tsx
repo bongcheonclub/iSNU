@@ -991,6 +991,7 @@ export default function Meal({mealData}: Props) {
                           padding={0}
                           key={name}>
                           <Text
+                            textAlign="center"
                             variant={
                               isOperatingMeal
                                 ? 'normalOpenPlaceSmall'
