@@ -38,7 +38,7 @@ function checkOperating(
       }>,
     ] {
   const now = new Date();
-  // const now = new Date('Tue Sep 23 2021 12:24:15 GMT+0900');
+  // const now = new Date('Wed Oct 13 2021 12:24:15 GMT+0900');
   const spliter = cafeteriaName.includes('감골') ? '~' : '-';
   const today = (() => {
     switch (
@@ -915,11 +915,7 @@ export default function Meal({mealData}: Props) {
                     px="0px"
                     onPress={() => setSelectedMeal(name)}>
                     <HStack position="relative" padding={0}>
-                      <Center
-                        width="34%"
-                        paddingLeft="12px"
-                        marginBottom={0}
-                        bg="transparent">
+                      <Center width="34%" marginBottom={0} bg="transparent">
                         <Text variant="favoritePlaceNameBig" textAlign="center">
                           {name === '대학원기숙사' ? '대학원\n기숙사' : name}
                         </Text>
