@@ -32,8 +32,13 @@ const SHUTTLES: Shuttle[] = [
         numbers: '3대',
       },
       {
-        time: '15:00~19:00',
+        time: '15:00~18:00',
         interval: '3~4분',
+        numbers: '9대',
+      },
+      {
+        time: '18:00~19:00',
+        interval: '3~4분\n(설입방면만 운영)',
         numbers: '9대',
       },
       {
