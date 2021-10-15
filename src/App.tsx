@@ -33,6 +33,7 @@ import MoreModal from './components/MoreModal';
 import Text from './components/Text';
 
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {setItem} from './helpers/localStorage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Tab = createBottomTabNavigator();
@@ -236,24 +237,19 @@ export default function App() {
                 </Tab.Screen>
               </Tab.Navigator>
             </NavigationContainer>
+            <FirstAlert wasViewedNotice={data.wasViewedNotice} />
           </>
         ) : null}
-        <FirstAlert />
       </Box>
     </NativeBaseProvider>
   );
 }
 
-const FirstAlert = () => {
+const FirstAlert = (props: {wasViewedNotice: boolean}) => {
   const [displayNotice, setDisplayNotice] = useState(false);
   useEffect(() => {
-    (async () => {
-      const alreadyViewNotice = await AsyncStorage.getItem('wasViewedNotice');
-      if (alreadyViewNotice !== 'true') {
-        setDisplayNotice(true);
-      }
-    })();
-  }, []);
+    setDisplayNotice(!props.wasViewedNotice);
+  }, [props.wasViewedNotice]);
 
   return displayNotice ? (
     <Alert
@@ -285,7 +281,7 @@ const FirstAlert = () => {
           <IconButton
             onPress={() => {
               setDisplayNotice(false);
-              AsyncStorage.setItem('wasViewedNotice', 'true');
+              setItem('wasViewedNotice', true);
             }}
             variant="unstyled"
             icon={<CloseIcon size="3" color="coolGray.600" />}

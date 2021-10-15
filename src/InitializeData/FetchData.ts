@@ -8,12 +8,14 @@ export async function fetchLocalStoreageData() {
     favoriteShuttles,
     favoriteMeals,
     cachedResponses,
+    wasViewedNotice,
   ] = await Promise.all([
     getItem('favoriteCafes'),
     getItem('favoriteMarts'),
     getItem('favoriteShuttles'),
     getItem('favoriteMeals'),
     getItem('cachedResponses'),
+    getItem('wasViewedNotice'),
   ]);
 
   return {
@@ -22,6 +24,7 @@ export async function fetchLocalStoreageData() {
     favoriteShuttles,
     favoriteMeals,
     cachedResponses,
+    wasViewedNotice,
   };
 }
 

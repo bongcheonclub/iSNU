@@ -12,6 +12,7 @@ export async function initializeData() {
     favoriteShuttles,
     favoriteMeals,
     cachedResponses,
+    wasViewedNotice,
   } = await fetchLocalStoreageData();
 
   const responses = await (async () => {
@@ -52,5 +53,6 @@ export async function initializeData() {
     favoriteCafes: favoriteCafes ?? [],
     favoriteMarts: favoriteMarts ?? [],
     favoriteShuttles: favoriteShuttles ?? [],
+    wasViewedNotice: !!wasViewedNotice,
   };
 }

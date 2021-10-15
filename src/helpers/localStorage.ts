@@ -11,6 +11,7 @@ export type LOCAL_STORAGE = {
     date: string;
     data: Awaited<ReturnType<typeof fetchCrawlData>>;
   };
+  wasViewedNotice: boolean;
 };
 
 export async function getItem<T extends keyof LOCAL_STORAGE>(
