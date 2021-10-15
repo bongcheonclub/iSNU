@@ -324,7 +324,7 @@ export default function MoreModal(props: IBoxProps<null>) {
                   _focus={{
                     borderColor: 'blue.100',
                   }}
-                  size="xl"
+                  size="md"
                   placeholder="내용 입력하기"
                 />
                 <Modal.Footer
