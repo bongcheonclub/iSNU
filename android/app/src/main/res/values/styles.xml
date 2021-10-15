@@ -15,6 +15,7 @@
 				
 				<item name="android:navigationBarColor">@color/app_bg</item>
 				<item name="android:windowLightNavigationBar">true</item>
+				<item name="android:textCursorDrawable">@drawable/cursor</item>
 
     </style>
 
