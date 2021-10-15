@@ -245,10 +245,7 @@ export default function App() {
 }
 
 const FirstAlert = (props: {wasViewedNotice: boolean}) => {
-  const [displayNotice, setDisplayNotice] = useState(false);
-  useEffect(() => {
-    setDisplayNotice(!props.wasViewedNotice);
-  }, [props.wasViewedNotice]);
+  const [displayNotice, setDisplayNotice] = useState(!props.wasViewedNotice);
 
   return displayNotice ? (
     <Alert
