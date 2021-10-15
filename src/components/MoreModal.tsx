@@ -21,6 +21,43 @@ import Back from '../icons/back.svg';
 import BackPressed from '../icons/back-pressed.svg';
 import {theme} from '../ui/theme';
 import amplitude from '../helpers/amplitude';
+import {getDeviceId} from 'react-native-device-info';
+
+async function submitToSlack(type: string, contents: string) {
+  const [deviceType, deviceId, sessionId] = await Promise.all([
+    getDeviceId(),
+    amplitude.getDeviceId(),
+    amplitude.getSessionId(),
+  ]);
+  try {
+    const textLines = [
+      `deviceType: ${deviceType}`,
+      `deviceId: ${deviceId}`,
+      `sessionId: ${sessionId}`,
+      `내용: ${contents}`,
+    ];
+    await slack.post('', {
+      blocks: [
+        {
+          type: 'section',
+          text: {
+            type: 'mrkdwn',
+            text: type,
+          },
+        },
+        {
+          type: 'section',
+          text: {
+            type: 'mrkdwn',
+            text: textLines.join('\n'),
+          },
+        },
+      ],
+    });
+  } catch (e) {
+    console.error(e);
+  }
+}
 
 export default function MoreModal(props: IBoxProps<null>) {
   const [selectedMoreTap, setSelectedMoreTap] = useState<
@@ -37,80 +74,15 @@ export default function MoreModal(props: IBoxProps<null>) {
     setCheckSubmit(false);
     setSelectedMoreTap('submitSuggest');
     setSuggestInput('');
-
-    const [deviceId, sessionId] = await Promise.all([
-      amplitude.getDeviceId(),
-      amplitude.getSessionId(),
-    ]);
-    try {
-      const textLines = [
-        `deviceId: ${deviceId}`,
-        `sessionId: ${sessionId}`,
-        `내용: ${suggestInput}`,
-      ];
-      await slack.post('', {
-        blocks: [
-          {
-            type: 'section',
-            text: {
-              type: 'mrkdwn',
-              text: '기능 추가 건의',
-            },
-          },
-          {
-            type: 'section',
-            text: {
-              type: 'mrkdwn',
-              text: textLines.join('\n'),
-            },
-          },
-        ],
-      });
-    } catch (e) {
-      console.error(e);
-    }
+    await submitToSlack('기능 추가 건의', suggestInput);
   }, [suggestInput]);
 
   const handleSubmitTip = useCallback(async () => {
     setCheckSubmit(false);
     setSelectedMoreTap('submitTip');
     setTipInput('');
-    const [deviceId, sessionId] = await Promise.all([
-      amplitude.getDeviceId(),
-      amplitude.getSessionId(),
-    ]);
-    try {
-      const textLines = [
-        `deviceId: ${deviceId}`,
-        `sessionId: ${sessionId}`,
-        `내용: ${tipInput}`,
-      ];
-
-      await slack.post('', {
-        blocks: [
-          {
-            type: 'section',
-            text: {
-              type: 'mrkdwn',
-              text: '잘못된 정보 제보',
-            },
-          },
-          {
-            type: 'section',
-            text: {
-              type: 'mrkdwn',
-              text: textLines.join('\n'),
-            },
-          },
-        ],
-      });
-    } catch (e) {
-      console.error(e);
-    }
+    await submitToSlack('잘못된 정보 제보', tipInput);
   }, [tipInput]);
-  // const handleBack = useCallback(() => {
-  //   setSelectedMoreTap('main');
-  // }, []);
 
   const handleTipInput = useCallback((text: string) => {
     setTipInput(text);
