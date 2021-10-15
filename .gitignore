@@ -1,4 +1,6 @@
 secure.ts
+ios/snuinfoapp/Info.plist
+android/app/src/main/res/values/strings.xml
 # OSX
 #
 .DS_Store

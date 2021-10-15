@@ -8,7 +8,10 @@
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "code-push": "yarn code-push:android & yarn code-push:ios",
+    "code-push:android": "appcenter codepush release-react -a geongun/iSNU-android -d Production",
+    "code-push:ios": "appcenter codepush release-react -a geongun/iSNU-ios -d Production"
   },
   "dependencies": {
     "@amplitude/react-native": "^2.5.0",
@@ -23,6 +26,7 @@
     "node-html-parser": "^4.1.4",
     "react": "17.0.2",
     "react-native": "0.65.1",
+    "react-native-code-push": "^7.0.4",
     "react-native-public-ip": "^1.0.2",
     "react-native-safe-area-context": "^3.3.2",
     "react-native-screens": "^3.7.1",
@@ -43,7 +47,9 @@
     "@types/react-native": "0.65.1",
     "@types/react-native-vector-icons": "^6.4.9",
     "@types/react-test-renderer": "^17.0.1",
+    "appcenter-cli": "^2.10.3",
     "babel-jest": "^26.6.3",
+    "code-push-cli": "^3.0.0",
     "eslint": "^7.32.0",
     "husky": "^7.0.2",
     "jest": "^26.6.3",
