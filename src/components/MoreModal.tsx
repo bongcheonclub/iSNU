@@ -174,7 +174,6 @@ export default function MoreModal(props: IBoxProps<null>) {
         <Modal.Content
           backgroundColor={theme.colors.white}
           padding={0}
-          height="203px"
           width="90%">
           {selectedMoreTap === 'main' && (
             <>
@@ -361,7 +360,9 @@ export default function MoreModal(props: IBoxProps<null>) {
                   variant="closeButton"
                   borderTopWidth="1px"
                   onPress={() => setSelectedMoreTap(null)}>
-                  <Text variant="closeButton">닫기</Text>
+                  <Text variant="closeButton" height="32px">
+                    닫기
+                  </Text>
                 </Button>
               </VStack>
             </Box>
@@ -389,7 +390,9 @@ export default function MoreModal(props: IBoxProps<null>) {
                   variant="closeButton"
                   borderTopWidth="1px"
                   onPress={() => setSelectedMoreTap(null)}>
-                  <Text variant="closeButton">닫기</Text>
+                  <Text variant="closeButton" height="32px">
+                    닫기
+                  </Text>
                 </Button>
               </VStack>
             </Box>
