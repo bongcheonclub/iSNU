@@ -852,24 +852,22 @@ export default function Meal({mealData}: Props) {
     }
   }
 
-  const checkStatus = useMemo(() => {
-    return chain(mealList)
-      .map(cafeteriaName => {
-        const [status, nextTime, operatingInfo] = checkOperating(
-          cafeteriaName,
-          cafeteria,
-        );
+  const checkStatus = chain(mealList)
+    .map(cafeteriaName => {
+      const [status, nextTime, operatingInfo] = checkOperating(
+        cafeteriaName,
+        cafeteria,
+      );
 
-        return {
-          name: cafeteriaName,
-          status,
-          nextTime,
-          operatingInfo: operatingInfo !== undefined ? operatingInfo : null, // 소담마루, 301 등 현재 운영 상태 비정상인 곳 에러 넘기기
-        };
-      })
-      .keyBy('name')
-      .value();
-  }, [cafeteria, mealList]);
+      return {
+        name: cafeteriaName,
+        status,
+        nextTime,
+        operatingInfo: operatingInfo !== undefined ? operatingInfo : null, // 소담마루, 301 등 현재 운영 상태 비정상인 곳 에러 넘기기
+      };
+    })
+    .keyBy('name')
+    .value();
 
   function isOperating(name: string) {
     if (checkStatus === null || menu[name] === undefined) {
