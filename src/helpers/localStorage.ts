@@ -18,10 +18,6 @@ export async function getItem<T extends keyof LOCAL_STORAGE>(
   key: T,
 ): Promise<LOCAL_STORAGE[T] | null> {
   const item = await AsyncStorage.getItem(key);
-  if (key === 'favoriteMeals' && item == null) {
-    await AsyncStorage.setItem(key, '["학생회관"]');
-    return ['학생회관'] as LOCAL_STORAGE[T];
-  }
   const parsedItem =
     item != null ? (JSON.parse(item) as LOCAL_STORAGE[T]) : null;
   return parsedItem;

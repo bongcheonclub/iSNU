@@ -40,7 +40,7 @@ export async function initializeData() {
     mealListRes,
     mealDormListRes,
     mealMenuListRes,
-    favoriteMeals ?? [],
+    favoriteMeals,
   );
 
   const cafeData = processCafeData(cafeRes);
