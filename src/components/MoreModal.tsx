@@ -267,13 +267,15 @@ export default function MoreModal(props: IBoxProps<null>) {
                   <Text variant="modalSubContent">잘못된 정보 제보하기</Text>
                 </Modal.Header>
                 <TextArea
-                  height="90px"
+                  height="120px"
+                  textAlignVertical="top"
                   rounded="0"
+                  underlineColorAndroid="transparent"
                   onChangeText={handleTipInput}
                   _focus={{
                     borderColor: 'blue.100',
                   }}
-                  size="xl"
+                  size="md"
                   placeholder="내용 입력하기"
                 />
                 <Modal.Footer
@@ -314,8 +316,10 @@ export default function MoreModal(props: IBoxProps<null>) {
                   <Text variant="modalSubContent">기능 추가 건의하기</Text>
                 </Modal.Header>
                 <TextArea
-                  height="90px"
+                  height="120px"
+                  textAlignVertical="top"
                   rounded="0"
+                  underlineColorAndroid="transparent"
                   onChangeText={handleSuggestInput}
                   _focus={{
                     borderColor: 'blue.100',
