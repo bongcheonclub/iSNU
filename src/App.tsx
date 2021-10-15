@@ -34,7 +34,6 @@ import Text from './components/Text';
 
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {setItem} from './helpers/localStorage';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Tab = createBottomTabNavigator();
 

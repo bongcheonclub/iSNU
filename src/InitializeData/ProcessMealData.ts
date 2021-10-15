@@ -44,8 +44,12 @@ export function processMealData(
   mealListRes: AxiosResponse<any>,
   mealDormListRes: AxiosResponse<any>,
   mealMenuListRes: AxiosResponse<any>,
-  favoriteList: string[],
+  favoriteMeals: string[] | null,
 ) {
+  if (favoriteMeals === null) {
+    setItem('favoriteMeals', ['학생회관']);
+  }
+  const favoriteList = favoriteMeals ?? ['학생회관'];
   const {month, date, koreanDay, day} = getTodaysDate();
   function fetchMenu() {
     // 식단 정보 가져오는 함수
