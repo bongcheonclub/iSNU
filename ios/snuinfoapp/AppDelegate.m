@@ -45,7 +45,7 @@ static void InitializeFlipper(UIApplication *application) {
   
 
   RCTRootView *rootView = [[RCTRootView alloc] initWithBridge:bridge
-                                                   moduleName:@"snuinfoapp"
+                                                   moduleName:@"iSNU"
                                             initialProperties:nil];
 
   if (@available(iOS 13.0, *)) {
