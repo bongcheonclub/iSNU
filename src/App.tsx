@@ -9,6 +9,7 @@ import {
   VStack,
   IconButton,
   CloseIcon,
+  Modal,
 } from 'native-base';
 import React, {useCallback, useEffect, useState} from 'react';
 import {SafeAreaView, Dimensions, Platform} from 'react-native';
@@ -246,9 +247,14 @@ export default function App() {
 
 const FirstAlert = (props: {wasViewedNotice: boolean}) => {
   const [displayNotice, setDisplayNotice] = useState(!props.wasViewedNotice);
-
   return displayNotice ? (
-    <Alert
+		<Modal
+		isOpen={displayNotice}
+		onClose={() => {
+			setDisplayNotice(false);
+			setItem('wasViewedNotice', true);
+		}}>
+<Alert
       w="90%"
       status="info"
       colorScheme="info"
@@ -295,5 +301,5 @@ const FirstAlert = (props: {wasViewedNotice: boolean}) => {
         </Box>
       </VStack>
     </Alert>
+		</Modal>
   ) : null;
-};
