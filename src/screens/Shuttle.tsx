@@ -38,7 +38,7 @@ const SHUTTLES: Shuttle[] = [
       },
       {
         time: '18:00~19:00',
-        interval: '3~4분\n(설입방면만 운영)',
+        interval: '3~4분\n(하교셔틀만 운영)',
         numbers: '9대',
       },
       {
@@ -62,8 +62,13 @@ const SHUTTLES: Shuttle[] = [
         numbers: '3대',
       },
       {
-        time: '11:00~19:00',
+        time: '11:00~18:00',
         interval: '10분',
+        numbers: '2대',
+      },
+      {
+        time: '18:00~19:00',
+        interval: '10분\n(하교셔틀만 운영)',
         numbers: '2대',
       },
       {
