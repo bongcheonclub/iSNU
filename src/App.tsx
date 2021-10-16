@@ -35,6 +35,8 @@ import Text from './components/Text';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {setItem} from './helpers/localStorage';
 
+import Code_Push from './Code_Push';
+
 const Tab = createBottomTabNavigator();
 
 export default function App() {
@@ -54,7 +56,7 @@ export default function App() {
     <NativeBaseProvider theme={theme}>
       <Box width="100%" height="100%" safeArea backgroundColor="white">
         <StatusBar barStyle="dark-content" />
-
+        <Code_Push />
         {data ? (
           <>
             <NavigationContainer>
@@ -102,7 +104,7 @@ export default function App() {
                         borderColor={theme.colors.gray[300]}
                         paddingLeft={windowWidth * 0.075}>
                         <Text bottom="8px" variant="pageTitle">
-                          식당
+                          식당zz
                         </Text>
                         <MoreModal />
                       </HStack>
