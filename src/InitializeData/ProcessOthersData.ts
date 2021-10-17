@@ -107,6 +107,17 @@ export function processCafeData(res: AxiosResponse<any>) {
       };
     })
     .value();
-
-  return cafes;
+  const defaultCafe = [
+    {
+      name: '카페그랑',
+      location: '901동 1층',
+      items: '',
+      size: '',
+      weekday: '07:30~22:00',
+      saturday: '07:30~21:00',
+      holiday: '07:30~21:00',
+      contact: '02-881-9204',
+    },
+  ];
+  return cafes.concat(defaultCafe);
 }
