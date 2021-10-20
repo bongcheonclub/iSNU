@@ -1,4 +1,4 @@
-import {chain} from 'lodash';
+import {chain, mapValues, tap} from 'lodash';
 import {parse} from 'node-html-parser';
 import {AxiosResponse} from 'axios';
 
@@ -30,7 +30,7 @@ export function processMartData(res: AxiosResponse<any>) {
     })
     .value();
 
-  const defaultMart = [
+  const defaultMarts = [
     {
       name: '해동 학술관',
       location: '공과대학 해동학술관 (32-1동 지하1층)',
@@ -68,7 +68,44 @@ export function processMartData(res: AxiosResponse<any>) {
       contact: '',
     },
   ];
-  return marts.concat(defaultMart);
+
+  const allMarts = marts.concat(defaultMarts);
+
+  /**
+   * Refine mart data.
+   */
+
+  function refineName(name: string): string {
+    const trimmedName = name.trim();
+    const replacedName = (() => {
+      switch (trimmedName) {
+        case '스누플렉스 (복합매장)':
+          return '스누 플렉스';
+        case '글로벌생활관 편의점':
+          return '글로벌 생활관';
+        case '기숙사GS25':
+          return '기숙사 GS25';
+        default:
+          return trimmedName;
+      }
+    })();
+    return replacedName.replace('편의점', '').trim();
+  }
+
+  function refineTime(time: string): string {
+    return time.replace('24시간 유', '24시간\n유');
+  }
+
+  const refinedMarts = chain(allMarts)
+    .map(mart => ({
+      ...mart,
+      name: refineName(mart.name),
+      weekday: refineTime(mart.weekday),
+      saturday: refineTime(mart.saturday),
+      holiday: refineTime(mart.holiday),
+    }))
+    .value();
+  return refinedMarts;
 }
 
 export function processCafeData(res: AxiosResponse<any>) {
@@ -107,7 +144,8 @@ export function processCafeData(res: AxiosResponse<any>) {
       };
     })
     .value();
-  const defaultCafe = [
+
+  const defaultCafes = [
     {
       name: '카페그랑',
       location: '901동 1층',
@@ -119,5 +157,36 @@ export function processCafeData(res: AxiosResponse<any>) {
       contact: '02-881-9204',
     },
   ];
-  return cafes.concat(defaultCafe);
+
+  function refineName(name: string): string {
+    const trimmedName = name.trim();
+    const replacedName = (() => {
+      switch (trimmedName) {
+        case 'Pascucci':
+          return '파스쿠찌';
+        case '투썸플레이스':
+          return '투썸';
+        case '카페이야기':
+          return '카페 이야기';
+        case '라운지스낵':
+          return '라운지 스낵';
+        case '수의대스낵':
+          return '수의대 스낵';
+        default:
+          return trimmedName;
+      }
+    })();
+    return replacedName.trim();
+  }
+
+  const allCafes = cafes.concat(defaultCafes);
+
+  const refinedCafes = chain(allCafes)
+    .map(cafe => ({
+      ...cafe,
+      name: refineName(cafe.name),
+    }))
+    .value();
+
+  return refinedCafes;
 }
