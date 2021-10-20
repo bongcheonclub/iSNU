@@ -78,35 +78,6 @@ const Grid = <T extends AvailableItem>(props: Props<T>) => {
       sortedItems.find(({name}) => name === focusedName)) ||
     null;
 
-  function refineName(name: string): string {
-    switch (name.trim()) {
-      case 'Pascucci':
-        return '파스쿠찌';
-      case '투썸플레이스':
-        return '투썸';
-      case '카페이야기':
-        return '카페 이야기';
-      case '라운지스낵':
-        return '라운지 스낵';
-      case '수의대스낵':
-        return '수의대 스낵';
-      case '스누플렉스 (복합매장)':
-        return '스누 플렉스';
-      case '글로벌생활관 편의점':
-        return '글로벌 생활관';
-      case '기숙사GS25':
-        return '기숙사 GS25';
-      default:
-        return name;
-    }
-  }
-
-  function refineTime(time: string): string {
-    if (time.trim().includes('유인')) {
-      return time.replace(' ', ' (') + ')';
-    }
-    return time;
-  }
   return (
     <Box height="100%" bgColor={colors.white}>
       {sortedItems ? (
@@ -163,10 +134,7 @@ const Grid = <T extends AvailableItem>(props: Props<T>) => {
                                   : 'normalClosedPlaceSmall'
                               }
                               textAlign="center">
-                              {refineName(name)
-                                .replace('편의점', '')
-                                .trim()
-                                .replace(' ', '\n')}
+                              {name.replace(' ', '\n')}
                             </Text>
                           </Button>
                         );
@@ -190,9 +158,7 @@ const Grid = <T extends AvailableItem>(props: Props<T>) => {
                 <Box margin={6} marginBottom={1}>
                   <HStack left={-15} top={-15}>
                     <Text variant="modalTitle" marginBottom={1}>
-                      {refineName(focusedItem.name)
-                        .replace('편의점', '')
-                        .trim()}
+                      {focusedItem.name}
                     </Text>
                     <Button
                       label={`${itemType}-toggle-favorite`}
@@ -243,7 +209,7 @@ const Grid = <T extends AvailableItem>(props: Props<T>) => {
                       width="65%"
                       variant="modalSubContent"
                       textAlign="center">
-                      {refineTime(focusedItem.weekday)}
+                      {focusedItem.weekday}
                     </Text>
                   </HStack>
                   <Divider
@@ -264,7 +230,7 @@ const Grid = <T extends AvailableItem>(props: Props<T>) => {
                       width="65%"
                       variant="modalSubContent"
                       textAlign="center">
-                      {refineTime(focusedItem.saturday)}
+                      {focusedItem.saturday}
                     </Text>
                   </HStack>
                   <Divider
@@ -286,7 +252,7 @@ const Grid = <T extends AvailableItem>(props: Props<T>) => {
                       variant="modalSubContent"
                       textAlign="center"
                       marginBottom="20px">
-                      {refineTime(focusedItem.holiday)}
+                      {focusedItem.holiday}
                     </Text>
                   </HStack>
                 </VStack>
