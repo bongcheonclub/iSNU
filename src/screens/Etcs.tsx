@@ -9,20 +9,46 @@ import {
 } from 'native-base';
 import Button from '../components/WrappedButton';
 import Text from '../components/Text';
-import React, {useState} from 'react';
-import {StyleSheet, Linking} from 'react-native';
+import React, {useCallback, useState} from 'react';
+import {Linking} from 'react-native';
 import {colors} from '../ui/colors';
 
 export default function Etcs() {
-  const [focusedEtc, setFocusedEtc] = useState<string | null>(null);
+  const [focusedEtc, setFocusedEtc] = useState<'Post' | 'Book' | 'Bank' | null>(
+    null,
+  );
+
+  const closeFocused = useCallback(() => setFocusedEtc(null), []);
+
+  const focusToBook = useCallback(() => setFocusedEtc('Book'), []);
+  const focusToBank = useCallback(() => setFocusedEtc('Bank'), []);
+  const focusToPost = useCallback(() => setFocusedEtc('Post'), []);
+
+  const linkToPublicHealth = useCallback(
+    () =>
+      Linking.openURL(
+        'https://m.health4u.snu.ac.kr/medicalTreatment/PracticeSchedule/_/view.do',
+      ),
+    [],
+  );
+
+  const linkToDormitory = useCallback(
+    () =>
+      Linking.openURL(
+        'https://snudorm.snu.ac.kr/%ec%83%9d%ed%99%9c%ec%95%88%eb%82%b4/%ed%8e%b8%ec%9d%98%ec%8b%9c%ec%84%a4/%ea%b8%b0%ed%83%80/',
+      ),
+    [],
+  );
+  const linkToLibrary = useCallback(
+    () => Linking.openURL('https://lib.snu.ac.kr/hours'),
+    [],
+  );
 
   return (
     <Box height="100%">
       {focusedEtc ? (
         <>
-          <Modal
-            isOpen={focusedEtc === 'Bank'}
-            onClose={() => setFocusedEtc(null)}>
+          <Modal isOpen={focusedEtc === 'Bank'} onClose={closeFocused}>
             <Modal.Content
               paddingTop="8px"
               px="12px"
@@ -244,9 +270,7 @@ export default function Etcs() {
               </ScrollView>
             </Modal.Content>
           </Modal>
-          <Modal
-            isOpen={focusedEtc === 'Post'}
-            onClose={() => setFocusedEtc(null)}>
+          <Modal isOpen={focusedEtc === 'Post'} onClose={closeFocused}>
             <Modal.Content
               paddingTop="8px"
               px="12px"
@@ -323,9 +347,7 @@ export default function Etcs() {
               </VStack>
             </Modal.Content>
           </Modal>
-          <Modal
-            isOpen={focusedEtc === 'Book'}
-            onClose={() => setFocusedEtc(null)}>
+          <Modal isOpen={focusedEtc === 'Book'} onClose={closeFocused}>
             <Modal.Content
               paddingTop="8px"
               px="12px"
@@ -412,7 +434,7 @@ export default function Etcs() {
           <Center marginTop={2.5} marginBottom={2.5}>
             <Button
               label="etcs-bank"
-              onPress={() => setFocusedEtc('Bank')}
+              onPress={focusToBank}
               rounded="10px"
               width="85%"
               height="72px"
@@ -423,7 +445,7 @@ export default function Etcs() {
           <Center marginTop={2.5} marginBottom={2.5}>
             <Button
               label="etcs-post-office"
-              onPress={() => setFocusedEtc('Post')}
+              onPress={focusToPost}
               rounded="10px"
               width="85%"
               height="72px"
@@ -434,7 +456,7 @@ export default function Etcs() {
           <Center marginTop={2.5} marginBottom={2.5}>
             <Button
               label="etcs-bookstore"
-              onPress={() => setFocusedEtc('Book')}
+              onPress={focusToBook}
               rounded="10px"
               width="85%"
               height="72px"
@@ -445,7 +467,7 @@ export default function Etcs() {
           <Center marginTop={2.5} marginBottom={2.5}>
             <Button
               label="etcs-library"
-              onPress={() => Linking.openURL('https://lib.snu.ac.kr/hours')}
+              onPress={linkToLibrary}
               rounded="10px"
               width="85%"
               height="72px"
@@ -456,11 +478,7 @@ export default function Etcs() {
           <Center marginTop={2.5} marginBottom={2.5}>
             <Button
               label="etcs-public-health"
-              onPress={() =>
-                Linking.openURL(
-                  'https://m.health4u.snu.ac.kr/medicalTreatment/PracticeSchedule/_/view.do',
-                )
-              }
+              onPress={linkToPublicHealth}
               rounded="10px"
               width="85%"
               height="72px"
@@ -471,11 +489,7 @@ export default function Etcs() {
           <Center marginTop={2.5} marginBottom={2.5}>
             <Button
               label="etcs-dormitory"
-              onPress={() =>
-                Linking.openURL(
-                  'https://snudorm.snu.ac.kr/%ec%83%9d%ed%99%9c%ec%95%88%eb%82%b4/%ed%8e%b8%ec%9d%98%ec%8b%9c%ec%84%a4/%ea%b8%b0%ed%83%80/',
-                )
-              }
+              onPress={linkToDormitory}
               rounded="10px"
               width="85%"
               height="72px"
@@ -488,5 +502,3 @@ export default function Etcs() {
     </Box>
   );
 }
-
-const style = StyleSheet.create({});

@@ -1,13 +1,13 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {compareAsc, getDay, parse as parseTime} from 'date-fns';
 import Grid from '../components/Grid';
 
 type Props = {
-  cafes: Cafe[];
+  cafes: CafeData[];
   initialFavoriteNames: string[];
 };
 
-export type Cafe = {
+export type CafeData = {
   name: string;
   contact: string;
   location: string;
@@ -18,7 +18,7 @@ export type Cafe = {
   holiday: string;
 };
 
-function checkOperating(cafe: Cafe): boolean {
+function checkOperating(cafe: CafeData): boolean {
   const {weekday, saturday, holiday} = cafe;
 
   const now = new Date();

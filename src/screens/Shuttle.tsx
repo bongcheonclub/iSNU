@@ -1,18 +1,18 @@
-import {chain, find, map} from 'lodash';
-import React, {useEffect, useState} from 'react';
-import {compareAsc, getDay, parse as parseTime, subDays} from 'date-fns';
+import {find} from 'lodash';
+import React from 'react';
+import {compareAsc, getDay, parse as parseTime} from 'date-fns';
 import List from '../components/List';
 
 type Props = {
   initialFavoriteNames: string[];
 };
 
-export type Shuttle = {
+export type ShuttleType = {
   name: string;
   operatings: {time: string; interval: string; numbers: string}[];
 };
 
-const SHUTTLES: Shuttle[] = [
+const SHUTTLES: ShuttleType[] = [
   {
     name: '설입 ↔ 행정관',
     operatings: [
@@ -155,9 +155,9 @@ const SHUTTLES: Shuttle[] = [
   },
 ];
 
-function checkOperating(suttle: Shuttle): {
+function checkOperating(suttle: ShuttleType): {
   isOperating: boolean;
-  operating: Shuttle['operatings'][number] | null;
+  operating: ShuttleType['operatings'][number] | null;
 } {
   const {operatings} = suttle;
 

@@ -1,5 +1,4 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {getItem, setItem} from '../helpers/localStorage';
+import {setItem} from '../helpers/localStorage';
 import {getTodaysDate} from '../helpers/getTodaysDate';
 import {processMealData} from './ProcessMealData';
 import {fetchCrawlData, fetchLocalStoreageData} from './FetchData';

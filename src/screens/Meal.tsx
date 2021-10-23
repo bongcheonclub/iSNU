@@ -1,6 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, {useState} from 'react';
-import {StyleSheet, useWindowDimensions} from 'react-native';
 import {
   Box,
   Center,
@@ -56,7 +55,6 @@ function checkOperating(
   if (rawData === '휴관' || rawData === '휴점 중' || rawData === '') {
     return ['end', '추후'];
   }
-  const additionalInfo = rawData.split(' ').filter(item => item[0] === '(')[0];
   const times = rawData
     .split(' ')
     .filter(item => item[0] !== '(' && item[-1] !== ')' && item.includes('0'))
@@ -114,8 +112,6 @@ function checkOperating(
 }
 
 export default function Meal({mealData}: Props) {
-  const window = useWindowDimensions();
-
   const {
     menu,
     cafeteria,
@@ -162,7 +158,7 @@ export default function Meal({mealData}: Props) {
   function refineMenuName(rawText: string) {
     const splitedText = rawText.split(/\+|&|\*/).map(item => item.trim());
     const refinedMenuNameArray: string[] = [];
-    splitedText.forEach((item, idx) => {
+    splitedText.forEach(item => {
       const lastIndex = refinedMenuNameArray.length - 1;
       if (lastIndex === -1) {
         refinedMenuNameArray.push(item);
@@ -1175,5 +1171,3 @@ export default function Meal({mealData}: Props) {
     </VStack>
   );
 }
-
-const style = StyleSheet.create({});
