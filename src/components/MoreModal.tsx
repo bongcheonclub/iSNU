@@ -63,16 +63,14 @@ async function submitToSlack(type: string, contents: string) {
 
 export default function MoreModal(props: IBoxProps<null>) {
   const [status, setStatus] = useState<
-    'tip' | 'suggest' | 'main' | 'submitTip' | 'submitSuggest' | null
-  >(null);
-  const [nextState, setNextState] = useState<'main' | null>(null);
+    'tip' | 'suggest' | 'main' | 'submitTip' | 'submitSuggest' | 'exit'
+  >('exit');
   const [showSubmitDialog, setShowSubmitDialog] = useState<boolean>(false);
-  const [showCloseDialog, setShowCloseDialog] = useState<boolean>(false);
+  const [desireStateWithCloseDialog, setDesireStateWithShowCloseDialog] =
+    useState<'main' | 'exit' | null>(null);
   const [tipInput, setTipInput] = useState<string>('');
   const [suggestInput, setSuggestInput] = useState<string>('');
   const windowWidth = Dimensions.get('window').width;
-
-  console.log(showSubmitDialog);
 
   const handleSubmitSuggest = useCallback(async () => {
     setShowSubmitDialog(false);
@@ -98,37 +96,47 @@ export default function MoreModal(props: IBoxProps<null>) {
 
   function handleClose(preState: string | null) {
     switch (preState) {
-      case 'main':
-        return setStatus(null);
-      case 'tip':
+      case 'main': {
+        setStatus('exit');
+        break;
+      }
+      case 'tip': {
         if (!tipInput.trim()) {
-          return setStatus(null);
+          setStatus('exit');
         } else {
-          setNextState(null);
-          return setShowCloseDialog(true);
+          setDesireStateWithShowCloseDialog('exit');
         }
-      case 'suggest':
+        break;
+      }
+      case 'suggest': {
         if (!suggestInput.trim()) {
-          return setStatus(null);
+          setStatus('exit');
         } else {
-          setNextState(null);
-          return setShowCloseDialog(true);
+          setDesireStateWithShowCloseDialog('exit');
         }
-      case 'submitTip':
-        return setStatus(null);
-      case 'submitSuggest':
-        return setStatus(null);
-      case 'back':
-        setNextState('main');
-        if (status === 'tip' && !!tipInput.trim()) {
-          return setShowCloseDialog(true);
-        } else if (status === 'suggest' && !!suggestInput.trim()) {
-          return setShowCloseDialog(true);
-        } else {
-          return setStatus('main');
-        }
+        break;
+      }
+      case 'submitTip': {
+        setStatus('exit');
+        break;
+      }
+
+      case 'submitSuggest': {
+        setStatus('exit');
+        break;
+      }
     }
   }
+
+  const handleBack = () => {
+    if (status === 'tip' && !!tipInput.trim()) {
+      setDesireStateWithShowCloseDialog('main');
+    } else if (status === 'suggest' && !!suggestInput.trim()) {
+      setDesireStateWithShowCloseDialog('main');
+    } else {
+      setStatus('main');
+    }
+  };
 
   return (
     <Box bottom="8px">
@@ -143,7 +151,10 @@ export default function MoreModal(props: IBoxProps<null>) {
         }}
       </Pressable>
 
-      <Modal top="-10%" isOpen={!!status} onClose={() => handleClose(status)}>
+      <Modal
+        top="-10%"
+        isOpen={status !== 'exit'}
+        onClose={() => handleClose(status)}>
         <Modal.Content
           backgroundColor={theme.colors.white}
           padding={0}
@@ -229,7 +240,7 @@ export default function MoreModal(props: IBoxProps<null>) {
                   flexDir="row">
                   <Pressable
                     label="more-tip-back"
-                    onPress={() => handleClose('back')}
+                    onPress={handleBack}
                     marginRight={2}>
                     {({isPressed}) => {
                       return isPressed ? <PressedBackIcon /> : <BackIcon />;
@@ -278,7 +289,7 @@ export default function MoreModal(props: IBoxProps<null>) {
                   flexDir="row">
                   <Pressable
                     label="more-suggest-back"
-                    onPress={() => handleClose('back')}
+                    onPress={handleBack}
                     marginRight={2}>
                     {({isPressed}) => {
                       return isPressed ? <PressedBackIcon /> : <BackIcon />;
@@ -318,14 +329,14 @@ export default function MoreModal(props: IBoxProps<null>) {
         <SimpleDialog
           title="소중한 의견 감사합니다!"
           contents={'보내주신 부분은 빠른 시일내에 수정하겠습니다.'}
-          onClose={() => setStatus(null)}
+          onClose={() => setStatus('exit')}
         />
       )}
       {status === 'submitSuggest' && (
         <SimpleDialog
           title="소중한 의견 감사합니다!"
           contents={'보내주신 의견은 논의 후 반영하겠습니다.'}
-          onClose={() => setStatus(null)}
+          onClose={() => setStatus('exit')}
         />
       )}
       {showSubmitDialog && (
@@ -339,16 +350,16 @@ export default function MoreModal(props: IBoxProps<null>) {
           confirmText="보내기"
         />
       )}
-      {showCloseDialog && (
+      {desireStateWithCloseDialog && (
         <ConfirmDialog
           title="나가시겠습니까?"
           contents="작성중인 내용이 저장되지 않고 사라집니다."
-          onClose={() => setShowCloseDialog(false)}
+          onClose={() => setDesireStateWithShowCloseDialog(null)}
           onConfirm={() => {
-            setStatus(nextState);
+            setStatus(desireStateWithCloseDialog);
             setTipInput('');
             setSuggestInput('');
-            setShowCloseDialog(false);
+            setDesireStateWithShowCloseDialog(null);
           }}
           confirmText="나가기"
         />
