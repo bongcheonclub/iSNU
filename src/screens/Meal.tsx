@@ -13,8 +13,8 @@ import {
 } from 'native-base';
 import {chain, chunk, Dictionary, floor} from 'lodash';
 import {compareAsc, getDay, parse as parseTime} from 'date-fns';
-import FilledStar from '../icons/filled-star.svg';
-import UnfilledStar from '../icons/unfilled-star.svg';
+import FilledStarIcon from '../icons/filled-star.svg';
+import UnfilledStarIcon from '../icons/unfilled-star.svg';
 import {MealData} from '../InitializeData/ProcessMealData';
 import Text from '../components/Text';
 import {theme} from '../ui/theme';
@@ -1030,9 +1030,9 @@ export default function Meal({mealData}: Props) {
                       top={-1}
                       onPress={() => editFavoriteList(String(selectedMeal))}>
                       {favoriteList.includes(selectedMeal) ? (
-                        <FilledStar />
+                        <FilledStarIcon />
                       ) : (
-                        <UnfilledStar />
+                        <UnfilledStarIcon />
                       )}
                     </Button>
                   </HStack>
