@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, {useState, useEffect, useMemo} from 'react';
+import React, {useState} from 'react';
 import {StyleSheet, useWindowDimensions} from 'react-native';
 import {
   Box,

@@ -9,16 +9,12 @@ import {
 } from 'native-base';
 import Button from '../components/WrappedButton';
 import Text from '../components/Text';
-import {WebView} from 'react-native-webview';
 import React, {useState} from 'react';
-import {Keyboard, StyleSheet, Dimensions, Linking} from 'react-native';
+import {StyleSheet, Linking} from 'react-native';
 import {colors} from '../ui/colors';
-import {ParamListBase} from '@react-navigation/native';
 
 export default function Etcs() {
   const [focusedEtc, setFocusedEtc] = useState<string | null>(null);
-  const windowHeight = Dimensions.get('window').height;
-  const windowWidth = Dimensions.get('window').width;
 
   return (
     <Box height="100%">

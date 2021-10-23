@@ -1,18 +1,9 @@
 import {chain, map} from 'lodash';
 import {Dimensions} from 'react-native';
-import {
-  Box,
-  Center,
-  HStack,
-  ScrollView,
-  VStack,
-  Modal,
-  Flex,
-  Divider,
-} from 'native-base';
+import {Box, HStack, ScrollView, VStack, Modal, Divider} from 'native-base';
 import FilledStar from '../icons/filled-star.svg';
 import UnfilledStar from '../icons/unfilled-star.svg';
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import React, {useCallback, useMemo, useState} from 'react';
 import {colors} from '../ui/colors';
 import {Cafe} from '../screens/Cafe';
 import {Mart} from '../screens/Mart';
