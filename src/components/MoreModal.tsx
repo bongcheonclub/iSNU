@@ -13,12 +13,12 @@ import Text from './Text';
 import Button from './WrappedButton';
 import Pressable from './WrappedPressable';
 import {slack} from '../helpers/axios';
-import More from '../icons/kebab.svg';
-import MorePressed from '../icons/kebab-pressed.svg';
-import Outlink from '../icons/outlink.svg';
-import OutlinkPressed from '../icons/outlink-pressed.svg';
-import Back from '../icons/back.svg';
-import BackPressed from '../icons/back-pressed.svg';
+import KebabIcon from '../icons/kebab.svg';
+import PressedKebabIcon from '../icons/kebab-pressed.svg';
+import OutlinkIcon from '../icons/outlink.svg';
+import PressedOutlinkIcon from '../icons/outlink-pressed.svg';
+import BackIcon from '../icons/back.svg';
+import PressedBackIcon from '../icons/back-pressed.svg';
 import {theme} from '../ui/theme';
 import amplitude from '../helpers/amplitude';
 import {getDeviceId} from 'react-native-device-info';
@@ -60,26 +60,26 @@ async function submitToSlack(type: string, contents: string) {
 }
 
 export default function MoreModal(props: IBoxProps<null>) {
-  const [selectedMoreTap, setSelectedMoreTap] = useState<
+  const [status, setStatus] = useState<
     'tip' | 'suggest' | 'main' | 'submitTip' | 'submitSuggest' | null
   >(null);
   const [nextState, setNextState] = useState<'main' | null>(null);
-  const [checkSubmit, setCheckSubmit] = useState<boolean>(false);
-  const [checkClose, setCheckClose] = useState<boolean>(false);
+  const [showSubmitDialog, setShowSubmitDialog] = useState<boolean>(false);
+  const [showCloseDialog, setShowCloseDialog] = useState<boolean>(false);
   const [tipInput, setTipInput] = useState<string>('');
   const [suggestInput, setSuggestInput] = useState<string>('');
   const windowWidth = Dimensions.get('window').width;
 
   const handleSubmitSuggest = useCallback(async () => {
-    setCheckSubmit(false);
-    setSelectedMoreTap('submitSuggest');
+    setShowSubmitDialog(false);
+    setStatus('submitSuggest');
     setSuggestInput('');
     await submitToSlack('기능 추가 건의', suggestInput);
   }, [suggestInput]);
 
   const handleSubmitTip = useCallback(async () => {
-    setCheckSubmit(false);
-    setSelectedMoreTap('submitTip');
+    setShowSubmitDialog(false);
+    setStatus('submitTip');
     setTipInput('');
     await submitToSlack('잘못된 정보 제보', tipInput);
   }, [tipInput]);
@@ -95,33 +95,33 @@ export default function MoreModal(props: IBoxProps<null>) {
   function handleClose(preState: string | null) {
     switch (preState) {
       case 'main':
-        return setSelectedMoreTap(null);
+        return setStatus(null);
       case 'tip':
         if (!tipInput.trim()) {
-          return setSelectedMoreTap(null);
+          return setStatus(null);
         } else {
           setNextState(null);
-          return setCheckClose(true);
+          return setShowCloseDialog(true);
         }
       case 'suggest':
         if (!suggestInput.trim()) {
-          return setSelectedMoreTap(null);
+          return setStatus(null);
         } else {
           setNextState(null);
-          return setCheckClose(true);
+          return setShowCloseDialog(true);
         }
       case 'submitTip':
-        return setSelectedMoreTap(null);
+        return setStatus(null);
       case 'submitSuggest':
-        return setSelectedMoreTap(null);
+        return setStatus(null);
       case 'back':
         setNextState('main');
-        if (selectedMoreTap === 'tip' && !!tipInput.trim()) {
-          return setCheckClose(true);
-        } else if (selectedMoreTap === 'suggest' && !!suggestInput.trim()) {
-          return setCheckClose(true);
+        if (status === 'tip' && !!tipInput.trim()) {
+          return setShowCloseDialog(true);
+        } else if (status === 'suggest' && !!suggestInput.trim()) {
+          return setShowCloseDialog(true);
         } else {
-          return setSelectedMoreTap('main');
+          return setStatus('main');
         }
     }
   }
@@ -132,28 +132,23 @@ export default function MoreModal(props: IBoxProps<null>) {
         label="more"
         marginBottom="14px"
         paddingRight={windowWidth * 0.075}
-        onPress={() => setSelectedMoreTap('main')}
+        onPress={() => setStatus('main')}
         backgroundColor="transparent">
         {({isPressed}) => {
-          return isPressed ? <MorePressed /> : <More />;
+          return isPressed ? <PressedKebabIcon /> : <KebabIcon />;
         }}
       </Pressable>
 
-      <Modal
-        top="-10%"
-        isOpen={!!selectedMoreTap}
-        onClose={() => handleClose(selectedMoreTap)}>
+      <Modal top="-10%" isOpen={!!status} onClose={() => handleClose(status)}>
         <Modal.Content
           backgroundColor={theme.colors.white}
           padding={0}
           width="90%">
-          {selectedMoreTap === 'main' && (
+          {status === 'main' && (
             <>
               <Modal.CloseButton />
               <Box margin="auto" my="5" alignItems="flex-end">
-                <Pressable
-                  label="more-tip"
-                  onPress={() => setSelectedMoreTap('tip')}>
+                <Pressable label="more-tip" onPress={() => setStatus('tip')}>
                   {({isPressed}) => {
                     return (
                       <Center flexDirection="row" my="3" w="72%" marginX="14%">
@@ -165,14 +160,14 @@ export default function MoreModal(props: IBoxProps<null>) {
                           }>
                           잘못된 정보 제보하기
                         </Text>
-                        {isPressed ? <OutlinkPressed /> : <Outlink />}
+                        {isPressed ? <PressedOutlinkIcon /> : <OutlinkIcon />}
                       </Center>
                     );
                   }}
                 </Pressable>
                 <Pressable
                   label="more-suggest"
-                  onPress={() => setSelectedMoreTap('suggest')}>
+                  onPress={() => setStatus('suggest')}>
                   {({isPressed}) => {
                     return (
                       <Center flexDirection="row" my="3" w="72%" marginX="14%">
@@ -184,7 +179,7 @@ export default function MoreModal(props: IBoxProps<null>) {
                           }>
                           기능 추가 건의하기
                         </Text>
-                        {isPressed ? <OutlinkPressed /> : <Outlink />}
+                        {isPressed ? <PressedOutlinkIcon /> : <OutlinkIcon />}
                       </Center>
                     );
                   }}
@@ -207,7 +202,7 @@ export default function MoreModal(props: IBoxProps<null>) {
                           }>
                           개발자들 보러 가기
                         </Text>
-                        {isPressed ? <OutlinkPressed /> : <Outlink />}
+                        {isPressed ? <PressedOutlinkIcon /> : <OutlinkIcon />}
                       </Center>
                     );
                   }}
@@ -215,7 +210,7 @@ export default function MoreModal(props: IBoxProps<null>) {
               </Box>
             </>
           )}
-          {selectedMoreTap === 'tip' && (
+          {status === 'tip' && (
             <Pressable
               label="more-tip-keyboard-dismiss"
               onPress={Keyboard.dismiss}>
@@ -233,7 +228,7 @@ export default function MoreModal(props: IBoxProps<null>) {
                     onPress={() => handleClose('back')}
                     marginRight={2}>
                     {({isPressed}) => {
-                      return isPressed ? <BackPressed /> : <Back />;
+                      return isPressed ? <PressedBackIcon /> : <BackIcon />;
                     }}
                   </Pressable>
                   <Text variant="modalSubContent">잘못된 정보 제보하기</Text>
@@ -255,7 +250,7 @@ export default function MoreModal(props: IBoxProps<null>) {
                   paddingTop="10px">
                   <Button
                     label="more-tip-submit"
-                    onPress={() => setCheckSubmit(true)}
+                    onPress={() => setShowSubmitDialog(true)}
                     variant="submitButton"
                     isDisabled={!tipInput.trim()}>
                     <Text variant="submitButton">제출하기</Text>
@@ -264,7 +259,7 @@ export default function MoreModal(props: IBoxProps<null>) {
               </Box>
             </Pressable>
           )}
-          {selectedMoreTap === 'suggest' && (
+          {status === 'suggest' && (
             <Pressable
               label="more-suggest-keyboard-dismiss"
               onPress={Keyboard.dismiss}>
@@ -282,7 +277,7 @@ export default function MoreModal(props: IBoxProps<null>) {
                     onPress={() => handleClose('back')}
                     marginRight={2}>
                     {({isPressed}) => {
-                      return isPressed ? <BackPressed /> : <Back />;
+                      return isPressed ? <PressedBackIcon /> : <BackIcon />;
                     }}
                   </Pressable>
                   <Text variant="modalSubContent">기능 추가 건의하기</Text>
@@ -304,7 +299,7 @@ export default function MoreModal(props: IBoxProps<null>) {
                   paddingTop="10px">
                   <Button
                     label="more-suggest-submit"
-                    onPress={() => setCheckSubmit(true)}
+                    onPress={() => setShowSubmitDialog(true)}
                     variant="submitButton"
                     isDisabled={!suggestInput.trim()}>
                     <Text variant="submitButton">제출하기</Text>
@@ -313,7 +308,7 @@ export default function MoreModal(props: IBoxProps<null>) {
               </Box>
             </Pressable>
           )}
-          {selectedMoreTap === 'submitTip' && (
+          {status === 'submitTip' && (
             <Box>
               <VStack width="100%" marginTop="20px" alignItems="center">
                 <Text
@@ -335,7 +330,7 @@ export default function MoreModal(props: IBoxProps<null>) {
                   width="100%"
                   variant="closeButton"
                   borderTopWidth="1px"
-                  onPress={() => setSelectedMoreTap(null)}>
+                  onPress={() => setStatus(null)}>
                   <Text variant="closeButton" height="32px">
                     닫기
                   </Text>
@@ -343,7 +338,7 @@ export default function MoreModal(props: IBoxProps<null>) {
               </VStack>
             </Box>
           )}
-          {selectedMoreTap === 'submitSuggest' && (
+          {status === 'submitSuggest' && (
             <Box>
               <VStack width="100%" marginTop="20px" alignItems="center">
                 <Text
@@ -365,7 +360,7 @@ export default function MoreModal(props: IBoxProps<null>) {
                   width="100%"
                   variant="closeButton"
                   borderTopWidth="1px"
-                  onPress={() => setSelectedMoreTap(null)}>
+                  onPress={() => setStatus(null)}>
                   <Text variant="closeButton" height="32px">
                     닫기
                   </Text>
@@ -377,8 +372,8 @@ export default function MoreModal(props: IBoxProps<null>) {
       </Modal>
       <Modal
         top="-10%"
-        isOpen={checkSubmit}
-        onClose={() => setCheckSubmit(false)}>
+        isOpen={showSubmitDialog}
+        onClose={() => setShowSubmitDialog(false)}>
         <Modal.Content width="80%" padding="5px" bg={theme.colors.gray[100]}>
           <VStack width="100%" marginTop="20px" alignItems="center">
             <Text color={theme.colors.black} fontSize="18px" fontWeight="400">
@@ -398,7 +393,7 @@ export default function MoreModal(props: IBoxProps<null>) {
                 borderWidth="1px"
                 borderLeftWidth="0"
                 borderBottomWidth="0"
-                onPress={() => setCheckSubmit(false)}>
+                onPress={() => setShowSubmitDialog(false)}>
                 <Text variant="closeButton" fontWeight="300">
                   취소
                 </Text>
@@ -409,9 +404,7 @@ export default function MoreModal(props: IBoxProps<null>) {
                 variant="closeButton"
                 borderTopWidth="1px"
                 onPress={
-                  selectedMoreTap === 'suggest'
-                    ? handleSubmitSuggest
-                    : handleSubmitTip
+                  status === 'suggest' ? handleSubmitSuggest : handleSubmitTip
                 }>
                 <Text variant="closeButton" fontWeight="400">
                   보내기
@@ -423,8 +416,8 @@ export default function MoreModal(props: IBoxProps<null>) {
       </Modal>
       <Modal
         top="-10%"
-        isOpen={checkClose}
-        onClose={() => setCheckClose(false)}>
+        isOpen={showCloseDialog}
+        onClose={() => setShowCloseDialog(false)}>
         <Modal.Content width="80%" padding="5px" bg={theme.colors.gray[100]}>
           <VStack width="100%" marginTop="20px" alignItems="center">
             <Text color={theme.colors.black} fontSize="18px" fontWeight="400">
@@ -444,7 +437,7 @@ export default function MoreModal(props: IBoxProps<null>) {
                 borderWidth="1px"
                 borderLeftWidth="0"
                 borderBottomWidth="0"
-                onPress={() => setCheckClose(false)}>
+                onPress={() => setShowCloseDialog(false)}>
                 <Text variant="closeButton" fontWeight="400">
                   취소
                 </Text>
@@ -455,10 +448,10 @@ export default function MoreModal(props: IBoxProps<null>) {
                 variant="closeButton"
                 borderTopWidth="1px"
                 onPress={() => {
-                  setSelectedMoreTap(nextState);
+                  setStatus(nextState);
                   setTipInput('');
                   setSuggestInput('');
-                  setCheckClose(false);
+                  setShowCloseDialog(false);
                 }}>
                 <Text variant="closeButton" fontWeight="300">
                   나가기

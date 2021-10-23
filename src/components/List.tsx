@@ -11,9 +11,9 @@ import {
   Divider,
   Row,
 } from 'native-base';
-import FilledStar from '../icons/filled-star.svg';
-import UnfilledStar from '../icons/unfilled-star.svg';
 import React, {useEffect, useMemo, useState} from 'react';
+import FilledStarIcon from '../icons/filled-star.svg';
+import UnfilledStarIcon from '../icons/unfilled-star.svg';
 import {colors} from '../ui/colors';
 import {Shuttle} from '../screens/Shuttle';
 import {ItemClick} from 'native-base/lib/typescript/components/composites/Typeahead/useTypeahead/types';
@@ -190,9 +190,9 @@ const List = <T extends AvailableItem>(props: Props<T>) => {
                         });
                       }}>
                       {focusedItem.favoriteRate > 0 ? (
-                        <FilledStar />
+                        <FilledStarIcon />
                       ) : (
-                        <UnfilledStar />
+                        <UnfilledStarIcon />
                       )}
                     </Button>
                   </HStack>
