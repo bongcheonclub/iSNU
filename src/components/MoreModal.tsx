@@ -94,8 +94,8 @@ export default function MoreModal(props: IBoxProps<null>) {
     setSuggestInput(text);
   }, []);
 
-  function handleClose(preState: string | null) {
-    switch (preState) {
+  function handleClose() {
+    switch (status) {
       case 'main': {
         setStatus('exit');
         break;
@@ -151,10 +151,7 @@ export default function MoreModal(props: IBoxProps<null>) {
         }}
       </Pressable>
 
-      <Modal
-        top="-10%"
-        isOpen={status !== 'exit'}
-        onClose={() => handleClose(status)}>
+      <Modal top="-10%" isOpen={status !== 'exit'} onClose={handleClose}>
         <Modal.Content
           backgroundColor={theme.colors.white}
           padding={0}
@@ -230,7 +227,7 @@ export default function MoreModal(props: IBoxProps<null>) {
               label="more-tip-keyboard-dismiss"
               onPress={Keyboard.dismiss}>
               <Box>
-                <Modal.CloseButton onPress={() => handleClose('tip')} />
+                <Modal.CloseButton onPress={handleClose} />
                 <Modal.Header
                   borderColor={theme.colors.blue[100]}
                   paddingLeft="16px"
@@ -279,7 +276,7 @@ export default function MoreModal(props: IBoxProps<null>) {
               label="more-suggest-keyboard-dismiss"
               onPress={Keyboard.dismiss}>
               <Box>
-                <Modal.CloseButton onPress={() => handleClose('suggest')} />
+                <Modal.CloseButton onPress={handleClose} />
                 <Modal.Header
                   borderColor={theme.colors.blue[100]}
                   paddingLeft="16px"
