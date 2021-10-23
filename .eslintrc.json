@@ -1,0 +1,22 @@
+{
+  "root": true,
+  "plugins": ["prettier", "@typescript-eslint", "react-memo"],
+  "extends": [
+    "airbnb-typescript",
+    "prettier",
+    "plugin:import/recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "@react-native-community"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  },
+  "settings": {
+    "import/ignore": ["node_modules/react-native/index\\.js$"]
+  },
+  "rules": {
+    "react-memo/require-usememo": "warn"
+  }
+}
