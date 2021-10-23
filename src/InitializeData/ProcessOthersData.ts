@@ -118,6 +118,36 @@ export function processCafeData(res: AxiosResponse<any>) {
       holiday: '07:30~21:00',
       contact: '02-881-9204',
     },
+    {
+      name: '사범대 더랩',
+      location: '기초사범교육협력센터 1층(12동)',
+      items: '',
+      size: '',
+      weekday: '08:00~20:00',
+      saturday: '09:00~17:00',
+      holiday: '휴무',
+      contact: '02-878-8880',
+    },
+    {
+      name: '커피앤티',
+      location: '사회대 신양학술정보관 (16-1동)',
+      items: '',
+      size: '',
+      weekday: '08:00~18:00',
+      saturday: '휴무',
+      holiday: '휴무',
+      contact: '02-871-2558',
+    },
+    {
+      name: '더로스터 59',
+      location: 'LG경영관 2층(59동)',
+      items: '',
+      size: '',
+      weekday: '08:00~20:00',
+      saturday: '08:00~17:00',
+      holiday: '휴무',
+      contact: '02-873-8880',
+    },
   ];
   return cafes.concat(defaultCafe);
 }
