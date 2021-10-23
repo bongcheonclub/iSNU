@@ -1,4 +1,4 @@
-import {Amplitude, Identify} from '@amplitude/react-native';
+import {Amplitude} from '@amplitude/react-native';
 import {AMPLITUDE_API_KEY} from '../../secure';
 
 const amplitude = Amplitude.getInstance();

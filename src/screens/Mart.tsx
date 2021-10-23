@@ -1,14 +1,13 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {compareAsc, getDay, parse as parseTime} from 'date-fns';
 import Grid from '../components/Grid';
-import {ParamListBase} from '@react-navigation/native';
 
 type Props = {
-  marts: Mart[];
+  marts: MartData[];
   initialFavoriteNames: string[];
 };
 
-export type Mart = {
+export type MartData = {
   name: string;
   location: string;
   items: string;
@@ -18,7 +17,7 @@ export type Mart = {
   contact: string;
 };
 
-function checkOperating(mart: Mart): boolean {
+function checkOperating(mart: MartData): boolean {
   const {weekday, saturday, holiday} = mart;
 
   const now = new Date();

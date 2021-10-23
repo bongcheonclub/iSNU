@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import {Button, IPressableProps, ITextProps} from 'native-base';
 import type {ResponsiveValue} from 'native-base/lib/typescript/components/types';
 import type {ISizes} from 'native-base/lib/typescript/theme/base/sizes';
@@ -26,6 +26,7 @@ export interface IButtonProps extends IPressableProps {
   /**
    * The size of the button.
    */
+  // eslint-disable-next-line @typescript-eslint/ban-types
   size?: ResponsiveValue<ISizes | (string & {}) | number>;
   /**
    * The start icon element to use in the button.
@@ -62,14 +63,17 @@ export interface IButtonProps extends IPressableProps {
   /**
    * Props to be passed to the button when isLoading is true.
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   _loading?: any;
   /**
    * Props to be passed to the button when button is disabled.
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   _disabled?: any;
   /**
    * Props to be passed to the spinner when isLoading is true.
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   _spinner?: any;
   /**
    * The right icon element to use in the button.
@@ -98,6 +102,7 @@ export interface IButtonGroupProps extends IStackProps {
   /**
    * The start icon element to use in the button.
    */
+  // eslint-disable-next-line @typescript-eslint/ban-types
   size?: ResponsiveValue<ISizes | (string & {}) | number>;
   /**
    * The color of the radio when it's checked. This should be one of the color keys in the theme (e.g."green", "red").
@@ -115,7 +120,7 @@ export interface IButtonGroupProps extends IStackProps {
 }
 export declare type WrappedButtonType = (
   props: IButtonProps & {
-    ref?: MutableRefObject<any>;
+    ref?: MutableRefObject<unknown>;
   },
 ) => React.ReactElement;
 
@@ -126,15 +131,16 @@ const WrappedButton: WrappedButtonType = ({
   variant,
   ...props
 }) => {
+  const wrappedOnPress = useCallback(
+    e => {
+      amplitude.logEvent(label, tag);
+      onPress?.(e);
+    },
+    [label, onPress, tag],
+  );
   return (
-    <Button
-      variant={variant as any}
-      onPress={e => {
-        amplitude.logEvent(label, tag);
-        onPress?.(e);
-      }}
-      {...props}
-    />
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    <Button variant={variant as any} onPress={wrappedOnPress} {...props} />
   );
 };
 

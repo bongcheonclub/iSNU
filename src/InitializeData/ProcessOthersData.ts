@@ -1,7 +1,8 @@
-import {chain, mapValues, tap} from 'lodash';
+import {chain} from 'lodash';
 import {parse} from 'node-html-parser';
 import {AxiosResponse} from 'axios';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function processMartData(res: AxiosResponse<any>) {
   const html = res.data;
   const root = parse(html);
@@ -108,6 +109,7 @@ export function processMartData(res: AxiosResponse<any>) {
   return refinedMarts;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function processCafeData(res: AxiosResponse<any>) {
   const html = res.data;
   const root = parse(html);

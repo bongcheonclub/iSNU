@@ -1,10 +1,4 @@
-import {
-  compareAsc,
-  getDate,
-  getDay,
-  getMonth,
-  parse as parseTime,
-} from 'date-fns';
+import {getDate, getDay, getMonth} from 'date-fns';
 
 export function getTodaysDate() {
   const now = new Date();

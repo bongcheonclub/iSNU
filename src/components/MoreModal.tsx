@@ -1,12 +1,4 @@
-import {
-  Box,
-  Center,
-  Modal,
-  TextArea,
-  VStack,
-  HStack,
-  IBoxProps,
-} from 'native-base';
+import {Box, Center, Modal, TextArea} from 'native-base';
 import React, {useCallback, useState} from 'react';
 import {Keyboard, Dimensions, Linking} from 'react-native';
 import Text from './Text';
@@ -61,26 +53,49 @@ async function submitToSlack(type: string, contents: string) {
   }
 }
 
-export default function MoreModal(props: IBoxProps<null>) {
+const FOCUSED_BORDER = {
+  borderColor: 'blue.100',
+};
+
+export default function MoreModal() {
   const [status, setStatus] = useState<
     'tip' | 'suggest' | 'main' | 'submitTip' | 'submitSuggest' | 'exit'
   >('exit');
-  const [showSubmitDialog, setShowSubmitDialog] = useState<boolean>(false);
+  const [isSubmitDialogShown, setSubmitDialogShown] = useState<boolean>(false);
   const [desireStateWithCloseDialog, setDesireStateWithShowCloseDialog] =
     useState<'main' | 'exit' | null>(null);
   const [tipInput, setTipInput] = useState<string>('');
   const [suggestInput, setSuggestInput] = useState<string>('');
+
   const windowWidth = Dimensions.get('window').width;
 
+  const showSubmitDialog = useCallback(() => setSubmitDialogShown(true), []);
+  const hideSubmitDialog = useCallback(() => setSubmitDialogShown(false), []);
+
+  const hideCloseDialog = useCallback(
+    () => setDesireStateWithShowCloseDialog(null),
+    [],
+  );
+  const confirmCloseDialog = useCallback(() => {
+    if (!desireStateWithCloseDialog) {
+      return;
+    }
+
+    setStatus(desireStateWithCloseDialog);
+    setTipInput('');
+    setSuggestInput('');
+    setDesireStateWithShowCloseDialog(null);
+  }, [desireStateWithCloseDialog]);
+
   const handleSubmitSuggest = useCallback(async () => {
-    setShowSubmitDialog(false);
+    setSubmitDialogShown(false);
     setStatus('submitSuggest');
     setSuggestInput('');
     await submitToSlack('기능 추가 건의', suggestInput);
   }, [suggestInput]);
 
   const handleSubmitTip = useCallback(async () => {
-    setShowSubmitDialog(false);
+    setSubmitDialogShown(false);
     setStatus('submitTip');
     setTipInput('');
     await submitToSlack('잘못된 정보 제보', tipInput);
@@ -94,7 +109,7 @@ export default function MoreModal(props: IBoxProps<null>) {
     setSuggestInput(text);
   }, []);
 
-  function handleClose() {
+  const handleClose = useCallback(() => {
     switch (status) {
       case 'main': {
         setStatus('exit');
@@ -126,9 +141,22 @@ export default function MoreModal(props: IBoxProps<null>) {
         break;
       }
     }
-  }
+  }, [status, suggestInput, tipInput]);
 
-  const handleBack = () => {
+  const moveToMain = useCallback(() => setStatus('main'), []);
+  const moveToTip = useCallback(() => setStatus('tip'), []);
+  const moveToSuggest = useCallback(() => setStatus('suggest'), []);
+  const exit = useCallback(() => setStatus('exit'), []);
+
+  const linkToDevelopers = useCallback(
+    () =>
+      Linking.openURL(
+        'https://wobby.notion.site/wobby/We-Work-as-a-Hobby-9c6a1081ecbf4885902962c0998bfd2c',
+      ),
+    [],
+  );
+
+  const handleBack = useCallback(() => {
     if (status === 'tip' && !!tipInput.trim()) {
       setDesireStateWithShowCloseDialog('main');
     } else if (status === 'suggest' && !!suggestInput.trim()) {
@@ -136,7 +164,7 @@ export default function MoreModal(props: IBoxProps<null>) {
     } else {
       setStatus('main');
     }
-  };
+  }, [status, suggestInput, tipInput]);
 
   return (
     <Box bottom="8px">
@@ -144,7 +172,7 @@ export default function MoreModal(props: IBoxProps<null>) {
         label="more"
         marginBottom="14px"
         paddingRight={windowWidth * 0.075}
-        onPress={() => setStatus('main')}
+        onPress={moveToMain}
         backgroundColor="transparent">
         {({isPressed}) => {
           return isPressed ? <PressedKebabIcon /> : <KebabIcon />;
@@ -160,7 +188,7 @@ export default function MoreModal(props: IBoxProps<null>) {
             <>
               <Modal.CloseButton />
               <Box margin="auto" my="5" alignItems="flex-end">
-                <Pressable label="more-tip" onPress={() => setStatus('tip')}>
+                <Pressable label="more-tip" onPress={moveToTip}>
                   {({isPressed}) => {
                     return (
                       <Center flexDirection="row" my="3" w="72%" marginX="14%">
@@ -177,9 +205,7 @@ export default function MoreModal(props: IBoxProps<null>) {
                     );
                   }}
                 </Pressable>
-                <Pressable
-                  label="more-suggest"
-                  onPress={() => setStatus('suggest')}>
+                <Pressable label="more-suggest" onPress={moveToSuggest}>
                   {({isPressed}) => {
                     return (
                       <Center flexDirection="row" my="3" w="72%" marginX="14%">
@@ -198,11 +224,7 @@ export default function MoreModal(props: IBoxProps<null>) {
                 </Pressable>
                 <Pressable
                   label="more-developer-introduce"
-                  onPress={() =>
-                    Linking.openURL(
-                      'https://wobby.notion.site/wobby/We-Work-as-a-Hobby-9c6a1081ecbf4885902962c0998bfd2c',
-                    )
-                  }>
+                  onPress={linkToDevelopers}>
                   {({isPressed}) => {
                     return (
                       <Center flexDirection="row" my="3" w="72%" marginX="14%">
@@ -251,9 +273,7 @@ export default function MoreModal(props: IBoxProps<null>) {
                   rounded="0"
                   underlineColorAndroid="transparent"
                   onChangeText={handleTipInput}
-                  _focus={{
-                    borderColor: 'blue.100',
-                  }}
+                  _focus={FOCUSED_BORDER}
                   size="md"
                   placeholder="내용 입력하기"
                 />
@@ -262,7 +282,7 @@ export default function MoreModal(props: IBoxProps<null>) {
                   paddingTop="10px">
                   <Button
                     label="more-tip-submit"
-                    onPress={() => setShowSubmitDialog(true)}
+                    onPress={showSubmitDialog}
                     variant="submitButton"
                     isDisabled={!tipInput.trim()}>
                     <Text variant="submitButton">제출하기</Text>
@@ -300,9 +320,7 @@ export default function MoreModal(props: IBoxProps<null>) {
                   rounded="0"
                   underlineColorAndroid="transparent"
                   onChangeText={handleSuggestInput}
-                  _focus={{
-                    borderColor: 'blue.100',
-                  }}
+                  _focus={FOCUSED_BORDER}
                   size="md"
                   placeholder="내용 입력하기"
                 />
@@ -311,7 +329,7 @@ export default function MoreModal(props: IBoxProps<null>) {
                   paddingTop="10px">
                   <Button
                     label="more-suggest-submit"
-                    onPress={() => setShowSubmitDialog(true)}
+                    onPress={showSubmitDialog}
                     variant="submitButton"
                     isDisabled={!suggestInput.trim()}>
                     <Text variant="submitButton">제출하기</Text>
@@ -326,21 +344,21 @@ export default function MoreModal(props: IBoxProps<null>) {
         <SimpleDialog
           title="소중한 의견 감사합니다!"
           contents={'보내주신 부분은 빠른 시일내에 수정하겠습니다.'}
-          onClose={() => setStatus('exit')}
+          onClose={exit}
         />
       )}
       {status === 'submitSuggest' && (
         <SimpleDialog
           title="소중한 의견 감사합니다!"
           contents={'보내주신 의견은 논의 후 반영하겠습니다.'}
-          onClose={() => setStatus('exit')}
+          onClose={exit}
         />
       )}
-      {showSubmitDialog && (
+      {isSubmitDialogShown && (
         <ConfirmDialog
           title="제출하시겠습니까?"
           contents="작성하신 내용이 개발자들에게 전달됩니다."
-          onClose={() => setShowSubmitDialog(false)}
+          onClose={hideSubmitDialog}
           onConfirm={
             status === 'suggest' ? handleSubmitSuggest : handleSubmitTip
           }
@@ -351,13 +369,8 @@ export default function MoreModal(props: IBoxProps<null>) {
         <ConfirmDialog
           title="나가시겠습니까?"
           contents="작성중인 내용이 저장되지 않고 사라집니다."
-          onClose={() => setDesireStateWithShowCloseDialog(null)}
-          onConfirm={() => {
-            setStatus(desireStateWithCloseDialog);
-            setTipInput('');
-            setSuggestInput('');
-            setDesireStateWithShowCloseDialog(null);
-          }}
+          onClose={hideCloseDialog}
+          onConfirm={confirmCloseDialog}
           confirmText="나가기"
         />
       )}

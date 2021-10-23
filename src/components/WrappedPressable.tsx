@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import {IPressableProps, Pressable} from 'native-base';
 import amplitude from '../helpers/amplitude';
 
@@ -12,15 +12,14 @@ const WrappedPressable: WrappedPressableType = ({
   onPress,
   ...props
 }) => {
-  return (
-    <Pressable
-      onPress={e => {
-        amplitude.logEvent(label, tag);
-        onPress?.(e);
-      }}
-      {...props}
-    />
+  const wrappedOnPress = useCallback(
+    e => {
+      amplitude.logEvent(label, tag);
+      onPress?.(e);
+    },
+    [label, onPress, tag],
   );
+  return <Pressable onPress={wrappedOnPress} {...props} />;
 };
 
 export default WrappedPressable as WrappedPressableType;

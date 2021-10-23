@@ -1,7 +1,7 @@
 import {AxiosResponse} from 'axios';
 import {getTodaysDate} from '../helpers/getTodaysDate';
 
-import {chain, keyBy, map} from 'lodash';
+import {chain, keyBy} from 'lodash';
 import {Node, parse} from 'node-html-parser';
 import {setItem} from '../helpers/localStorage';
 
@@ -41,8 +41,11 @@ export type MealData = {
 
 // 식단 정보(menu) 및 식당 운영 정보(info) 가져오기, 즐겨찾기 리스트 가져오기
 export function processMealData(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   mealListRes: AxiosResponse<any>,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   mealDormListRes: AxiosResponse<any>,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   mealMenuListRes: AxiosResponse<any>,
   favoriteMeals: string[] | null,
 ) {
@@ -59,7 +62,7 @@ export function processMealData(
     chain(root.querySelector('tbody').childNodes)
       .map(trNode => {
         const trTexts = chain(trNode.childNodes)
-          .map((tdNode, idx) =>
+          .map(tdNode =>
             tdNode.innerText
               .split(/\s|\t|\n/)
               .filter(item => item.length > 0)
@@ -69,17 +72,11 @@ export function processMealData(
         return trTexts;
       })
       .filter(trTexts => trTexts.length > 0)
-      .forEach((trTexts, idx) => {
-        const [
-          blank_1,
-          nameAndContact,
-          blank_2,
-          breakfast,
-          blank_3,
-          lunch,
-          blank_4,
-          dinner,
-        ] = trTexts;
+      .forEach(trTexts => {
+        const nameAndContact = trTexts[1];
+        const breakfast = trTexts[3];
+        const lunch = trTexts[5];
+        const dinner = trTexts[7];
         const rawName = nameAndContact.split(/\(|\)/)[0];
         const contact = nameAndContact.split(/\(|\)/)[1];
         const name =
@@ -213,7 +210,7 @@ export function processMealData(
               ![...assertedTdNode.classList._set].includes('bg')
             );
           })
-          .map((tdNode, idx) => {
+          .map(tdNode => {
             if (tdNode.innerText.length === 0) {
               return ' ';
             }

@@ -1,5 +1,5 @@
-import {Box, Modal, VStack} from 'native-base';
-import React, {useCallback, useState} from 'react';
+import {Modal, VStack} from 'native-base';
+import React from 'react';
 import Text from './Text';
 import Button from './WrappedButton';
 import {theme} from '../ui/theme';
