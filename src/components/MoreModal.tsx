@@ -22,6 +22,8 @@ import PressedBackIcon from '../icons/back-pressed.svg';
 import {theme} from '../ui/theme';
 import amplitude from '../helpers/amplitude';
 import {getDeviceId} from 'react-native-device-info';
+import SimpleDialog from './SimpleDialog';
+import ConfirmDialog from './ConfirmDialog';
 
 async function submitToSlack(type: string, contents: string) {
   const [deviceType, deviceId, sessionId] = await Promise.all([
@@ -69,6 +71,8 @@ export default function MoreModal(props: IBoxProps<null>) {
   const [tipInput, setTipInput] = useState<string>('');
   const [suggestInput, setSuggestInput] = useState<string>('');
   const windowWidth = Dimensions.get('window').width;
+
+  console.log(showSubmitDialog);
 
   const handleSubmitSuggest = useCallback(async () => {
     setShowSubmitDialog(false);
@@ -308,159 +312,47 @@ export default function MoreModal(props: IBoxProps<null>) {
               </Box>
             </Pressable>
           )}
-          {status === 'submitTip' && (
-            <Box>
-              <VStack width="100%" marginTop="20px" alignItems="center">
-                <Text
-                  color={theme.colors.black}
-                  fontSize="20px"
-                  fontWeight="400">
-                  소중한 의견 감사합니다!
-                </Text>
-                <Text
-                  color={theme.colors.black}
-                  fontSize="15px"
-                  fontWeight="300"
-                  marginTop="10px">
-                  보내주신 부분은 빠른 시일내에 수정하겠습니다.
-                </Text>
-                <Button
-                  label="more-tip-submit-close"
-                  marginTop="20px"
-                  width="100%"
-                  variant="closeButton"
-                  borderTopWidth="1px"
-                  onPress={() => setStatus(null)}>
-                  <Text variant="closeButton" height="32px">
-                    닫기
-                  </Text>
-                </Button>
-              </VStack>
-            </Box>
-          )}
-          {status === 'submitSuggest' && (
-            <Box>
-              <VStack width="100%" marginTop="20px" alignItems="center">
-                <Text
-                  color={theme.colors.black}
-                  fontSize="20px"
-                  fontWeight="400">
-                  소중한 의견 감사합니다!
-                </Text>
-                <Text
-                  color={theme.colors.black}
-                  fontSize="15px"
-                  fontWeight="300"
-                  marginTop="10px">
-                  보내주신 의견은 논의 후 반영하겠습니다.
-                </Text>
-                <Button
-                  label="more-suggest-submit-close"
-                  marginTop="20px"
-                  width="100%"
-                  variant="closeButton"
-                  borderTopWidth="1px"
-                  onPress={() => setStatus(null)}>
-                  <Text variant="closeButton" height="32px">
-                    닫기
-                  </Text>
-                </Button>
-              </VStack>
-            </Box>
-          )}
         </Modal.Content>
       </Modal>
-      <Modal
-        top="-10%"
-        isOpen={showSubmitDialog}
-        onClose={() => setShowSubmitDialog(false)}>
-        <Modal.Content width="80%" padding="5px" bg={theme.colors.gray[100]}>
-          <VStack width="100%" marginTop="20px" alignItems="center">
-            <Text color={theme.colors.black} fontSize="18px" fontWeight="400">
-              제출하시겠습니까?
-            </Text>
-            <Text color={theme.colors.black} fontSize="15px" fontWeight="300">
-              작성하신 내용이 개발자들에게 전달됩니다.
-            </Text>
-            <HStack
-              marginTop="20px"
-              width="100%"
-              justifyContent="space-between">
-              <Button
-                label="more-submit-cancel"
-                width="50%"
-                variant="closeButton"
-                borderWidth="1px"
-                borderLeftWidth="0"
-                borderBottomWidth="0"
-                onPress={() => setShowSubmitDialog(false)}>
-                <Text variant="closeButton" fontWeight="300">
-                  취소
-                </Text>
-              </Button>
-              <Button
-                label="more-submit-accept"
-                width="50%"
-                variant="closeButton"
-                borderTopWidth="1px"
-                onPress={
-                  status === 'suggest' ? handleSubmitSuggest : handleSubmitTip
-                }>
-                <Text variant="closeButton" fontWeight="400">
-                  보내기
-                </Text>
-              </Button>
-            </HStack>
-          </VStack>
-        </Modal.Content>
-      </Modal>
-      <Modal
-        top="-10%"
-        isOpen={showCloseDialog}
-        onClose={() => setShowCloseDialog(false)}>
-        <Modal.Content width="80%" padding="5px" bg={theme.colors.gray[100]}>
-          <VStack width="100%" marginTop="20px" alignItems="center">
-            <Text color={theme.colors.black} fontSize="18px" fontWeight="400">
-              나가시겠습니까?
-            </Text>
-            <Text color={theme.colors.black} fontSize="15px" fontWeight="300">
-              작성중인 내용이 저장되지 않고 사라집니다.
-            </Text>
-            <HStack
-              marginTop="20px"
-              width="100%"
-              justifyContent="space-between">
-              <Button
-                label="more-exit-modal-cancel"
-                width="50%"
-                variant="closeButton"
-                borderWidth="1px"
-                borderLeftWidth="0"
-                borderBottomWidth="0"
-                onPress={() => setShowCloseDialog(false)}>
-                <Text variant="closeButton" fontWeight="400">
-                  취소
-                </Text>
-              </Button>
-              <Button
-                label="more-exit-modal-accept"
-                width="50%"
-                variant="closeButton"
-                borderTopWidth="1px"
-                onPress={() => {
-                  setStatus(nextState);
-                  setTipInput('');
-                  setSuggestInput('');
-                  setShowCloseDialog(false);
-                }}>
-                <Text variant="closeButton" fontWeight="300">
-                  나가기
-                </Text>
-              </Button>
-            </HStack>
-          </VStack>
-        </Modal.Content>
-      </Modal>
+      {status === 'submitTip' && (
+        <SimpleDialog
+          title="소중한 의견 감사합니다!"
+          contents={'보내주신 부분은 빠른 시일내에 수정하겠습니다.'}
+          onClose={() => setStatus(null)}
+        />
+      )}
+      {status === 'submitSuggest' && (
+        <SimpleDialog
+          title="소중한 의견 감사합니다!"
+          contents={'보내주신 의견은 논의 후 반영하겠습니다.'}
+          onClose={() => setStatus(null)}
+        />
+      )}
+      {showSubmitDialog && (
+        <ConfirmDialog
+          title="제출하시겠습니까?"
+          contents="작성하신 내용이 개발자들에게 전달됩니다."
+          onClose={() => setShowSubmitDialog(false)}
+          onConfirm={
+            status === 'suggest' ? handleSubmitSuggest : handleSubmitTip
+          }
+          confirmText="보내기"
+        />
+      )}
+      {showCloseDialog && (
+        <ConfirmDialog
+          title="나가시겠습니까?"
+          contents="작성중인 내용이 저장되지 않고 사라집니다."
+          onClose={() => setShowCloseDialog(false)}
+          onConfirm={() => {
+            setStatus(nextState);
+            setTipInput('');
+            setSuggestInput('');
+            setShowCloseDialog(false);
+          }}
+          confirmText="나가기"
+        />
+      )}
     </Box>
   );
 }
