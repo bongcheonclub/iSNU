@@ -13,7 +13,7 @@ import {
 } from 'native-base';
 import FilledStar from '../icons/filled-star.svg';
 import UnfilledStar from '../icons/unfilled-star.svg';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {colors} from '../ui/colors';
 import {Shuttle} from '../screens/Shuttle';
 import {ItemClick} from 'native-base/lib/typescript/components/composites/Typeahead/useTypeahead/types';
@@ -56,35 +56,43 @@ const List = <T extends AvailableItem>(props: Props<T>) => {
   const [favoriteNames, setFavoriteNames] =
     useState<string[]>(initialFavoriteNames);
 
-  const sortedItems: ItemWithFlag<T>[] = chain(items)
-    .map(item => {
-      const {isOperating, operating} = checkOperating(item);
-      const favoriteRate =
-        favoriteNames.findIndex(name => name === item.name) + 1;
-      return {
-        ...item,
-        isOperating,
-        favoriteRate,
-        interval: operating?.interval ?? null,
-      };
-    })
-    .sortBy(({isOperating, favoriteRate}) => {
-      if (favoriteRate > 0 && isOperating) {
-        return favoriteRate;
-      } else if (favoriteRate > 0) {
-        return 100 + favoriteRate;
-      } else if (isOperating) {
-        return 200;
-      } else {
-        return 300;
-      }
-    })
-    .value();
+  const sortedItems: ItemWithFlag<T>[] = useMemo(
+    () =>
+      chain(items)
+        .map(item => {
+          const {isOperating, operating} = checkOperating(item);
+          const favoriteRate =
+            favoriteNames.findIndex(name => name === item.name) + 1;
+          return {
+            ...item,
+            isOperating,
+            favoriteRate,
+            interval: operating?.interval ?? null,
+          };
+        })
+        .sortBy(({isOperating, favoriteRate}) => {
+          if (favoriteRate > 0 && isOperating) {
+            return favoriteRate;
+          } else if (favoriteRate > 0) {
+            return 100 + favoriteRate;
+          } else if (isOperating) {
+            return 200;
+          } else {
+            return 300;
+          }
+        })
+        .value(),
 
-  const focusedItem =
-    (focusedName !== null &&
-      sortedItems.find(({name}) => name === focusedName)) ||
-    null;
+    [checkOperating, favoriteNames, items],
+  );
+
+  const focusedItem = useMemo(
+    () =>
+      (focusedName !== null &&
+        sortedItems.find(({name}) => name === focusedName)) ||
+      null,
+    [focusedName, sortedItems],
+  );
 
   return (
     <Box height="100%" bgColor={colors.white}>

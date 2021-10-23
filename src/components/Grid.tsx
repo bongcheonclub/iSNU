@@ -12,7 +12,7 @@ import {
 } from 'native-base';
 import FilledStar from '../icons/filled-star.svg';
 import UnfilledStar from '../icons/unfilled-star.svg';
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {colors} from '../ui/colors';
 import {Cafe} from '../screens/Cafe';
 import {Mart} from '../screens/Mart';
@@ -45,38 +45,48 @@ const Grid = <T extends AvailableItem>(props: Props<T>) => {
     favoriteStorageKey,
     itemType,
   } = props;
-  const syncFavoritesToStorage = (favorites: string[]) => {
-    AsyncStorage.setItem(favoriteStorageKey, JSON.stringify(favorites));
-  };
-
   const [focusedName, setFocusedItem] = useState<string | null>(null);
   const [favoriteNames, setFavoriteNames] =
     useState<string[]>(initialFavoriteNames);
 
-  const sortedItems: ItemWithFlag<T>[] = chain(items)
-    .map(item => {
-      const isOperating = checkOperating(item);
-      const favoriteRate =
-        favoriteNames.findIndex(name => name === item.name) + 1;
-      return {...item, isOperating, favoriteRate};
-    })
-    .sortBy(({isOperating, favoriteRate}) => {
-      if (favoriteRate > 0 && isOperating) {
-        return favoriteRate;
-      } else if (favoriteRate > 0) {
-        return 100 + favoriteRate;
-      } else if (isOperating) {
-        return 200;
-      } else {
-        return 300;
-      }
-    })
-    .value();
+  const syncFavoritesToStorage = useCallback(
+    (favorites: string[]) => {
+      AsyncStorage.setItem(favoriteStorageKey, JSON.stringify(favorites));
+    },
+    [favoriteStorageKey],
+  );
 
-  const focusedItem =
-    (focusedName !== null &&
-      sortedItems.find(({name}) => name === focusedName)) ||
-    null;
+  const sortedItems: ItemWithFlag<T>[] = useMemo(
+    () =>
+      chain(items)
+        .map(item => {
+          const isOperating = checkOperating(item);
+          const favoriteRate =
+            favoriteNames.findIndex(name => name === item.name) + 1;
+          return {...item, isOperating, favoriteRate};
+        })
+        .sortBy(({isOperating, favoriteRate}) => {
+          if (favoriteRate > 0 && isOperating) {
+            return favoriteRate;
+          } else if (favoriteRate > 0) {
+            return 100 + favoriteRate;
+          } else if (isOperating) {
+            return 200;
+          } else {
+            return 300;
+          }
+        })
+        .value(),
+    [checkOperating, favoriteNames, items],
+  );
+
+  const focusedItem = useMemo(
+    () =>
+      (focusedName !== null &&
+        sortedItems.find(({name}) => name === focusedName)) ||
+      null,
+    [focusedName, sortedItems],
+  );
 
   function refineName(name: string): string {
     switch (name.trim()) {
