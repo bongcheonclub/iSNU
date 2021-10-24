@@ -8,10 +8,10 @@
 
 ## Stack:
 
-- Development: JavaScript(ES6), ReactNative, NativeBase
-- Collaboration: Git, Github, Slack, Notion
-- Design: Figma
-- User Analysis: Amplitude
+- **Development**: JavaScript(ES6), TypeScript, ReactNative, NativeBase
+- **Collaboration**: Git, Github, Slack, Notion
+- **Design**: Figma
+- **User Analysis**: Amplitude
 
 ## Channel:
 
