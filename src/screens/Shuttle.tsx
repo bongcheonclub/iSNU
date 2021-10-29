@@ -155,20 +155,20 @@ const SHUTTLES: ShuttleType[] = [
   },
 ];
 
-function checkOperating(suttle: ShuttleType): {
+function checkOperating(shuttle: ShuttleType): {
   isOperating: boolean;
   operating: ShuttleType['operatings'][number] | null;
 } {
-  const {operatings} = suttle;
+  const {operatings} = shuttle;
 
   const now = new Date();
 
   const day = getDay(now);
 
-  if (!suttle.name.includes('심야') && (day === 0 || day === 6)) {
+  if (!shuttle.name.includes('심야') && (day === 0 || day === 6)) {
     return {isOperating: false, operating: null};
   }
-  if (suttle.name.includes('심야') && (day === 0 || day === 1)) {
+  if (shuttle.name.includes('심야') && (day === 0 || day === 1)) {
     return {isOperating: false, operating: null};
   }
 
