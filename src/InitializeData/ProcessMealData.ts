@@ -27,7 +27,8 @@ export type Cafeteria = {
 };
 
 export type MealData = {
-  menu: TodaysMenu;
+  todayMenu: TodaysMenu;
+  tomorrowMenu: TodaysMenu;
   cafeteria: {
     [key: string]: Cafeteria;
   };
@@ -46,7 +47,15 @@ export function processMealData(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   mealDormListRes: AxiosResponse<any>,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  mealMenuListRes: AxiosResponse<any>,
+  dayBefore2MenuListRes: AxiosResponse<any>,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  dayBefore1MenuListRes: AxiosResponse<any>,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  day0MenuListRes: AxiosResponse<any>,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  dayAfter1MenuListRes: AxiosResponse<any>,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  dayAfter2MenuListRes: AxiosResponse<any>,
   favoriteMeals: string[] | null,
 ) {
   if (favoriteMeals === null) {
@@ -54,9 +63,10 @@ export function processMealData(
   }
   const favoriteList = favoriteMeals ?? ['학생회관'];
   const {month, date, koreanDay, day} = getTodaysDate();
-  function fetchMenu() {
+  function fetchMenu(when: 'today' | 'tomorrow') {
     // 식단 정보 가져오는 함수
-    const html = mealMenuListRes.data;
+    const html =
+      when === 'today' ? todayMenuListRes.data : tomorrowMenuListRes.data;
     const root = parse(html);
     const data: TodaysMenu = {};
     chain(root.querySelector('tbody').childNodes)
@@ -187,7 +197,8 @@ export function processMealData(
       nonFavoriteList,
     };
   }
-  const menu = fetchMenu();
+  const todayMenu = fetchMenu('today');
+  const tomorrowMenu = fetchMenu('tomorrow');
   const {cafeteria, mealList, nonFavoriteList} = fetchInfo();
 
   function processDormData() {
@@ -220,14 +231,37 @@ export function processMealData(
       })
       .filter(item => item[1] !== undefined)
       .value();
-    const breakfast = data[0][day] + data[1][day];
-    const lunch = data[2][day] + data[3][day] + data[4][day];
-    const dinner = data[5][day] + data[6][day] + data[7][day];
+    const todayBreakfast = data[0][day] + data[1][day];
+    const todayLunch = data[2][day] + data[3][day] + data[4][day];
+    const todayDinner = data[5][day] + data[6][day] + data[7][day];
+    const tomorrowBreakfast =
+      day !== 6 ? data[0][day + 1] + data[1][day + 1] : '';
+    const tomorrowLunch =
+      day !== 6 ? data[2][day + 1] + data[3][day + 1] + data[4][day + 1] : '';
+    const tomorrowDinner =
+      day !== 6 ? data[5][day + 1] + data[6][day + 1] + data[7][day + 1] : '';
     const contact = 'unknown';
-    const todaysMenu: TodaysMenu = {
-      대학원기숙사: {breakfast, lunch, dinner, contact},
+    const todayOurhomeMenu: TodaysMenu = {
+      대학원기숙사: {
+        breakfast: todayBreakfast,
+        lunch: todayLunch,
+        dinner: todayDinner,
+        contact,
+      },
     };
-    const menuIncludeOurhome = {...menu, ...todaysMenu};
+    const tomorrowOurhomeMenu: TodaysMenu = {
+      대학원기숙사: {
+        breakfast: tomorrowBreakfast,
+        lunch: tomorrowLunch,
+        dinner: tomorrowDinner,
+        contact,
+      },
+    };
+    const todayMenuIncludeOurhome = {...todayMenu, ...todayOurhomeMenu};
+    const tomorrowMenuIncludeOurhome = {
+      ...tomorrowMenu,
+      ...tomorrowOurhomeMenu,
+    };
     const ourhomeCafeteria = {
       name: '대학원기숙사',
       contact: 'unknown',
@@ -244,13 +278,22 @@ export function processMealData(
       대학원기숙사: ourhomeCafeteria,
     };
 
-    return {cafeteriaIncludeOurhome, menuIncludeOurhome};
+    return {
+      cafeteriaIncludeOurhome,
+      todayMenuIncludeOurhome,
+      tomorrowMenuIncludeOurhome,
+    };
   }
 
-  const {cafeteriaIncludeOurhome, menuIncludeOurhome} = processDormData();
+  const {
+    cafeteriaIncludeOurhome,
+    todayMenuIncludeOurhome,
+    tomorrowMenuIncludeOurhome,
+  } = processDormData();
 
   return {
-    menu: menuIncludeOurhome,
+    todayMenu: todayMenuIncludeOurhome,
+    tomorrowMenu: tomorrowMenuIncludeOurhome,
     cafeteria: cafeteriaIncludeOurhome,
     mealList,
     favoriteList,

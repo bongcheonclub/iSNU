@@ -113,7 +113,8 @@ function checkOperating(
 
 export default function Meal({mealData}: Props) {
   const {
-    menu,
+    todayMenu,
+    tomorrowMenu,
     cafeteria,
     mealList,
     favoriteList: initialFavoriteList,
@@ -123,6 +124,7 @@ export default function Meal({mealData}: Props) {
     koreanDay,
   } = mealData;
 
+  const [selectedDate, setSelectedDate] = useState<string | null>('today');
   const [selectedMeal, setSelectedMeal] = useState<string | null>(null); // store selected meal (modal) here
 
   const [favoriteList, setFavoriteList] =
@@ -130,6 +132,9 @@ export default function Meal({mealData}: Props) {
   const [nonFavoriteList, setNonFavoriteList] = useState<string[]>(
     initialNonFavoriteList,
   );
+
+  // const menu = selectedDate === 'today' ? todayMenu : tomorrowMenu;
+  const menu = todayMenu;
 
   // 즐겨찾기 설정 해제 함수
   async function editFavoriteList(name: string) {
@@ -184,7 +189,8 @@ export default function Meal({mealData}: Props) {
       return null;
     }
     // 메뉴 표기
-    const string = menu[cafeteriaName][whichMenu];
+    const selectedMenu = selectedDate === 'today' ? menu : tomorrowMenu;
+    const string = selectedMenu[cafeteriaName][whichMenu];
     if (cafeteriaName.includes('자하연')) {
       return string
         .replace(/.파업/, '※')
@@ -1028,7 +1034,10 @@ export default function Meal({mealData}: Props) {
         {selectedMeal !== null ? (
           <Modal // modal 구현
             isOpen={selectedMeal !== null}
-            onClose={() => setSelectedMeal(null)}>
+            onClose={() => {
+              setSelectedMeal(null);
+              setSelectedDate('today');
+            }}>
             <Modal.Content
               paddingTop="8px"
               px="12px"
@@ -1061,9 +1070,23 @@ export default function Meal({mealData}: Props) {
                   <Text variant="modalSubInfo" left={-15} top={-20}>
                     {cafeteria[selectedMeal].location}
                   </Text>
-                  <Text variant="modalToday" textAlign="center" marginTop={3}>
-                    {month}월 {date}일 ({koreanDay})
-                  </Text>
+                  <HStack w="100%" alignItems="center" justifyContent="center">
+                    <Text variant="modalToday" textAlign="center" marginTop={3}>
+                      {month}월 {date}일 ({koreanDay})
+                    </Text>
+                    <Button
+                      label={'nextDate'}
+                      backgroundColor="transparent"
+                      onPress={() => {
+                        if (selectedDate === 'today') {
+                          return setSelectedDate('tomorrow');
+                        } else if (selectedDate === 'tomorrow') {
+                          return setSelectedDate('today');
+                        }
+                      }}>
+                      <Text>{'>>'}</Text>
+                    </Button>
+                  </HStack>
                 </Box>
               ) : (
                 <></>
