@@ -32,13 +32,20 @@ export async function initializeData() {
     return fetchedData;
   })();
 
-  const {cafeRes, martRes, mealListRes, mealDormListRes, mealMenuListRes} =
-    responses;
+  const {
+    cafeRes,
+    martRes,
+    mealListRes,
+    mealDormListRes,
+    todayMenuListRes,
+    tomorrowMenuListRes,
+  } = responses;
 
   const mealData = processMealData(
     mealListRes,
     mealDormListRes,
-    mealMenuListRes,
+    todayMenuListRes,
+    tomorrowMenuListRes,
     favoriteMeals,
   );
 
