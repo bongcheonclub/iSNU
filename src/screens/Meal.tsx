@@ -37,7 +37,7 @@ function checkOperating(
       }>,
     ] {
   // const now = new Date();
-  const now = new Date('Wed Oct 13 2021 12:24:15 GMT+0900');
+  const now = new Date('Tue Oct 26 2021 12:24:15 GMT+0900');
   const spliter = cafeteriaName.includes('감골') ? '~' : '-';
   const today = (() => {
     switch (
@@ -231,7 +231,7 @@ export default function Meal({mealData}: Props) {
             .trim()
             .split(/ *&amp; */)
             .join('&\n')
-            .split(' : ');
+            .split(/ *: */);
         })
         .map(menuAndPrice => {
           if (menuAndPrice.length !== 2) {
@@ -586,7 +586,7 @@ export default function Meal({mealData}: Props) {
               .split(/ *&amp; */)
               .join('&')
               .trim()
-              .split(' : ');
+              .split(/ *: */);
           })
           .map(menuAndPrice => {
             if (menuAndPrice.length !== 2) {
