@@ -169,11 +169,7 @@ export function processMealData(
     const refinedMealList = data
       .filter(item => {
         // 학관 지하 등 필터링
-        return (
-          !item.name.includes(' ') &&
-          !item.name.includes('라운지오') &&
-          !item.name.includes('두레미담')
-        );
+        return !item.name.includes(' ') && !item.name.includes('라운지오');
       })
       .map(item => {
         return item.name;

@@ -36,8 +36,8 @@ function checkOperating(
         time: string;
       }>,
     ] {
-  const now = new Date();
-  // const now = new Date('Wed Oct 13 2021 12:24:15 GMT+0900');
+  // const now = new Date();
+  const now = new Date('Wed Oct 13 2021 12:24:15 GMT+0900');
   const spliter = cafeteriaName.includes('감골') ? '~' : '-';
   const today = (() => {
     switch (
@@ -404,6 +404,23 @@ export default function Meal({mealData}: Props) {
       );
     }
 
+    if (cafeteriaName.includes('두레미담')) {
+      return (
+        <Text textAlign="center" width="100%" variant="modalSubContent">
+          {string
+            .trim()
+            .split('※')[0]
+            .replace('&amp;', '&')
+            .replace('&lt;', '<')
+            .replace('&gt;', '>')
+            .split('00원')
+            .join('00원\n')
+            .split(' ')
+            .join('\n')}
+        </Text>
+      );
+    }
+
     if (cafeteriaName.includes('공간')) {
       return (
         <Text textAlign="center" width="100%" variant="modalSubContent">
@@ -736,6 +753,14 @@ export default function Meal({mealData}: Props) {
           });
       }
 
+      if (cafeteriaName.includes('두레미담')) {
+        return (
+          <Text textAlign="center" width="100%" variant="favoriteMenuName">
+            메뉴 정보 보기
+          </Text>
+        );
+      }
+
       if (cafeteriaName.includes('소담마루')) {
         return (
           <Text textAlign="center" width="100%" variant="favoritePlaceTime">
@@ -880,6 +905,7 @@ export default function Meal({mealData}: Props) {
     }
   }
 
+  console.log(selectedMeal);
   return (
     <VStack>
       <ScrollView bgColor={theme.colors.white} height="100%">
