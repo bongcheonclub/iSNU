@@ -38,6 +38,7 @@ export type MealData = {
   mealList: string[];
   favoriteList: string[];
   nonFavoriteList: string[];
+  year: number;
   month: number;
   date: number;
   koreanDay: string;
@@ -65,7 +66,7 @@ export function processMealData(
     setItem('favoriteMeals', ['학생회관']);
   }
   const favoriteList = favoriteMeals ?? ['학생회관'];
-  const {month, date, koreanDay, day} = getTodaysDate();
+  const {year, month, date, koreanDay, day} = getTodaysDate();
   function fetchMenu(menuListRes: AxiosResponse<any>) {
     // 식단 정보 가져오는 함수
     const html = menuListRes.data;
@@ -298,6 +299,7 @@ export function processMealData(
     mealList,
     favoriteList,
     nonFavoriteList,
+    year,
     month,
     date,
     koreanDay,

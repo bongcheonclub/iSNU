@@ -1,4 +1,4 @@
-import {getDate, getDay, getMonth} from 'date-fns';
+import {getDate, getDay, getMonth, getYear} from 'date-fns';
 
 export function getTodaysDate() {
   const now = new Date();
@@ -6,6 +6,7 @@ export function getTodaysDate() {
   const month = getMonth(now) + 1;
   const date = getDate(now);
   const day = getDay(now);
+  const year = getYear(now);
   const koreanDay = (() => {
     if (day === 0) {
       return '일';
@@ -30,5 +31,5 @@ export function getTodaysDate() {
     }
     throw Error('이럴리없다.');
   })();
-  return {month, date, koreanDay, day};
+  return {year, month, date, koreanDay, day};
 }

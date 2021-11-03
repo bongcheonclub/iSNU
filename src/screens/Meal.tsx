@@ -11,7 +11,14 @@ import {
   AspectRatio,
 } from 'native-base';
 import {chain, chunk, Dictionary, floor} from 'lodash';
-import {compareAsc, getDay, parse as parseTime} from 'date-fns';
+import {
+  compareAsc,
+  getDate,
+  getDay,
+  getMonth,
+  getYear,
+  parse as parseTime,
+} from 'date-fns';
 import FilledStarIcon from '../icons/filled-star.svg';
 import UnfilledStarIcon from '../icons/unfilled-star.svg';
 import {MealData} from '../InitializeData/ProcessMealData';
@@ -124,12 +131,14 @@ export default function Meal({mealData}: Props) {
     mealList,
     favoriteList: initialFavoriteList,
     nonFavoriteList: initialNonFavoriteList,
+    year,
     month,
     date,
     koreanDay,
   } = mealData;
 
   const [selectedDateOffset, setSelectedDateOffset] = useState<number>(0);
+
   const [selectedMeal, setSelectedMeal] = useState<string | null>(null); // store selected meal (modal) here
 
   const [favoriteList, setFavoriteList] =
@@ -137,6 +146,45 @@ export default function Meal({mealData}: Props) {
   const [nonFavoriteList, setNonFavoriteList] = useState<string[]>(
     initialNonFavoriteList,
   );
+
+  function getDisplayDate(
+    thisYear: number,
+    thisMonth: number,
+    thisDate: number,
+    offset: number,
+  ): string {
+    const _displayDay = new Date(thisYear, thisMonth - 1, thisDate + offset);
+    const _month = getMonth(_displayDay) + 1;
+    const _date = getDate(_displayDay);
+    const _day = getDay(_displayDay);
+    const _koreanDay = (() => {
+      if (_day === 0) {
+        return '일';
+      }
+      if (_day === 1) {
+        return '월';
+      }
+      if (_day === 2) {
+        return '화';
+      }
+      if (_day === 3) {
+        return '수';
+      }
+      if (_day === 4) {
+        return '목';
+      }
+      if (_day === 5) {
+        return '금';
+      }
+      if (_day === 6) {
+        return '토';
+      }
+      throw Error('이럴리없다.');
+    })();
+    const _displayDate = `${_month}월 ${_date}일 (${_koreanDay})`;
+    return _displayDate;
+  }
+  const displayDate = getDisplayDate(year, month, date, selectedDateOffset);
 
   // const menu = selectedDate === 'today' ? day0Menu : day1Menu;
   const menus: object = {
@@ -1086,9 +1134,12 @@ export default function Meal({mealData}: Props) {
                   </Text>
                   <HStack w="100%" alignItems="center" justifyContent="center">
                     <Button
-                      label={'nextDate'}
+                      label={'prevDate'}
                       backgroundColor="transparent"
                       onPress={() => {
+                        if (selectedMeal.includes('대학원')) {
+                          return;
+                        }
                         if (selectedDateOffset !== -2) {
                           setSelectedDateOffset(selectedDateOffset - 1);
                         }
@@ -1096,12 +1147,15 @@ export default function Meal({mealData}: Props) {
                       <Text>{'<<'}</Text>
                     </Button>
                     <Text variant="modalToday" textAlign="center" marginTop={3}>
-                      {month}월 {date}일 ({koreanDay})
+                      {displayDate}
                     </Text>
                     <Button
                       label={'nextDate'}
                       backgroundColor="transparent"
                       onPress={() => {
+                        if (selectedMeal.includes('대학원')) {
+                          return;
+                        }
                         if (selectedDateOffset !== 2) {
                           setSelectedDateOffset(selectedDateOffset + 1);
                         }
