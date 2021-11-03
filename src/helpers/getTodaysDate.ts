@@ -2,6 +2,7 @@ import {getDate, getDay, getMonth} from 'date-fns';
 
 export function getTodaysDate() {
   const now = new Date();
+  // const now = new Date('Tue Oct 26 2021 12:24:15 GMT+0900');
   const month = getMonth(now) + 1;
   const date = getDate(now);
   const day = getDay(now);

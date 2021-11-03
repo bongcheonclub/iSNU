@@ -37,15 +37,21 @@ export async function initializeData() {
     martRes,
     mealListRes,
     mealDormListRes,
-    todayMenuListRes,
-    tomorrowMenuListRes,
+    day0MenuListRes,
+    day1MenuListRes,
+    day2MenuListRes,
+    day_1MenuListRes,
+    day_2MenuListRes,
   } = responses;
 
   const mealData = processMealData(
     mealListRes,
     mealDormListRes,
-    todayMenuListRes,
-    tomorrowMenuListRes,
+    day0MenuListRes,
+    day1MenuListRes,
+    day2MenuListRes,
+    day_1MenuListRes,
+    day_2MenuListRes,
     favoriteMeals,
   );
 

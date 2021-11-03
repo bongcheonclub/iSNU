@@ -5,7 +5,7 @@ import {chain, keyBy} from 'lodash';
 import {Node, parse} from 'node-html-parser';
 import {setItem} from '../helpers/localStorage';
 
-export type TodaysMenu = {
+export type Menu = {
   [name: string]: {
     breakfast: string;
     lunch: string;
@@ -27,8 +27,11 @@ export type Cafeteria = {
 };
 
 export type MealData = {
-  todayMenu: TodaysMenu;
-  tomorrowMenu: TodaysMenu;
+  day0Menu: Menu;
+  day1Menu: Menu;
+  day2Menu: Menu;
+  day_1Menu: Menu;
+  day_2Menu: Menu;
   cafeteria: {
     [key: string]: Cafeteria;
   };
@@ -63,12 +66,11 @@ export function processMealData(
   }
   const favoriteList = favoriteMeals ?? ['학생회관'];
   const {month, date, koreanDay, day} = getTodaysDate();
-  function fetchMenu(when: 'today' | 'tomorrow') {
+  function fetchMenu(menuListRes: AxiosResponse<any>) {
     // 식단 정보 가져오는 함수
-    const html =
-      when === 'today' ? todayMenuListRes.data : tomorrowMenuListRes.data;
+    const html = menuListRes.data;
     const root = parse(html);
-    const data: TodaysMenu = {};
+    const data: Menu = {};
     chain(root.querySelector('tbody').childNodes)
       .map(trNode => {
         const trTexts = chain(trNode.childNodes)
@@ -197,8 +199,11 @@ export function processMealData(
       nonFavoriteList,
     };
   }
-  const todayMenu = fetchMenu('today');
-  const tomorrowMenu = fetchMenu('tomorrow');
+  const day0Menu = fetchMenu(day0MenuListRes);
+  const day1Menu = fetchMenu(day1MenuListRes);
+  const day2Menu = fetchMenu(day2MenuListRes);
+  const day_1Menu = fetchMenu(day_1MenuListRes);
+  const day_2Menu = fetchMenu(day_2MenuListRes);
   const {cafeteria, mealList, nonFavoriteList} = fetchInfo();
 
   function processDormData() {
@@ -241,7 +246,7 @@ export function processMealData(
     const tomorrowDinner =
       day !== 6 ? data[5][day + 1] + data[6][day + 1] + data[7][day + 1] : '';
     const contact = 'unknown';
-    const todayOurhomeMenu: TodaysMenu = {
+    const day0OurhomeMenu: Menu = {
       대학원기숙사: {
         breakfast: todayBreakfast,
         lunch: todayLunch,
@@ -249,7 +254,7 @@ export function processMealData(
         contact,
       },
     };
-    const tomorrowOurhomeMenu: TodaysMenu = {
+    const day1OurhomeMenu: Menu = {
       대학원기숙사: {
         breakfast: tomorrowBreakfast,
         lunch: tomorrowLunch,
@@ -257,11 +262,8 @@ export function processMealData(
         contact,
       },
     };
-    const todayMenuIncludeOurhome = {...todayMenu, ...todayOurhomeMenu};
-    const tomorrowMenuIncludeOurhome = {
-      ...tomorrowMenu,
-      ...tomorrowOurhomeMenu,
-    };
+    const day0MenuIncludeOurhome = {...day0Menu, ...day0OurhomeMenu};
+
     const ourhomeCafeteria = {
       name: '대학원기숙사',
       contact: 'unknown',
@@ -280,20 +282,18 @@ export function processMealData(
 
     return {
       cafeteriaIncludeOurhome,
-      todayMenuIncludeOurhome,
-      tomorrowMenuIncludeOurhome,
+      day0MenuIncludeOurhome,
     };
   }
 
-  const {
-    cafeteriaIncludeOurhome,
-    todayMenuIncludeOurhome,
-    tomorrowMenuIncludeOurhome,
-  } = processDormData();
+  const {cafeteriaIncludeOurhome, day0MenuIncludeOurhome} = processDormData();
 
   return {
-    todayMenu: todayMenuIncludeOurhome,
-    tomorrowMenu: tomorrowMenuIncludeOurhome,
+    day0Menu: day0MenuIncludeOurhome,
+    day1Menu,
+    day2Menu,
+    day_1Menu,
+    day_2Menu,
     cafeteria: cafeteriaIncludeOurhome,
     mealList,
     favoriteList,
