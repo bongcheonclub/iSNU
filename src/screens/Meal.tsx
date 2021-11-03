@@ -23,6 +23,8 @@ type Props = {
   mealData: MealData;
 };
 
+// type Offset = 0 | 1 | 2 | -1 | -2;
+
 function checkOperating(
   cafeteriaName: string,
   cafeteria: MealData['cafeteria'],
@@ -36,8 +38,8 @@ function checkOperating(
         time: string;
       }>,
     ] {
-  // const now = new Date();
-  const now = new Date('Tue Oct 26 2021 12:24:15 GMT+0900');
+  const now = new Date();
+  // const now = new Date('Tue Oct 26 2021 12:24:15 GMT+0900');
   const spliter = cafeteriaName.includes('감골') ? '~' : '-';
   const today = (() => {
     switch (
@@ -113,8 +115,11 @@ function checkOperating(
 
 export default function Meal({mealData}: Props) {
   const {
-    todayMenu,
-    tomorrowMenu,
+    day0Menu,
+    day1Menu,
+    day2Menu,
+    day_1Menu,
+    day_2Menu,
     cafeteria,
     mealList,
     favoriteList: initialFavoriteList,
@@ -124,7 +129,7 @@ export default function Meal({mealData}: Props) {
     koreanDay,
   } = mealData;
 
-  const [selectedDate, setSelectedDate] = useState<string | null>('today');
+  const [selectedDateOffset, setSelectedDateOffset] = useState<number>(0);
   const [selectedMeal, setSelectedMeal] = useState<string | null>(null); // store selected meal (modal) here
 
   const [favoriteList, setFavoriteList] =
@@ -133,8 +138,15 @@ export default function Meal({mealData}: Props) {
     initialNonFavoriteList,
   );
 
-  // const menu = selectedDate === 'today' ? todayMenu : tomorrowMenu;
-  const menu = todayMenu;
+  // const menu = selectedDate === 'today' ? day0Menu : day1Menu;
+  const menus: object = {
+    0: day0Menu,
+    1: day1Menu,
+    2: day2Menu,
+    [-1]: day_1Menu,
+    [-2]: day_2Menu,
+  };
+  const menu = menus[selectedDateOffset];
 
   // 즐겨찾기 설정 해제 함수
   async function editFavoriteList(name: string) {
@@ -161,7 +173,9 @@ export default function Meal({mealData}: Props) {
   }
 
   function refineMenuName(rawText: string) {
-    const splitedText = rawText.split(/\+|&|\*/).map(item => item.trim());
+    const splitedText = rawText
+      .split(/\+|&|\*/)
+      .map((item: string) => item.trim());
     const refinedMenuNameArray: string[] = [];
     splitedText.forEach(item => {
       const lastIndex = refinedMenuNameArray.length - 1;
@@ -189,21 +203,21 @@ export default function Meal({mealData}: Props) {
       return null;
     }
     // 메뉴 표기
-    const selectedMenu = selectedDate === 'today' ? menu : tomorrowMenu;
+    const selectedMenu = menu;
     const string = selectedMenu[cafeteriaName][whichMenu];
     if (cafeteriaName.includes('자하연')) {
       return string
         .replace(/.파업/, '※')
         .split('※')[0]
         .split('00원')
-        .map(item => {
+        .map((item: string) => {
           return item
             .trim()
             .split(/ *&amp; */)
             .join('&')
             .split(' ');
         })
-        .map(menuAndPrice => {
+        .map((menuAndPrice: string[]) => {
           if (menuAndPrice.length !== 2) {
             return;
           }
@@ -232,14 +246,14 @@ export default function Meal({mealData}: Props) {
       return string
         .split('▶')[0]
         .split('원')
-        .map(item => {
+        .map((item: string) => {
           return item
             .trim()
             .split(/ *&amp; */)
             .join('&\n')
             .split(/ *: */);
         })
-        .map(menuAndPrice => {
+        .map((menuAndPrice: string[]) => {
           if (menuAndPrice.length !== 2) {
             return;
           }
@@ -268,7 +282,7 @@ export default function Meal({mealData}: Props) {
       return string
         .split('※')[0]
         .split('원')
-        .map(item => {
+        .map((item: string) => {
           return item
             .trim()
             .split(/ *&amp; */)
@@ -277,7 +291,7 @@ export default function Meal({mealData}: Props) {
             .replace(/ *[/*|/&|/+] */, '+')
             .split(' ');
         })
-        .map(menuAndPrice => {
+        .map((menuAndPrice: string[]) => {
           if (
             menuAndPrice.length !== 2 &&
             !menuAndPrice[0].includes('플러스메뉴')
@@ -311,7 +325,7 @@ export default function Meal({mealData}: Props) {
       return string
         .split('※')[0]
         .split('원')
-        .map(item => {
+        .map((item: string) => {
           return item
             .trim()
             .split(/ *&amp; */)
@@ -323,7 +337,7 @@ export default function Meal({mealData}: Props) {
             .join('>')
             .split(' ');
         })
-        .map(menuAndPrice => {
+        .map((menuAndPrice: string[]) => {
           if (menuAndPrice.length !== 2) {
             return;
           }
@@ -500,14 +514,14 @@ export default function Meal({mealData}: Props) {
     return string
       .replace(/.파업/, '※')
       .split('원')
-      .map(text => {
+      .map((text: string) => {
         return text
           .trim()
           .split(/ *&amp; */)
           .join('&')
           .split(' ');
       })
-      .map(menuAndPrice => {
+      .map((menuAndPrice: string[]) => {
         if (menuAndPrice[0].includes('※')) {
           return;
         }
@@ -547,14 +561,14 @@ export default function Meal({mealData}: Props) {
           .replace(/.파업/, '※')
           .split('※')[0]
           .split('00원')
-          .map(item => {
+          .map((item: string) => {
             return item
               .trim()
               .split(/ *&amp; */)
               .join('&')
               .split(' ');
           })
-          .map(menuAndPrice => {
+          .map((menuAndPrice: string[]) => {
             if (menuAndPrice.length !== 2) {
               return;
             }
@@ -586,7 +600,7 @@ export default function Meal({mealData}: Props) {
         return string
           .split('▶')[0]
           .split('원')
-          .map(item => {
+          .map((item: string) => {
             return item
               .trim()
               .split(/ *&amp; */)
@@ -594,7 +608,7 @@ export default function Meal({mealData}: Props) {
               .trim()
               .split(/ *: */);
           })
-          .map(menuAndPrice => {
+          .map((menuAndPrice: string[]) => {
             if (menuAndPrice.length !== 2) {
               return;
             }
@@ -626,7 +640,7 @@ export default function Meal({mealData}: Props) {
         return string
           .split('※')[0]
           .split('원')
-          .map(item => {
+          .map((item: string) => {
             return item
               .trim()
               .split(/ *&amp; */)
@@ -635,7 +649,7 @@ export default function Meal({mealData}: Props) {
               .replace(/ *[/*|/&|/+] */, '+')
               .split(' ');
           })
-          .map(menuAndPrice => {
+          .map((menuAndPrice: string[]) => {
             if (
               menuAndPrice.length !== 2 &&
               !menuAndPrice[0].includes('플러스메뉴')
@@ -669,7 +683,7 @@ export default function Meal({mealData}: Props) {
         return string
           .split('※')[0]
           .split('원')
-          .map(item => {
+          .map((item: string) => {
             return item
               .trim()
               .split(/ *&amp; */)
@@ -681,7 +695,7 @@ export default function Meal({mealData}: Props) {
               .join('>')
               .split(' ');
           })
-          .map(menuAndPrice => {
+          .map((menuAndPrice: string[]) => {
             if (menuAndPrice.length !== 2) {
               return;
             }
@@ -814,14 +828,14 @@ export default function Meal({mealData}: Props) {
       return string
         .replace(/.파업/, '※')
         .split('원')
-        .map(text => {
+        .map((text: string) => {
           return text
             .trim()
             .split(/ *&amp; */)
             .join('&')
             .split(' ');
         })
-        .map(menuAndPrice => {
+        .map((menuAndPrice: string[]) => {
           if (menuAndPrice[0].includes('※')) {
             return;
           }
@@ -1036,7 +1050,7 @@ export default function Meal({mealData}: Props) {
             isOpen={selectedMeal !== null}
             onClose={() => {
               setSelectedMeal(null);
-              setSelectedDate('today');
+              setSelectedDateOffset(0);
             }}>
             <Modal.Content
               paddingTop="8px"
@@ -1071,6 +1085,16 @@ export default function Meal({mealData}: Props) {
                     {cafeteria[selectedMeal].location}
                   </Text>
                   <HStack w="100%" alignItems="center" justifyContent="center">
+                    <Button
+                      label={'nextDate'}
+                      backgroundColor="transparent"
+                      onPress={() => {
+                        if (selectedDateOffset !== -2) {
+                          setSelectedDateOffset(selectedDateOffset - 1);
+                        }
+                      }}>
+                      <Text>{'<<'}</Text>
+                    </Button>
                     <Text variant="modalToday" textAlign="center" marginTop={3}>
                       {month}월 {date}일 ({koreanDay})
                     </Text>
@@ -1078,10 +1102,8 @@ export default function Meal({mealData}: Props) {
                       label={'nextDate'}
                       backgroundColor="transparent"
                       onPress={() => {
-                        if (selectedDate === 'today') {
-                          return setSelectedDate('tomorrow');
-                        } else if (selectedDate === 'tomorrow') {
-                          return setSelectedDate('today');
+                        if (selectedDateOffset !== 2) {
+                          setSelectedDateOffset(selectedDateOffset + 1);
                         }
                       }}>
                       <Text>{'>>'}</Text>
