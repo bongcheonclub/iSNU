@@ -293,7 +293,7 @@ export default function Meal({mealData}: Props) {
     if (cafeteriaName.includes('예술계')) {
       return string
         .split('▶')[0]
-        .split('원')
+        .split('00원')
         .map((item: string) => {
           return item
             .trim()
@@ -307,7 +307,7 @@ export default function Meal({mealData}: Props) {
           }
           const [menuName, price] = [
             refineMenuName(menuAndPrice[0]),
-            menuAndPrice[1] + '원',
+            menuAndPrice[1] + '00원',
           ];
           return (
             <HStack
@@ -329,7 +329,7 @@ export default function Meal({mealData}: Props) {
     if (cafeteriaName.includes('220동')) {
       return string
         .split('※')[0]
-        .split('원')
+        .split('00원')
         .map((item: string) => {
           return item
             .trim()
@@ -349,9 +349,9 @@ export default function Meal({mealData}: Props) {
           const [menuName, price] = menuAndPrice[0].includes('플러스메뉴')
             ? [
                 refineMenuName(menuAndPrice[0] + '\n' + menuAndPrice[1]),
-                menuAndPrice[2] + '원',
+                menuAndPrice[2] + '00원',
               ]
-            : [refineMenuName(menuAndPrice[0]), menuAndPrice[1] + '원'];
+            : [refineMenuName(menuAndPrice[0]), menuAndPrice[1] + '00원'];
           return (
             <HStack
               alignItems="center"
@@ -372,7 +372,7 @@ export default function Meal({mealData}: Props) {
     if (cafeteriaName.includes('감골')) {
       return string
         .split('※')[0]
-        .split('원')
+        .split('00원')
         .map((item: string) => {
           return item
             .trim()
@@ -391,7 +391,7 @@ export default function Meal({mealData}: Props) {
           }
           const [menuName, price] = [
             refineMenuName(menuAndPrice[0]),
-            menuAndPrice[1] + '원',
+            menuAndPrice[1] + '00원',
           ];
           return (
             <HStack
@@ -478,7 +478,7 @@ export default function Meal({mealData}: Props) {
           {string
             .trim()
             .split('※')[0]
-            .replace('&amp;', '&')
+            .replaceAll('&amp;', '&')
             .replace('&lt;', '<')
             .replace('&gt;', '>')
             .split('00원')
@@ -561,7 +561,7 @@ export default function Meal({mealData}: Props) {
 
     return string
       .replace(/.파업/, '※')
-      .split('원')
+      .split('00원')
       .map((text: string) => {
         return text
           .trim()
@@ -575,7 +575,7 @@ export default function Meal({mealData}: Props) {
         }
         const [menuName, price] = [
           refineMenuName(menuAndPrice[0]),
-          menuAndPrice[1] + '원',
+          menuAndPrice[1] + '00원',
         ];
         return (
           <HStack
@@ -647,7 +647,7 @@ export default function Meal({mealData}: Props) {
       if (cafeteriaName.includes('예술계')) {
         return string
           .split('▶')[0]
-          .split('원')
+          .split('00원')
           .map((item: string) => {
             return item
               .trim()
@@ -662,7 +662,7 @@ export default function Meal({mealData}: Props) {
             }
             const [menuName, price] = [
               refineMenuName(menuAndPrice[0]),
-              menuAndPrice[1] + '원',
+              menuAndPrice[1] + '00원',
             ];
             return (
               <HStack
@@ -687,7 +687,7 @@ export default function Meal({mealData}: Props) {
       if (cafeteriaName.includes('220동')) {
         return string
           .split('※')[0]
-          .split('원')
+          .split('00원')
           .map((item: string) => {
             return item
               .trim()
@@ -705,8 +705,8 @@ export default function Meal({mealData}: Props) {
               return;
             }
             const [menuName, price] = menuAndPrice[0].includes('플러스메뉴')
-              ? [refineMenuName(menuAndPrice[1]), menuAndPrice[2] + '원']
-              : [refineMenuName(menuAndPrice[0]), menuAndPrice[1] + '원'];
+              ? [refineMenuName(menuAndPrice[1]), menuAndPrice[2] + '00원']
+              : [refineMenuName(menuAndPrice[0]), menuAndPrice[1] + '00원'];
             return (
               <HStack
                 alignItems="center"
@@ -730,7 +730,7 @@ export default function Meal({mealData}: Props) {
       if (cafeteriaName.includes('감골')) {
         return string
           .split('※')[0]
-          .split('원')
+          .split('00원')
           .map((item: string) => {
             return item
               .trim()
@@ -749,7 +749,7 @@ export default function Meal({mealData}: Props) {
             }
             const [menuName, price] = [
               refineMenuName(menuAndPrice[0]),
-              menuAndPrice[1] + '원',
+              menuAndPrice[1] + '00원',
             ];
             return (
               <HStack
@@ -875,7 +875,7 @@ export default function Meal({mealData}: Props) {
       }
       return string
         .replace(/.파업/, '※')
-        .split('원')
+        .split('00원')
         .map((text: string) => {
           return text
             .trim()
@@ -889,7 +889,7 @@ export default function Meal({mealData}: Props) {
           }
           const [menuName, price] = [
             refineMenuName(menuAndPrice[0]),
-            menuAndPrice[1] + '원',
+            menuAndPrice[1] + '00원',
           ];
           return (
             <HStack
