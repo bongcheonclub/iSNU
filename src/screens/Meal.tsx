@@ -21,7 +21,7 @@ import {
 } from 'date-fns';
 import FilledStarIcon from '../icons/filled-star.svg';
 import UnfilledStarIcon from '../icons/unfilled-star.svg';
-import {MealData} from '../InitializeData/ProcessMealData';
+import {MealData, Menu} from '../InitializeData/ProcessMealData';
 import Text from '../components/Text';
 import {theme} from '../ui/theme';
 import Button from '../components/WrappedButton';
@@ -187,14 +187,14 @@ export default function Meal({mealData}: Props) {
   const displayDate = getDisplayDate(year, month, date, selectedDateOffset);
 
   // const menu = selectedDate === 'today' ? day0Menu : day1Menu;
-  const menus: object = {
+  const menus: any = {
     0: day0Menu,
     1: day1Menu,
     2: day2Menu,
     [-1]: day_1Menu,
     [-2]: day_2Menu,
   };
-  const menu = menus[selectedDateOffset];
+  const menu: Menu = menus[selectedDateOffset];
 
   // 즐겨찾기 설정 해제 함수
   async function editFavoriteList(name: string) {
