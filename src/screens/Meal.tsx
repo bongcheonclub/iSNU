@@ -1132,10 +1132,16 @@ export default function Meal({mealData}: Props) {
                   <Text variant="modalSubInfo" left={-15} top={-20}>
                     {cafeteria[selectedMeal].location}
                   </Text>
-                  <HStack w="100%" alignItems="center" justifyContent="center">
+                  <HStack
+                    w="100%"
+                    alignItems="center"
+                    justifyContent="center"
+                    marginY={2}>
                     {selectedMeal.includes('대학원') ||
                     selectedDateOffset === -2 ? null : (
                       <Button
+                        position="absolute"
+                        left="44px"
                         label={'prevDate'}
                         backgroundColor="transparent"
                         onPress={() => {
@@ -1144,12 +1150,17 @@ export default function Meal({mealData}: Props) {
                         <Text>{'<<'}</Text>
                       </Button>
                     )}
-                    <Text variant="modalToday" textAlign="center" marginTop={3}>
+                    <Text
+                      variant="modalToday"
+                      textAlign="center"
+                      position="absolute">
                       {displayDate}
                     </Text>
                     {selectedMeal.includes('대학원') ||
                     selectedDateOffset === 2 ? null : (
                       <Button
+                        position="absolute"
+                        right="44px"
                         label={'nextDate'}
                         backgroundColor="transparent"
                         onPress={() => {
