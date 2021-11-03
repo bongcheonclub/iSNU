@@ -1133,35 +1133,31 @@ export default function Meal({mealData}: Props) {
                     {cafeteria[selectedMeal].location}
                   </Text>
                   <HStack w="100%" alignItems="center" justifyContent="center">
-                    <Button
-                      label={'prevDate'}
-                      backgroundColor="transparent"
-                      onPress={() => {
-                        if (selectedMeal.includes('대학원')) {
-                          return;
-                        }
-                        if (selectedDateOffset !== -2) {
+                    {selectedMeal.includes('대학원') ||
+                    selectedDateOffset === -2 ? null : (
+                      <Button
+                        label={'prevDate'}
+                        backgroundColor="transparent"
+                        onPress={() => {
                           setSelectedDateOffset(selectedDateOffset - 1);
-                        }
-                      }}>
-                      <Text>{'<<'}</Text>
-                    </Button>
+                        }}>
+                        <Text>{'<<'}</Text>
+                      </Button>
+                    )}
                     <Text variant="modalToday" textAlign="center" marginTop={3}>
                       {displayDate}
                     </Text>
-                    <Button
-                      label={'nextDate'}
-                      backgroundColor="transparent"
-                      onPress={() => {
-                        if (selectedMeal.includes('대학원')) {
-                          return;
-                        }
-                        if (selectedDateOffset !== 2) {
+                    {selectedMeal.includes('대학원') ||
+                    selectedDateOffset === 2 ? null : (
+                      <Button
+                        label={'nextDate'}
+                        backgroundColor="transparent"
+                        onPress={() => {
                           setSelectedDateOffset(selectedDateOffset + 1);
-                        }
-                      }}>
-                      <Text>{'>>'}</Text>
-                    </Button>
+                        }}>
+                        <Text>{'>>'}</Text>
+                      </Button>
+                    )}
                   </HStack>
                 </Box>
               ) : (
