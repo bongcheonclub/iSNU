@@ -203,10 +203,10 @@ export function processMealData(
   }
   const day0Menu = fetchMenu(day0MenuListRes);
 
-  const day1Menu = fetchMenu(day1MenuListRes);
-  const day2Menu = fetchMenu(day2MenuListRes);
-  const day_1Menu = fetchMenu(day_1MenuListRes);
-  const day_2Menu = fetchMenu(day_2MenuListRes);
+  const day1Menu = fetchMenu(dayAfter1MenuListRes);
+  const day2Menu = fetchMenu(dayAfter2MenuListRes);
+  const day_1Menu = fetchMenu(dayBefore1MenuListRes);
+  const day_2Menu = fetchMenu(dayBefore2MenuListRes);
   const {cafeteria, mealList, nonFavoriteList} = fetchInfo();
 
   function processDormData() {
