@@ -61,7 +61,10 @@ const RefineFetchedMenuOf = {
           .split(' ');
       })
       .map((menuAndPrice: string[]) => {
-        if (menuAndPrice[0].includes('※')) {
+        if (
+          menuAndPrice[0].includes('※') ||
+          menuAndPrice[0].includes('운영시간')
+        ) {
           return;
         }
         const [menuName, price] = [
