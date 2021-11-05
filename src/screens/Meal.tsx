@@ -10,7 +10,7 @@ import {
   Divider,
   AspectRatio,
 } from 'native-base';
-import {chain, chunk, Dictionary, floor} from 'lodash';
+import {chain, chunk, Dictionary} from 'lodash';
 import {
   compareAsc,
   getDate,
@@ -23,7 +23,7 @@ import FilledStarIcon from '../icons/filled-star.svg';
 import UnfilledStarIcon from '../icons/unfilled-star.svg';
 import TomorrowIcon from '../icons/tomorrow.svg';
 import YesterdayIcon from '../icons/yesterday.svg';
-import {MealData, Menu} from '../InitializeData/ProcessMealData';
+import {MealData} from '../InitializeData/ProcessMealData';
 import Text from '../components/Text';
 import {theme} from '../ui/theme';
 import Button from '../components/WrappedButton';
