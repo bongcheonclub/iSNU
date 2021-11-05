@@ -1,9 +1,10 @@
 import {AxiosResponse} from 'axios';
 import {getTodaysDate} from '../helpers/getTodaysDate';
 
-import {chain, keyBy} from 'lodash';
+import {chain, keyBy, mapValues} from 'lodash';
 import {Node, parse} from 'node-html-parser';
 import {setItem} from '../helpers/localStorage';
+import {refineMenuRawText} from './RefineMenuText';
 
 export type Menu = {
   [name: string]: {
@@ -201,6 +202,7 @@ export function processMealData(
     };
   }
   const day0Menu = fetchMenu(day0MenuListRes);
+
   const day1Menu = fetchMenu(day1MenuListRes);
   const day2Menu = fetchMenu(day2MenuListRes);
   const day_1Menu = fetchMenu(day_1MenuListRes);
@@ -265,6 +267,75 @@ export function processMealData(
     };
     const day0MenuIncludeOurhome = {...day0Menu, ...day0OurhomeMenu};
 
+    const refinedDay0Menu = mapValues(
+      day0MenuIncludeOurhome,
+      function (value, key) {
+        return mapValues(value, function (eachValue, eachKey) {
+          if (
+            eachKey === 'lunch' ||
+            eachKey === 'dinner' ||
+            eachKey === 'breakfast'
+          ) {
+            return refineMenuRawText(key, eachValue);
+          } else {
+            return eachValue;
+          }
+        });
+      },
+    );
+    const refinedDayAfter1Menu = mapValues(day1Menu, function (value, key) {
+      return mapValues(value, function (eachValue, eachKey) {
+        if (
+          eachKey === 'lunch' ||
+          eachKey === 'dinner' ||
+          eachKey === 'breakfast'
+        ) {
+          return refineMenuRawText(key, eachValue);
+        } else {
+          return eachValue;
+        }
+      });
+    });
+    const refinedDayAfter2Menu = mapValues(day2Menu, function (value, key) {
+      return mapValues(value, function (eachValue, eachKey) {
+        if (
+          eachKey === 'lunch' ||
+          eachKey === 'dinner' ||
+          eachKey === 'breakfast'
+        ) {
+          return refineMenuRawText(key, eachValue);
+        } else {
+          return eachValue;
+        }
+      });
+    });
+    const refinedDayBefore1Menu = mapValues(day_1Menu, function (value, key) {
+      return mapValues(value, function (eachValue, eachKey) {
+        if (
+          eachKey === 'lunch' ||
+          eachKey === 'dinner' ||
+          eachKey === 'breakfast'
+        ) {
+          return refineMenuRawText(key, eachValue);
+        } else {
+          return eachValue;
+        }
+      });
+    });
+    const refinedDayBefore2Menu = mapValues(day_2Menu, function (value, key) {
+      return mapValues(value, function (eachValue, eachKey) {
+        if (
+          eachKey === 'lunch' ||
+          eachKey === 'dinner' ||
+          eachKey === 'breakfast'
+        ) {
+          return refineMenuRawText(key, eachValue);
+        } else {
+          return eachValue;
+        }
+      });
+    });
+
     const ourhomeCafeteria = {
       name: '대학원기숙사',
       contact: 'unknown',
@@ -283,18 +354,29 @@ export function processMealData(
 
     return {
       cafeteriaIncludeOurhome,
-      day0MenuIncludeOurhome,
+      refinedDay0Menu,
+      refinedDayAfter1Menu,
+      refinedDayAfter2Menu,
+      refinedDayBefore1Menu,
+      refinedDayBefore2Menu,
     };
   }
 
-  const {cafeteriaIncludeOurhome, day0MenuIncludeOurhome} = processDormData();
+  const {
+    cafeteriaIncludeOurhome,
+    refinedDay0Menu,
+    refinedDayAfter1Menu,
+    refinedDayAfter2Menu,
+    refinedDayBefore1Menu,
+    refinedDayBefore2Menu,
+  } = processDormData();
 
   return {
-    day0Menu: day0MenuIncludeOurhome,
-    day1Menu,
-    day2Menu,
-    day_1Menu,
-    day_2Menu,
+    day0Menu: refinedDay0Menu,
+    day1Menu: refinedDayAfter1Menu,
+    day2Menu: refinedDayAfter2Menu,
+    day_1Menu: refinedDayBefore1Menu,
+    day_2Menu: refinedDayBefore2Menu,
     cafeteria: cafeteriaIncludeOurhome,
     mealList,
     favoriteList,
