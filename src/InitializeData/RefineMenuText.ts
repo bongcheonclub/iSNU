@@ -47,8 +47,7 @@ export function refineMenuRawText(mealName: string, text: string) {
     return RefineFetchedMenuOf.default(text);
   }
 }
-
-const RefineFetchedMenuOf = {
+const RefineFetchedMenuOf: {[key: string]: any} = {
   default: function (text: string) {
     return text
       .replace(/.파업/, '※')
