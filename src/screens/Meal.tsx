@@ -21,6 +21,8 @@ import {
 } from 'date-fns';
 import FilledStarIcon from '../icons/filled-star.svg';
 import UnfilledStarIcon from '../icons/unfilled-star.svg';
+import TomorrowIcon from '../icons/tomorrow.svg';
+import YesterdayIcon from '../icons/yesterday.svg';
 import {MealData, Menu} from '../InitializeData/ProcessMealData';
 import Text from '../components/Text';
 import {theme} from '../ui/theme';
@@ -45,8 +47,8 @@ function checkOperating(
         time: string;
       }>,
     ] {
-  const now = new Date();
-  // const now = new Date('Tue Oct 26 2021 12:24:15 GMT+0900');
+  // const now = new Date();
+  const now = new Date('Tue Oct 26 2021 12:24:15 GMT+0900');
   const spliter = cafeteriaName.includes('감골') ? '~' : '-';
   const today = (() => {
     switch (
@@ -186,7 +188,6 @@ export default function Meal({mealData}: Props) {
   }
   const displayDate = getDisplayDate(year, month, date, selectedDateOffset);
 
-  // const menu = selectedDate === 'today' ? day0Menu : day1Menu;
   const menus: any = {
     0: day0Menu,
     1: day1Menu,
@@ -194,6 +195,7 @@ export default function Meal({mealData}: Props) {
     [-1]: day_1Menu,
     [-2]: day_2Menu,
   };
+  const todaysMenu: Menu = menus[0];
   const menu: Menu = menus[selectedDateOffset];
 
   // 즐겨찾기 설정 해제 함수
@@ -247,355 +249,34 @@ export default function Meal({mealData}: Props) {
     cafeteriaName: string,
     whichMenu: 'breakfast' | 'lunch' | 'dinner',
   ) {
-    if (!menu) {
-      return null;
-    }
-    // 메뉴 표기
-    const selectedMenu = menu;
-    const string = selectedMenu[cafeteriaName][whichMenu];
-    if (cafeteriaName.includes('자하연')) {
-      return string
-        .replace(/.파업/, '※')
-        .split('※')[0]
-        .split('00원')
-        .map((item: string) => {
-          return item
-            .trim()
-            .split(/ *&amp; */)
-            .join('&')
-            .split(' ');
-        })
-        .map((menuAndPrice: string[]) => {
-          if (menuAndPrice.length !== 2) {
-            return;
-          }
-          const [menuName, price] = [
-            refineMenuName(menuAndPrice[0]),
-            menuAndPrice[1] + '00원',
-          ];
-          return (
-            <HStack
-              alignItems="center"
-              marginTop="6px"
-              marginBottom="6px"
-              key={menuName}>
-              <Text textAlign="center" width="70%" variant="modalSubContent">
-                {menuName}
-              </Text>
-              <Text textAlign="right" width="30%" variant="modalMenuPrice">
-                {price}
-              </Text>
-            </HStack>
-          );
-        });
+    const contents = menus[selectedDateOffset][cafeteriaName][whichMenu];
+    if (typeof contents === 'string') {
+      return <Text textAlign="center">{contents}</Text>;
     }
 
-    if (cafeteriaName.includes('예술계')) {
-      return string
-        .split('▶')[0]
-        .split('00원')
-        .map((item: string) => {
-          return item
-            .trim()
-            .split(/ *&amp; */)
-            .join('&\n')
-            .split(/ *: */);
-        })
-        .map((menuAndPrice: string[]) => {
-          if (menuAndPrice.length !== 2) {
-            return;
-          }
-          const [menuName, price] = [
-            refineMenuName(menuAndPrice[0]),
-            menuAndPrice[1] + '00원',
-          ];
-          return (
-            <HStack
-              alignItems="center"
-              marginTop="6px"
-              marginBottom="6px"
-              key={menuName}>
-              <Text textAlign="center" width="70%" variant="modalSubContent">
-                {menuName}
-              </Text>
-              <Text textAlign="right" width="30%" variant="modalMenuPrice">
-                {price}
-              </Text>
-            </HStack>
-          );
-        });
-    }
-
-    if (cafeteriaName.includes('220동')) {
-      return string
-        .split('※')[0]
-        .split('00원')
-        .map((item: string) => {
-          return item
-            .trim()
-            .split(/ *&amp; */)
-
-            .join('&')
-            .replace(/ *[/*|/&|/+] */, '+')
-            .split(' ');
-        })
-        .map((menuAndPrice: string[]) => {
-          if (
-            menuAndPrice.length !== 2 &&
-            !menuAndPrice[0].includes('플러스메뉴')
-          ) {
-            return;
-          }
-          const [menuName, price] = menuAndPrice[0].includes('플러스메뉴')
-            ? [
-                refineMenuName(menuAndPrice[0] + '\n' + menuAndPrice[1]),
-                menuAndPrice[2] + '00원',
-              ]
-            : [refineMenuName(menuAndPrice[0]), menuAndPrice[1] + '00원'];
-          return (
-            <HStack
-              alignItems="center"
-              marginTop="6px"
-              marginBottom="6px"
-              key={menuName}>
-              <Text textAlign="center" width="70%" variant="modalSubContent">
-                {menuName}
-              </Text>
-              <Text textAlign="right" width="30%" variant="modalMenuPrice">
-                {price}
-              </Text>
-            </HStack>
-          );
-        });
-    }
-
-    if (cafeteriaName.includes('감골')) {
-      return string
-        .split('※')[0]
-        .split('00원')
-        .map((item: string) => {
-          return item
-            .trim()
-            .split(/ *&amp; */)
-
-            .join('&\n')
-            .split('&lt;')
-            .join('<')
-            .split('&gt;')
-            .join('>')
-            .split(' ');
-        })
-        .map((menuAndPrice: string[]) => {
-          if (menuAndPrice.length !== 2) {
-            return;
-          }
-          const [menuName, price] = [
-            refineMenuName(menuAndPrice[0]),
-            menuAndPrice[1] + '00원',
-          ];
-          return (
-            <HStack
-              alignItems="center"
-              marginTop="6px"
-              marginBottom="6px"
-              key={menuName}>
-              <Text
-                textAlign="center"
-                width="70%"
-                variant="modalSubContent"
-                marginTop={2}>
-                {menuName}
-              </Text>
-              <Text textAlign="right" width="30%" variant="modalMenuPrice">
-                {price}
-              </Text>
-            </HStack>
-          );
-        });
-    }
-
-    if (cafeteriaName.includes('대학원')) {
-      const matchedStrings = string.match(/[A-Z]|\(\d,\d\d\d원\)/gi);
-      if (!matchedStrings) {
+    return contents.map(item => {
+      if (item === undefined) {
         return null;
       }
-      return matchedStrings
-        .map((priceSymbol, priceIndex) => {
-          if (priceSymbol.length === 1) {
-            const rawPrice = (priceSymbol.charCodeAt(0) - 65) * 500 + 2000;
-            const refinedPrice =
-              floor(rawPrice / 1000) +
-              ',' +
-              (rawPrice % 1000 === 0 ? '000' : rawPrice % 1000);
-            return {
-              parsedString:
-                string.split(/[A-Z]|\(\d,\d\d\d원\)/)[priceIndex + 1],
-              price: `${refinedPrice}원`,
-            };
-          } else {
-            return {
-              parsedString:
-                string.split(/[A-Z]|\(\d,\d\d\d원\)/)[priceIndex + 1],
-              price: `${priceSymbol.slice(1, -2)}원`,
-            };
-          }
-        })
-        .map(({parsedString, price}) => {
-          const menuName = refineMenuName(parsedString);
-
-          return (
-            <HStack
-              alignItems="center"
-              marginTop="6px"
-              marginBottom="6px"
-              key={menuName}>
-              <Text
-                textAlign="center"
-                width="70%"
-                marginTop={2}
-                variant="modalSubContent">
-                {menuName}
-              </Text>
-              <Text textAlign="right" width="30%" variant="modalMenuPrice">
-                {price}
-              </Text>
-            </HStack>
-          );
-        });
-    }
-
-    if (cafeteriaName.includes('소담마루')) {
       return (
-        <Text textAlign="center" width="100%" variant="modalSubContent">
-          {string}
-        </Text>
+        <HStack
+          alignItems="center"
+          marginTop="6px"
+          marginBottom="6px"
+          key={item[0]}>
+          <Text textAlign="center" width="70%" variant="modalSubContent">
+            {item[0]}
+          </Text>
+          <Text textAlign="right" width="30%" variant="modalMenuPrice">
+            {item[1]}
+          </Text>
+        </HStack>
       );
-    }
-
-    if (cafeteriaName.includes('두레미담')) {
-      return (
-        <Text textAlign="center" width="100%" variant="modalSubContent">
-          {string
-            .trim()
-            .split('※')[0]
-            .replaceAll('&amp;', '&')
-            .replace('&lt;', '<')
-            .replace('&gt;', '>')
-            .split('00원')
-            .join('00원\n')
-            .split(' ')
-            .join('\n')}
-        </Text>
-      );
-    }
-
-    if (cafeteriaName.includes('공간')) {
-      return (
-        <Text textAlign="center" width="100%" variant="modalSubContent">
-          {string
-            .trim()
-            .split('※')[0]
-            .split('00원')
-            .join('00원\n')
-            .split(/ *&amp; */)
-            .join('&\n')
-            .split('*')
-            .join('\n*')
-            .split('&lt;')
-            .join('\n<')
-            .split(/&gt;/)
-            .join('>\n')
-            .split(/<단품 메뉴>/)
-            .join('\n<단품 메뉴>')
-            .split(/<셋트 *메뉴>\n/)
-            .join('<셋트메뉴>')}
-        </Text>
-      );
-    }
-    if (cafeteriaName.includes('301')) {
-      return (
-        <Text textAlign="center" width="100%" variant="modalSubContent">
-          {
-            string
-              .trim()
-              .split('00원')
-              .join('00원\n')
-              .split('소반')
-              .join('\n소반')
-              .split(/ *&amp; */)
-              .join('&')
-              .split('&lt;')
-              .join('<')
-              .split('&gt;')
-              .join('>\n')
-              .split('*')[0]
-          }
-          {console.log(
-            string
-              .split('00원')
-              .join('00원\n')
-              .split('소반')
-              .join('\n소반')
-              .split(/ *&amp; */)
-              .join('&')
-              .split('&lt;')
-              .join('\n<')
-              .split('&gt;')
-              .join('>\n')
-              .split('*')[0],
-          )}
-        </Text>
-      );
-    }
-    if (
-      string.includes('휴관') ||
-      string.includes('휴점') ||
-      string.includes('폐점')
-    ) {
-      return (
-        <Text textAlign="center" variant="modalSubContent">
-          휴무/휴점
-        </Text>
-      );
-    }
-
-    return string
-      .replace(/.파업/, '※')
-      .split('00원')
-      .map((text: string) => {
-        return text
-          .trim()
-          .split(/ *&amp; */)
-          .join('&')
-          .split(' ');
-      })
-      .map((menuAndPrice: string[]) => {
-        if (menuAndPrice[0].includes('※')) {
-          return;
-        }
-        const [menuName, price] = [
-          refineMenuName(menuAndPrice[0]),
-          menuAndPrice[1] + '00원',
-        ];
-        return (
-          <HStack
-            alignItems="center"
-            marginTop="6px"
-            marginBottom="6px"
-            key={menuName}>
-            <Text textAlign="center" width="70%" variant="modalSubContent">
-              {menuName}
-            </Text>
-            <Text textAlign="right" width="30%" variant="modalMenuPrice">
-              {price}
-            </Text>
-          </HStack>
-        );
-      });
+    });
   }
 
   function showFavoriteMenu(cafeteriaName: string) {
-    if (checkStatus === null || menu === null) {
+    if (checkStatus === null || todaysMenu === null) {
       return <Text>Loading</Text>;
     }
     const [status, nextTime] = [
@@ -603,223 +284,7 @@ export default function Meal({mealData}: Props) {
       checkStatus[cafeteriaName].nextTime,
     ];
     if (status === 'breakfast' || status === 'lunch' || status === 'dinner') {
-      const string = menu[cafeteriaName][status];
-      if (cafeteriaName.includes('자하연')) {
-        return string
-          .replace(/.파업/, '※')
-          .split('※')[0]
-          .split('00원')
-          .map((item: string) => {
-            return item
-              .trim()
-              .split(/ *&amp; */)
-              .join('&')
-              .split(' ');
-          })
-          .map((menuAndPrice: string[]) => {
-            if (menuAndPrice.length !== 2) {
-              return;
-            }
-            const [menuName, price] = [
-              refineMenuName(menuAndPrice[0]),
-              menuAndPrice[1] + '00원',
-            ];
-            return (
-              <HStack
-                alignItems="center"
-                marginTop="6px"
-                marginBottom="6px"
-                key={menuName}>
-                <Text textAlign="center" width="60%" variant="favoriteMenuName">
-                  {menuName}
-                </Text>
-                <Text
-                  textAlign="center"
-                  width="40%"
-                  variant="favoriteMenuPrice">
-                  {price}
-                </Text>
-              </HStack>
-            );
-          });
-      }
-
-      if (cafeteriaName.includes('예술계')) {
-        return string
-          .split('▶')[0]
-          .split('00원')
-          .map((item: string) => {
-            return item
-              .trim()
-              .split(/ *&amp; */)
-              .join('&')
-              .trim()
-              .split(/ *: */);
-          })
-          .map((menuAndPrice: string[]) => {
-            if (menuAndPrice.length !== 2) {
-              return;
-            }
-            const [menuName, price] = [
-              refineMenuName(menuAndPrice[0]),
-              menuAndPrice[1] + '00원',
-            ];
-            return (
-              <HStack
-                alignItems="center"
-                marginTop="6px"
-                marginBottom="6px"
-                key={menuName}>
-                <Text textAlign="center" width="60%" variant="favoriteMenuName">
-                  {menuName}
-                </Text>
-                <Text
-                  textAlign="center"
-                  width="40%"
-                  variant="favoriteMenuPrice">
-                  {price}
-                </Text>
-              </HStack>
-            );
-          });
-      }
-
-      if (cafeteriaName.includes('220동')) {
-        return string
-          .split('※')[0]
-          .split('00원')
-          .map((item: string) => {
-            return item
-              .trim()
-              .split(/ *&amp; */)
-
-              .join('&')
-              .replace(/ *[/*|/&|/+] */, '+')
-              .split(' ');
-          })
-          .map((menuAndPrice: string[]) => {
-            if (
-              menuAndPrice.length !== 2 &&
-              !menuAndPrice[0].includes('플러스메뉴')
-            ) {
-              return;
-            }
-            const [menuName, price] = menuAndPrice[0].includes('플러스메뉴')
-              ? [refineMenuName(menuAndPrice[1]), menuAndPrice[2] + '00원']
-              : [refineMenuName(menuAndPrice[0]), menuAndPrice[1] + '00원'];
-            return (
-              <HStack
-                alignItems="center"
-                marginTop="6px"
-                marginBottom="6px"
-                key={menuName}>
-                <Text textAlign="center" width="60%" variant="favoriteMenuName">
-                  {menuName}
-                </Text>
-                <Text
-                  textAlign="center"
-                  width="40%"
-                  variant="favoriteMenuPrice">
-                  {price}
-                </Text>
-              </HStack>
-            );
-          });
-      }
-
-      if (cafeteriaName.includes('감골')) {
-        return string
-          .split('※')[0]
-          .split('00원')
-          .map((item: string) => {
-            return item
-              .trim()
-              .split(/ *&amp; */)
-
-              .join('&')
-              .split('&lt;')
-              .join('<')
-              .split('&gt;')
-              .join('>')
-              .split(' ');
-          })
-          .map((menuAndPrice: string[]) => {
-            if (menuAndPrice.length !== 2) {
-              return;
-            }
-            const [menuName, price] = [
-              refineMenuName(menuAndPrice[0]),
-              menuAndPrice[1] + '00원',
-            ];
-            return (
-              <HStack
-                alignItems="center"
-                marginTop="6px"
-                marginBottom="6px"
-                key={menuName}>
-                <Text textAlign="center" width="60%" variant="favoriteMenuName">
-                  {menuName}
-                </Text>
-                <Text
-                  textAlign="center"
-                  width="40%"
-                  variant="favoriteMenuPrice">
-                  {price}
-                </Text>
-              </HStack>
-            );
-          });
-      }
-
-      if (cafeteriaName.includes('대학원')) {
-        const matchedStrings = string.match(/[A-Z]|\(\d,\d\d\d원\)/gi);
-        if (!matchedStrings) {
-          return null;
-        }
-
-        return matchedStrings
-          .map((priceSymbol, priceIndex) => {
-            if (priceSymbol.length === 1) {
-              const rawPrice = (priceSymbol.charCodeAt(0) - 65) * 500 + 2000;
-              const refinedPrice =
-                floor(rawPrice / 1000) +
-                ',' +
-                (rawPrice % 1000 === 0 ? '000' : rawPrice % 1000);
-              return {
-                parsedString:
-                  string.split(/[A-Z]|\(\d,\d\d\d원\)/)[priceIndex + 1],
-                price: `${refinedPrice}원`,
-              };
-            } else {
-              return {
-                parsedString:
-                  string.split(/[A-Z]|\(\d,\d\d\d원\)/)[priceIndex + 1],
-                price: `${priceSymbol.slice(1, -2)}원`,
-              };
-            }
-          })
-          .map(({parsedString, price}) => {
-            const menuName = refineMenuName(parsedString);
-
-            return (
-              <HStack
-                alignItems="center"
-                marginTop="6px"
-                marginBottom="6px"
-                key={menuName}>
-                <Text textAlign="center" width="60%" variant="favoriteMenuName">
-                  {menuName}
-                </Text>
-                <Text
-                  textAlign="center"
-                  width="40%"
-                  variant="favoriteMenuPrice">
-                  {price}
-                </Text>
-              </HStack>
-            );
-          });
-      }
+      const string = todaysMenu[cafeteriaName][status];
 
       if (cafeteriaName.includes('두레미담')) {
         return (
@@ -873,41 +338,32 @@ export default function Meal({mealData}: Props) {
           </Text>
         );
       }
-      return string
-        .replace(/.파업/, '※')
-        .split('00원')
-        .map((text: string) => {
-          return text
-            .trim()
-            .split(/ *&amp; */)
-            .join('&')
-            .split(' ');
-        })
-        .map((menuAndPrice: string[]) => {
-          if (menuAndPrice[0].includes('※')) {
-            return;
-          }
-          const [menuName, price] = [
-            refineMenuName(menuAndPrice[0]),
-            menuAndPrice[1] + '00원',
-          ];
-          return (
-            <HStack
-              alignItems="center"
-              marginTop="6px"
-              marginBottom="6px"
-              key={menuName}>
-              <Text textAlign="center" width="60%" variant="favoriteMenuName">
-                {menuName}
-              </Text>
-              <Text textAlign="center" width="40%" variant="favoriteMenuPrice">
-                {price}
-              </Text>
-            </HStack>
-          );
-        });
+      const contents = todaysMenu[cafeteriaName][status];
+      if (typeof contents === 'string') {
+        return <Text textAlign="center">{contents}</Text>;
+      }
+
+      return contents.map(item => {
+        if (item === undefined) {
+          return null;
+        }
+        return (
+          <HStack
+            alignItems="center"
+            marginTop="6px"
+            marginBottom="6px"
+            key={item[0]}>
+            <Text textAlign="center" width="60%" variant="favoriteMenuName">
+              {item[0]}
+            </Text>
+            <Text textAlign="center" width="40%" variant="favoriteMenuPrice">
+              {item[1]}
+            </Text>
+          </HStack>
+        );
+      });
     } else {
-      const string = menu[cafeteriaName].lunch;
+      const string = todaysMenu[cafeteriaName].lunch;
       if (
         string.includes('휴점') ||
         string.includes('폐점') ||
@@ -959,7 +415,7 @@ export default function Meal({mealData}: Props) {
     .value();
 
   function isOperating(name: string) {
-    if (checkStatus === null || menu[name] === undefined) {
+    if (checkStatus === null || todaysMenu[name] === undefined) {
       return false;
     }
     if (
@@ -973,7 +429,6 @@ export default function Meal({mealData}: Props) {
     }
   }
 
-  console.log(selectedMeal);
   return (
     <VStack>
       <ScrollView bgColor={theme.colors.white} height="100%">
@@ -1018,9 +473,9 @@ export default function Meal({mealData}: Props) {
                           <Box height="0px" />
                         )}
                       </Center>
-                      {menu !== null &&
+                      {todaysMenu !== null &&
                       name !== null &&
-                      menu[name] !== undefined ? (
+                      todaysMenu[name] !== undefined ? (
                         <Center width="66%" padding={0}>
                           {showFavoriteMenu(name)}
                         </Center>
@@ -1147,7 +602,7 @@ export default function Meal({mealData}: Props) {
                         onPress={() => {
                           setSelectedDateOffset(selectedDateOffset - 1);
                         }}>
-                        <Text>{'<<'}</Text>
+                        <YesterdayIcon />
                       </Button>
                     )}
                     <Text
@@ -1166,7 +621,7 @@ export default function Meal({mealData}: Props) {
                         onPress={() => {
                           setSelectedDateOffset(selectedDateOffset + 1);
                         }}>
-                        <Text>{'>>'}</Text>
+                        <TomorrowIcon />
                       </Button>
                     )}
                   </HStack>
@@ -1181,7 +636,8 @@ export default function Meal({mealData}: Props) {
                   marginRight={3}
                   maxHeight="420px"
                   bounces={false}>
-                  {menu[selectedMeal].breakfast.length > 0 ? (
+                  {console.log(menu[selectedMeal])}
+                  {menu[selectedMeal].breakfast.length > 1 ? (
                     <>
                       <HStack>
                         <VStack width="25%" justifyContent="center">
@@ -1219,7 +675,7 @@ export default function Meal({mealData}: Props) {
                     <></>
                   )}
 
-                  {menu[selectedMeal].lunch.length > 0 ? (
+                  {menu[selectedMeal].lunch.length > 1 ? (
                     <HStack>
                       <VStack width="25%" justifyContent="center">
                         <Text textAlign="center" variant="modalSubContent">
@@ -1247,7 +703,7 @@ export default function Meal({mealData}: Props) {
                   ) : (
                     <></>
                   )}
-                  {menu[selectedMeal].dinner.length > 0 ? (
+                  {menu[selectedMeal].dinner.length > 1 ? (
                     <>
                       <Divider
                         my={2}
