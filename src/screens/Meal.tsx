@@ -47,8 +47,8 @@ function checkOperating(
         time: string;
       }>,
     ] {
-  // const now = new Date();
-  const now = new Date('Tue Oct 26 2021 12:24:15 GMT+0900');
+  const now = new Date();
+  // const now = new Date('Tue Oct 26 2021 12:24:15 GMT+0900');
   const spliter = cafeteriaName.includes('감골') ? '~' : '-';
   const today = (() => {
     switch (
@@ -195,8 +195,8 @@ export default function Meal({mealData}: Props) {
     [-1]: day_1Menu,
     [-2]: day_2Menu,
   };
-  const todaysMenu: Menu = menus[0];
-  const menu: Menu = menus[selectedDateOffset];
+  const todaysMenu = menus[0];
+  const menu = menus[selectedDateOffset];
 
   // 즐겨찾기 설정 해제 함수
   async function editFavoriteList(name: string) {
@@ -251,10 +251,14 @@ export default function Meal({mealData}: Props) {
   ) {
     const contents = menus[selectedDateOffset][cafeteriaName][whichMenu];
     if (typeof contents === 'string') {
-      return <Text textAlign="center">{contents}</Text>;
+      return (
+        <Text textAlign="center" width="100%" variant="modalSubContent">
+          {contents}
+        </Text>
+      );
     }
 
-    return contents.map(item => {
+    return contents.map((item: any[]) => {
       if (item === undefined) {
         return null;
       }
@@ -343,7 +347,7 @@ export default function Meal({mealData}: Props) {
         return <Text textAlign="center">{contents}</Text>;
       }
 
-      return contents.map(item => {
+      return contents.map((item: any[]) => {
         if (item === undefined) {
           return null;
         }
@@ -636,7 +640,6 @@ export default function Meal({mealData}: Props) {
                   marginRight={3}
                   maxHeight="420px"
                   bounces={false}>
-                  {console.log(menu[selectedMeal])}
                   {menu[selectedMeal].breakfast.length > 1 ? (
                     <>
                       <HStack>
