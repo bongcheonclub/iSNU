@@ -124,11 +124,11 @@ function checkOperating(
 
 export default function Meal({mealData}: Props) {
   const {
+    dayBefore2Menu,
+    dayBefore1Menu,
     day0Menu,
-    day1Menu,
-    day2Menu,
-    day_1Menu,
-    day_2Menu,
+    dayAfter1Menu,
+    dayAfter2Menu,
     cafeteria,
     mealList,
     favoriteList: initialFavoriteList,
@@ -189,11 +189,11 @@ export default function Meal({mealData}: Props) {
   const displayDate = getDisplayDate(year, month, date, selectedDateOffset);
 
   const menus: any = {
+    [-2]: dayBefore2Menu,
+    [-1]: dayBefore1Menu,
     0: day0Menu,
-    1: day1Menu,
-    2: day2Menu,
-    [-1]: day_1Menu,
-    [-2]: day_2Menu,
+    1: dayAfter1Menu,
+    2: dayAfter2Menu,
   };
   const todaysMenu = menus[0];
   const menu = menus[selectedDateOffset];
@@ -220,29 +220,6 @@ export default function Meal({mealData}: Props) {
       setFavoriteList(newFavoriteList);
       setNonFavoriteList(newnonFavoriteList);
     });
-  }
-
-  function refineMenuName(rawText: string) {
-    const splitedText = rawText
-      .split(/\+|&|\*/)
-      .map((item: string) => item.trim());
-    const refinedMenuNameArray: string[] = [];
-    splitedText.forEach(item => {
-      const lastIndex = refinedMenuNameArray.length - 1;
-      if (lastIndex === -1) {
-        refinedMenuNameArray.push(item);
-      } else {
-        if (refinedMenuNameArray[lastIndex].length + item.length > 8) {
-          refinedMenuNameArray[lastIndex] =
-            refinedMenuNameArray[lastIndex] + '\n';
-          refinedMenuNameArray.push('+' + item);
-        } else if (refinedMenuNameArray[lastIndex].length + item.length <= 8) {
-          refinedMenuNameArray[lastIndex] =
-            refinedMenuNameArray[lastIndex] + '+' + item;
-        }
-      }
-    });
-    return refinedMenuNameArray.join('').trim();
   }
 
   function showMenu(
