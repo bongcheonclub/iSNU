@@ -29,10 +29,10 @@ export type Cafeteria = {
 
 export type MealData = {
   day0Menu: Menu;
-  day1Menu: Menu;
-  day2Menu: Menu;
-  day_1Menu: Menu;
-  day_2Menu: Menu;
+  dayAfter1Menu: Menu;
+  dayAfter2Menu: Menu;
+  dayBefore1Menu: Menu;
+  dayBefore2Menu: Menu;
   cafeteria: {
     [key: string]: Cafeteria;
   };
@@ -202,11 +202,10 @@ export function processMealData(
     };
   }
   const day0Menu = fetchMenu(day0MenuListRes);
-
-  const day1Menu = fetchMenu(dayAfter1MenuListRes);
-  const day2Menu = fetchMenu(dayAfter2MenuListRes);
-  const day_1Menu = fetchMenu(dayBefore1MenuListRes);
-  const day_2Menu = fetchMenu(dayBefore2MenuListRes);
+  const dayAfter1Menu = fetchMenu(dayAfter1MenuListRes);
+  const dayAfter2Menu = fetchMenu(dayAfter2MenuListRes);
+  const dayBefore1Menu = fetchMenu(dayBefore1MenuListRes);
+  const dayBefore2Menu = fetchMenu(dayBefore2MenuListRes);
   const {cafeteria, mealList, nonFavoriteList} = fetchInfo();
 
   function processDormData() {
@@ -242,12 +241,12 @@ export function processMealData(
     const todayBreakfast = data[0][day] + data[1][day];
     const todayLunch = data[2][day] + data[3][day] + data[4][day];
     const todayDinner = data[5][day] + data[6][day] + data[7][day];
-    const tomorrowBreakfast =
-      day !== 6 ? data[0][day + 1] + data[1][day + 1] : '';
-    const tomorrowLunch =
-      day !== 6 ? data[2][day + 1] + data[3][day + 1] + data[4][day + 1] : '';
-    const tomorrowDinner =
-      day !== 6 ? data[5][day + 1] + data[6][day + 1] + data[7][day + 1] : '';
+    // const tomorrowBreakfast =
+    //   day !== 6 ? data[0][day + 1] + data[1][day + 1] : '';
+    // const tomorrowLunch =
+    //   day !== 6 ? data[2][day + 1] + data[3][day + 1] + data[4][day + 1] : '';
+    // const tomorrowDinner =
+    //   day !== 6 ? data[5][day + 1] + data[6][day + 1] + data[7][day + 1] : '';
     const contact = 'unknown';
     const day0OurhomeMenu: Menu = {
       대학원기숙사: {
@@ -257,84 +256,15 @@ export function processMealData(
         contact,
       },
     };
-    const day1OurhomeMenu: Menu = {
-      대학원기숙사: {
-        breakfast: tomorrowBreakfast,
-        lunch: tomorrowLunch,
-        dinner: tomorrowDinner,
-        contact,
-      },
-    };
+    // const day1OurhomeMenu: Menu = {
+    //   대학원기숙사: {
+    //     breakfast: tomorrowBreakfast,
+    //     lunch: tomorrowLunch,
+    //     dinner: tomorrowDinner,
+    //     contact,
+    //   },
+    // };
     const day0MenuIncludeOurhome = {...day0Menu, ...day0OurhomeMenu};
-
-    const refinedDay0Menu = mapValues(
-      day0MenuIncludeOurhome,
-      function (value, key) {
-        return mapValues(value, function (eachValue, eachKey) {
-          if (
-            eachKey === 'lunch' ||
-            eachKey === 'dinner' ||
-            eachKey === 'breakfast'
-          ) {
-            return refineMenuRawText(key, eachValue);
-          } else {
-            return eachValue;
-          }
-        });
-      },
-    );
-    const refinedDayAfter1Menu = mapValues(day1Menu, function (value, key) {
-      return mapValues(value, function (eachValue, eachKey) {
-        if (
-          eachKey === 'lunch' ||
-          eachKey === 'dinner' ||
-          eachKey === 'breakfast'
-        ) {
-          return refineMenuRawText(key, eachValue);
-        } else {
-          return eachValue;
-        }
-      });
-    });
-    const refinedDayAfter2Menu = mapValues(day2Menu, function (value, key) {
-      return mapValues(value, function (eachValue, eachKey) {
-        if (
-          eachKey === 'lunch' ||
-          eachKey === 'dinner' ||
-          eachKey === 'breakfast'
-        ) {
-          return refineMenuRawText(key, eachValue);
-        } else {
-          return eachValue;
-        }
-      });
-    });
-    const refinedDayBefore1Menu = mapValues(day_1Menu, function (value, key) {
-      return mapValues(value, function (eachValue, eachKey) {
-        if (
-          eachKey === 'lunch' ||
-          eachKey === 'dinner' ||
-          eachKey === 'breakfast'
-        ) {
-          return refineMenuRawText(key, eachValue);
-        } else {
-          return eachValue;
-        }
-      });
-    });
-    const refinedDayBefore2Menu = mapValues(day_2Menu, function (value, key) {
-      return mapValues(value, function (eachValue, eachKey) {
-        if (
-          eachKey === 'lunch' ||
-          eachKey === 'dinner' ||
-          eachKey === 'breakfast'
-        ) {
-          return refineMenuRawText(key, eachValue);
-        } else {
-          return eachValue;
-        }
-      });
-    });
 
     const ourhomeCafeteria = {
       name: '대학원기숙사',
@@ -354,29 +284,42 @@ export function processMealData(
 
     return {
       cafeteriaIncludeOurhome,
-      refinedDay0Menu,
-      refinedDayAfter1Menu,
-      refinedDayAfter2Menu,
-      refinedDayBefore1Menu,
-      refinedDayBefore2Menu,
+      day0MenuIncludeOurhome,
     };
   }
 
-  const {
-    cafeteriaIncludeOurhome,
-    refinedDay0Menu,
-    refinedDayAfter1Menu,
-    refinedDayAfter2Menu,
-    refinedDayBefore1Menu,
-    refinedDayBefore2Menu,
-  } = processDormData();
+  const {cafeteriaIncludeOurhome, day0MenuIncludeOurhome} = processDormData();
+
+  const menuBeforeRefine = [
+    dayBefore2Menu,
+    dayBefore1Menu,
+    day0MenuIncludeOurhome,
+    dayAfter1Menu,
+    dayAfter2Menu,
+  ];
+
+  const refinedMenus = menuBeforeRefine.map(oneDayMenu => {
+    return mapValues(oneDayMenu, function (value, key) {
+      return mapValues(value, function (eachValue, eachKey) {
+        if (
+          eachKey === 'lunch' ||
+          eachKey === 'dinner' ||
+          eachKey === 'breakfast'
+        ) {
+          return refineMenuRawText(key, eachValue);
+        } else {
+          return eachValue;
+        }
+      });
+    });
+  });
 
   return {
-    day0Menu: refinedDay0Menu,
-    day1Menu: refinedDayAfter1Menu,
-    day2Menu: refinedDayAfter2Menu,
-    day_1Menu: refinedDayBefore1Menu,
-    day_2Menu: refinedDayBefore2Menu,
+    dayBefore2Menu: refinedMenus[0],
+    dayBefore1Menu: refinedMenus[1],
+    day0Menu: refinedMenus[2],
+    dayAfter1Menu: refinedMenus[3],
+    dayAfter2Menu: refinedMenus[4],
     cafeteria: cafeteriaIncludeOurhome,
     mealList,
     favoriteList,
