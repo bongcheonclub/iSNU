@@ -33,7 +33,7 @@ export async function fetchLocalStoreageData() {
 
 export async function fetchCrawlData() {
   // const now = new Date('Tue Oct 26 2021 12:24:15 GMT+0900');
-  const DATE_OFFSETS = [-3, -2, -1, 0, 1, 2, 3];
+  const DATE_OFFSETS = [-2, -1, 0, 1, 2];
   function getDateMenuURL(offset: number): string {
     const now = new Date();
     const date = addDays(now, offset);
