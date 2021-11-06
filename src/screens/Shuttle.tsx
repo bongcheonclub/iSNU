@@ -2,6 +2,7 @@ import {find} from 'lodash';
 import React from 'react';
 import {compareAsc, getDay, parse as parseTime} from 'date-fns';
 import List from '../components/List';
+import {now} from '../helpers/getNow';
 
 type Props = {
   initialFavoriteNames: string[];
@@ -160,9 +161,6 @@ function checkOperating(shuttle: ShuttleType): {
   operating: ShuttleType['operatings'][number] | null;
 } {
   const {operatings} = shuttle;
-
-  const now = new Date();
-
   const day = getDay(now);
 
   if (!shuttle.name.includes('심야') && (day === 0 || day === 6)) {

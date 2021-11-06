@@ -26,6 +26,7 @@ import {MealData, RefinedMenu} from '../InitializeData/ProcessMealData';
 import Text from '../components/Text';
 import {theme} from '../ui/theme';
 import Button from '../components/WrappedButton';
+import {now} from '../helpers/getNow';
 
 type Props = {
   mealData: MealData;
@@ -44,8 +45,6 @@ function checkOperating(
         time: string;
       }>,
     ] {
-  const now = new Date();
-  // const now = new Date('Tue Oct 26 2021 12:24:15 GMT+0900');
   const spliter = cafeteriaName.includes('감골') ? '~' : '-';
   const today = (() => {
     switch (
