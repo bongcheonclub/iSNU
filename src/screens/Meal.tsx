@@ -12,6 +12,7 @@ import {
 } from 'native-base';
 import {chain, chunk, Dictionary} from 'lodash';
 import {
+  addDays,
   compareAsc,
   getDate,
   getDay,
@@ -35,6 +36,7 @@ type Props = {
 function checkOperating(
   cafeteriaName: string,
   cafeteria: MealData['cafeteria'],
+  selectedDate: Date,
 ):
   | [string, string]
   | [
@@ -48,7 +50,7 @@ function checkOperating(
   const spliter = cafeteriaName.includes('감골') ? '~' : '-';
   const today = (() => {
     switch (
-      getDay(now) // day
+      getDay(selectedDate) // day
     ) {
       case 0: // sunday
         return 'holiday';
@@ -129,9 +131,6 @@ export default function Meal({mealData}: Props) {
     mealList,
     favoriteList: initialFavoriteList,
     nonFavoriteList: initialNonFavoriteList,
-    year,
-    month,
-    date,
   } = mealData;
 
   const [selectedDateOffset, setSelectedDateOffset] = useState<number>(0);
@@ -144,16 +143,12 @@ export default function Meal({mealData}: Props) {
     initialNonFavoriteList,
   );
 
-  function getDisplayDate(
-    thisYear: number,
-    thisMonth: number,
-    thisDate: number,
-    offset: number,
-  ): string {
-    const displayDay = new Date(thisYear, thisMonth - 1, thisDate + offset);
-    const m = getMonth(displayDay) + 1;
-    const d = getDate(displayDay);
-    const day = getDay(displayDay);
+  const selectedDate = addDays(now, selectedDateOffset);
+
+  function getDisplayDate(specificDate: Date): string {
+    const m = getMonth(specificDate) + 1;
+    const d = getDate(specificDate);
+    const day = getDay(specificDate);
     const koreanDay = (() => {
       if (day === 0) {
         return '일';
@@ -181,7 +176,7 @@ export default function Meal({mealData}: Props) {
     const displayDateText = `${m}월 ${d}일 (${koreanDay})`;
     return displayDateText;
   }
-  const displayDate = getDisplayDate(year, month, date, selectedDateOffset);
+  const displayDate = getDisplayDate(selectedDate);
 
   const menus: {[key: number]: RefinedMenu} = {
     [-2]: dayBefore2Menu,
@@ -259,6 +254,7 @@ export default function Meal({mealData}: Props) {
       const [status, nextTime, operatingInfo] = checkOperating(
         cafeteriaName,
         cafeteria,
+        selectedDate,
       );
 
       return {
@@ -705,6 +701,7 @@ export default function Meal({mealData}: Props) {
                           점심
                         </Text>
                         <>
+                          {console.log(checkStatus[selectedMeal])}
                           {checkStatus[selectedMeal].operatingInfo
                             ?.beforeLunch ? (
                             <Text textAlign="center" variant="modalMenuTime">
