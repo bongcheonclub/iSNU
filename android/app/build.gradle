@@ -78,6 +78,7 @@ import com.android.build.OutputFile
  */
 
 project.ext.react = [
+    entryFile: "index.ts",
     enableHermes: false,  // clean and rebuild if changing
 ]
 
@@ -163,8 +164,10 @@ android {
         release {
             // Caution! In production, you need to generate your own keystore file.
             // see https://reactnative.dev/docs/signed-apk-android.
+            shrinkResources true
             signingConfig signingConfigs.release
             minifyEnabled enableProguardInReleaseBuilds
+            useProguard true
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
     }
