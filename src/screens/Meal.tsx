@@ -28,6 +28,7 @@ import Text from '../components/Text';
 import {theme} from '../ui/theme';
 import Button from '../components/WrappedButton';
 import {getNow} from '../helpers/getNow';
+import {convertToKoreanDay} from '../helpers/convertToKoreanDay';
 
 type Props = {
   mealData: MealData;
@@ -151,30 +152,7 @@ export default function Meal({mealData}: Props) {
     const m = getMonth(specificDate) + 1;
     const d = getDate(specificDate);
     const day = getDay(specificDate);
-    const koreanDay = (() => {
-      if (day === 0) {
-        return '일';
-      }
-      if (day === 1) {
-        return '월';
-      }
-      if (day === 2) {
-        return '화';
-      }
-      if (day === 3) {
-        return '수';
-      }
-      if (day === 4) {
-        return '목';
-      }
-      if (day === 5) {
-        return '금';
-      }
-      if (day === 6) {
-        return '토';
-      }
-      throw Error('이럴리없다.');
-    })();
+    const koreanDay = convertToKoreanDay(day);
     const displayDateText = `${m}월 ${d}일 (${koreanDay})`;
     return displayDateText;
   }
