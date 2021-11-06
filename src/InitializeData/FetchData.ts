@@ -1,11 +1,10 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import {addDays, getDate, getMonth, getYear} from 'date-fns';
 import {getItem} from '../helpers/localStorage';
 import {now} from '../helpers/getNow';
 
 export async function fetchLocalStoreageData() {
-  AsyncStorage.clear(); // 개발용 코드
+  // AsyncStorage.clear(); // 개발용 코드
   const [
     favoriteCafes,
     favoriteMarts,
