@@ -32,10 +32,10 @@ export async function fetchLocalStoreageData() {
 }
 
 export async function fetchCrawlData() {
-  // const now = new Date('Tue Oct 26 2021 12:24:15 GMT+0900');
   const DATE_OFFSETS = [-2, -1, 0, 1, 2];
   function getDateMenuURL(offset: number): string {
     const now = new Date();
+    // const now = new Date('Tue Oct 26 2021 12:24:15 GMT+0900');
     const date = addDays(now, offset);
     const url = `https://snuco.snu.ac.kr/ko/foodmenu?field_menu_date_value_1%5Bvalue%5D%5Bdate%5D=&field_menu_date_value%5Bvalue%5D%5Bdate%5D=${
       getMonth(date) + 1
@@ -66,7 +66,7 @@ export async function fetchCrawlData() {
     axios.get('https://snuco.snu.ac.kr/ko/node/20'),
     axios.get('https://snudorm.snu.ac.kr/food-schedule/'),
     await Promise.all(
-      menuUrlsWithOffset.map(async ({offset, url}) => {
+      menuUrlsWithOffset.map(async ({url}) => {
         const res = await axios.get(url);
         return res; // offset 혹은 연월일 리턴해서 활용하기
       }),

@@ -199,9 +199,17 @@ export const theme = extendTheme({
           },
         },
         closeButton: {
-          bg: 'white',
+          bg: 'transparent',
           borderColor: 'gray.300',
           rounded: '0',
+          _pressed: {
+            bg: 'gray.200',
+          },
+        },
+        changeMenuDateButton: {
+          bg: 'transparent',
+          borderColor: 'gray.300',
+          rounded: '8',
           _pressed: {
             bg: 'gray.200',
           },
