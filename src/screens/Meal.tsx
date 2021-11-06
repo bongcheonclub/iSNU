@@ -224,7 +224,7 @@ export default function Meal({mealData}: Props) {
           <Text textAlign="center" width="70%" variant="modalSubContent">
             {item.menuName}
           </Text>
-          <Text textAlign="right" width="30%" variant="modalMenuPrice">
+          <Text textAlign="right" width="30%" variant="modalSubContent">
             {item.price}
           </Text>
         </HStack>
