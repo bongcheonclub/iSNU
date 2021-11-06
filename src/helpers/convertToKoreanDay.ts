@@ -1,4 +1,4 @@
-export const convertToKoreanDay = (day: number) => {
+export const convertToKoreanDay = (day: 0 | 1 | 2 | 3 | 4 | 5 | 6) => {
   if (day === 0) {
     return '일';
   }
