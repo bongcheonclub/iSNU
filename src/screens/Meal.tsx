@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, {useState} from 'react';
+import React, {useCallback, useMemo, useState} from 'react';
 import {
   Box,
   Center,
@@ -16,14 +16,13 @@ import {
   getDate,
   getDay,
   getMonth,
-  getYear,
   parse as parseTime,
 } from 'date-fns';
 import FilledStarIcon from '../icons/filled-star.svg';
 import UnfilledStarIcon from '../icons/unfilled-star.svg';
 import TomorrowIcon from '../icons/tomorrow.svg';
 import YesterdayIcon from '../icons/yesterday.svg';
-import {MealData} from '../InitializeData/ProcessMealData';
+import {MealData, RefinedMenu} from '../InitializeData/ProcessMealData';
 import Text from '../components/Text';
 import {theme} from '../ui/theme';
 import Button from '../components/WrappedButton';
@@ -31,8 +30,6 @@ import Button from '../components/WrappedButton';
 type Props = {
   mealData: MealData;
 };
-
-// type Offset = 0 | 1 | 2 | -1 | -2;
 
 function checkOperating(
   cafeteriaName: string,
@@ -136,7 +133,6 @@ export default function Meal({mealData}: Props) {
     year,
     month,
     date,
-    koreanDay,
   } = mealData;
 
   const [selectedDateOffset, setSelectedDateOffset] = useState<number>(0);
@@ -155,40 +151,40 @@ export default function Meal({mealData}: Props) {
     thisDate: number,
     offset: number,
   ): string {
-    const _displayDay = new Date(thisYear, thisMonth - 1, thisDate + offset);
-    const _month = getMonth(_displayDay) + 1;
-    const _date = getDate(_displayDay);
-    const _day = getDay(_displayDay);
-    const _koreanDay = (() => {
-      if (_day === 0) {
+    const displayDay = new Date(thisYear, thisMonth - 1, thisDate + offset);
+    const m = getMonth(displayDay) + 1;
+    const d = getDate(displayDay);
+    const day = getDay(displayDay);
+    const koreanDay = (() => {
+      if (day === 0) {
         return '일';
       }
-      if (_day === 1) {
+      if (day === 1) {
         return '월';
       }
-      if (_day === 2) {
+      if (day === 2) {
         return '화';
       }
-      if (_day === 3) {
+      if (day === 3) {
         return '수';
       }
-      if (_day === 4) {
+      if (day === 4) {
         return '목';
       }
-      if (_day === 5) {
+      if (day === 5) {
         return '금';
       }
-      if (_day === 6) {
+      if (day === 6) {
         return '토';
       }
       throw Error('이럴리없다.');
     })();
-    const _displayDate = `${_month}월 ${_date}일 (${_koreanDay})`;
-    return _displayDate;
+    const displayDateText = `${m}월 ${d}일 (${koreanDay})`;
+    return displayDateText;
   }
   const displayDate = getDisplayDate(year, month, date, selectedDateOffset);
 
-  const menus: any = {
+  const menus: {[key: number]: RefinedMenu} = {
     [-2]: dayBefore2Menu,
     [-1]: dayBefore1Menu,
     0: day0Menu,
@@ -199,28 +195,32 @@ export default function Meal({mealData}: Props) {
   const menu = menus[selectedDateOffset];
 
   // 즐겨찾기 설정 해제 함수
-  async function editFavoriteList(name: string) {
-    if (mealList === null) {
-      return null;
-    }
 
-    const tempItem = await AsyncStorage.getItem('favoriteMeals');
-    const storedFavoriteMealList =
-      tempItem === undefined || tempItem === null ? [] : JSON.parse(tempItem);
-    const newFavoriteList = (await storedFavoriteMealList.includes(name))
-      ? storedFavoriteMealList.filter((item: string) => item !== name)
-      : storedFavoriteMealList.concat(name);
-    const newnonFavoriteList = mealList.filter(
-      item => !newFavoriteList.includes(item),
-    );
-    await AsyncStorage.setItem(
-      'favoriteMeals',
-      JSON.stringify(newFavoriteList),
-    ).then(() => {
-      setFavoriteList(newFavoriteList);
-      setNonFavoriteList(newnonFavoriteList);
-    });
-  }
+  const editFavoriteList = useCallback(
+    async (name: string) => {
+      if (mealList === null) {
+        return null;
+      }
+
+      const tempItem = await AsyncStorage.getItem('favoriteMeals');
+      const storedFavoriteMealList =
+        tempItem === undefined || tempItem === null ? [] : JSON.parse(tempItem);
+      const newFavoriteList = (await storedFavoriteMealList.includes(name))
+        ? storedFavoriteMealList.filter((item: string) => item !== name)
+        : storedFavoriteMealList.concat(name);
+      const newnonFavoriteList = mealList.filter(
+        item => !newFavoriteList.includes(item),
+      );
+      await AsyncStorage.setItem(
+        'favoriteMeals',
+        JSON.stringify(newFavoriteList),
+      ).then(() => {
+        setFavoriteList(newFavoriteList);
+        setNonFavoriteList(newnonFavoriteList);
+      });
+    },
+    [mealList],
+  );
 
   function showMenu(
     cafeteriaName: string,
@@ -235,8 +235,8 @@ export default function Meal({mealData}: Props) {
       );
     }
 
-    return contents.map((item: any[]) => {
-      if (item === undefined) {
+    return contents.map((item, idx) => {
+      if (item === undefined || item === null) {
         return null;
       }
       return (
@@ -244,17 +244,33 @@ export default function Meal({mealData}: Props) {
           alignItems="center"
           marginTop="6px"
           marginBottom="6px"
-          key={item[0]}>
+          key={idx}>
           <Text textAlign="center" width="70%" variant="modalSubContent">
-            {item[0]}
+            {item.menuName}
           </Text>
           <Text textAlign="right" width="30%" variant="modalMenuPrice">
-            {item[1]}
+            {item.price}
           </Text>
         </HStack>
       );
     });
   }
+  const checkStatus = chain(mealList)
+    .map(cafeteriaName => {
+      const [status, nextTime, operatingInfo] = checkOperating(
+        cafeteriaName,
+        cafeteria,
+      );
+
+      return {
+        name: cafeteriaName,
+        status,
+        nextTime,
+        operatingInfo: operatingInfo !== undefined ? operatingInfo : null, // 소담마루, 301 등 현재 운영 상태 비정상인 곳 에러 넘기기
+      };
+    })
+    .keyBy('name')
+    .value();
 
   function showFavoriteMenu(cafeteriaName: string) {
     if (checkStatus === null || todaysMenu === null) {
@@ -293,7 +309,7 @@ export default function Meal({mealData}: Props) {
       if (cafeteriaName.includes('301')) {
         return (
           <Text textAlign="center" width="100%" fontSize="md">
-            {string
+            {(string as string)
               .split('00원')
               .join('00원\n')
               .split('소반')
@@ -309,9 +325,9 @@ export default function Meal({mealData}: Props) {
         );
       }
       if (
-        string.includes('휴관') ||
-        string.includes('휴점') ||
-        string.includes('폐점')
+        (string as string).includes('휴관') ||
+        (string as string).includes('휴점') ||
+        (string as string).includes('폐점')
       ) {
         return (
           <Text textAlign="center" width="100%" variant="favoritePlaceTime">
@@ -324,8 +340,8 @@ export default function Meal({mealData}: Props) {
         return <Text textAlign="center">{contents}</Text>;
       }
 
-      return contents.map((item: any[]) => {
-        if (item === undefined) {
+      return contents.map((item, idx) => {
+        if (item === undefined || item === null) {
           return null;
         }
         return (
@@ -333,12 +349,12 @@ export default function Meal({mealData}: Props) {
             alignItems="center"
             marginTop="6px"
             marginBottom="6px"
-            key={item[0]}>
+            key={idx}>
             <Text textAlign="center" width="60%" variant="favoriteMenuName">
-              {item[0]}
+              {item.menuName}
             </Text>
             <Text textAlign="center" width="40%" variant="favoriteMenuPrice">
-              {item[1]}
+              {item.price}
             </Text>
           </HStack>
         );
@@ -346,9 +362,9 @@ export default function Meal({mealData}: Props) {
     } else {
       const string = todaysMenu[cafeteriaName].lunch;
       if (
-        string.includes('휴점') ||
-        string.includes('폐점') ||
-        string.includes('폐관')
+        (string as string).includes('휴점') ||
+        (string as string).includes('폐점') ||
+        (string as string).includes('폐관')
       ) {
         return (
           <Text variant="favoritePlaceTime" textAlign="center">
@@ -378,23 +394,6 @@ export default function Meal({mealData}: Props) {
     }
   }
 
-  const checkStatus = chain(mealList)
-    .map(cafeteriaName => {
-      const [status, nextTime, operatingInfo] = checkOperating(
-        cafeteriaName,
-        cafeteria,
-      );
-
-      return {
-        name: cafeteriaName,
-        status,
-        nextTime,
-        operatingInfo: operatingInfo !== undefined ? operatingInfo : null, // 소담마루, 301 등 현재 운영 상태 비정상인 곳 에러 넘기기
-      };
-    })
-    .keyBy('name')
-    .value();
-
   function isOperating(name: string) {
     if (checkStatus === null || todaysMenu[name] === undefined) {
       return false;
@@ -410,6 +409,140 @@ export default function Meal({mealData}: Props) {
     }
   }
 
+  const FavoritedMeal = function (props: {name: string}) {
+    const isOperatingMeal = isOperating(props.name);
+    const handleSelectedMeal = useCallback(
+      () => setSelectedMeal(props.name),
+      [props.name],
+    );
+    const favoritedMealButtonTags = useMemo(() => {
+      return {
+        name: props.name,
+        isOpearting: isOperatingMeal,
+        favorite: true,
+      };
+    }, [props.name, isOperatingMeal]);
+    return (
+      <Center
+        width="85%"
+        minHeight="60px"
+        position="relative"
+        marginBottom="15px"
+        key={props.name}>
+        <Button
+          tags={favoritedMealButtonTags}
+          label="meal-detail"
+          variant={
+            isOperatingMeal ? 'favoriteOpenPlace' : 'favoriteClosedPlace'
+          }
+          py="10px"
+          px="0px"
+          onPress={handleSelectedMeal}>
+          <HStack position="relative" padding={0}>
+            <Center width="34%" marginBottom={0} bg="transparent">
+              <Text variant="favoritePlaceNameBig" textAlign="center">
+                {props.name === '대학원기숙사' ? '대학원\n기숙사' : props.name}
+              </Text>
+              {isOperatingMeal ? (
+                <Text
+                  variant="favoritePlaceTime"
+                  textAlign="center"
+                  marginTop={1}>
+                  ~{checkStatus[props.name].nextTime}
+                </Text>
+              ) : (
+                <Box height="0px" />
+              )}
+            </Center>
+            {todaysMenu !== null &&
+            props.name !== null &&
+            todaysMenu[props.name] !== undefined ? (
+              <Center width="66%" padding={0}>
+                {showFavoriteMenu(props.name)}
+              </Center>
+            ) : (
+              <Text
+                width="65%"
+                variant="favoritePlaceTime"
+                textAlign="center"
+                margin="auto">
+                운영 정보 없음
+              </Text>
+            )}
+          </HStack>
+        </Button>
+      </Center>
+    );
+  };
+
+  const NotFavoriteMeal = function (props: {name: string}) {
+    const isOperatingMeal = isOperating(props.name);
+    const notFavoriteMealTags = useMemo(() => {
+      return {
+        name: props.name,
+        isOpearting: isOperatingMeal,
+        favorite: false,
+      };
+    }, [props.name, isOperatingMeal]);
+    const handleSelectedMeal = useCallback(
+      () => setSelectedMeal(props.name),
+      [props.name],
+    );
+    return (
+      <AspectRatio
+        key={props.name}
+        width="30%"
+        ratio={1}
+        mx="2.5%"
+        marginBottom="5%">
+        <Button
+          label="meal-detail"
+          tags={notFavoriteMealTags}
+          onPress={handleSelectedMeal}
+          width="100%"
+          margin={0}
+          variant="place"
+          padding={0}
+          key={props.name}>
+          <Text
+            textAlign="center"
+            variant={
+              isOperatingMeal
+                ? 'normalOpenPlaceSmall'
+                : 'normalClosedPlaceSmall'
+            }>
+            {props.name === '대학원기숙사' ? '대학원\n기숙사' : props.name}
+          </Text>
+        </Button>
+      </AspectRatio>
+    );
+  };
+
+  const hadnleModalClose = useCallback(() => {
+    setSelectedMeal(null);
+    setSelectedDateOffset(0);
+  }, []);
+
+  const handleFavoriteButton = useCallback(
+    () => editFavoriteList(String(selectedMeal)),
+    [editFavoriteList, selectedMeal],
+  );
+
+  const handleYesterdayButton = useCallback(() => {
+    setSelectedDateOffset(selectedDateOffset - 1);
+  }, [selectedDateOffset]);
+
+  const handleTomorrowButton = useCallback(() => {
+    setSelectedDateOffset(selectedDateOffset + 1);
+  }, [selectedDateOffset]);
+
+  const toggleFavoriteMealTag = useMemo(() => {
+    return {
+      name: selectedMeal,
+      isFavorite: favoriteList.includes(selectedMeal as string),
+    };
+  }, [favoriteList, selectedMeal]);
+
   return (
     <VStack>
       <ScrollView bgColor={theme.colors.white} height="100%">
@@ -419,60 +552,7 @@ export default function Meal({mealData}: Props) {
               return Number(isOperating(b)) - Number(isOperating(a));
             })
             .map(name => {
-              const isOperatingMeal = isOperating(name);
-              return (
-                <Center
-                  width="85%"
-                  minHeight="60px"
-                  position="relative"
-                  marginBottom="15px"
-                  key={name}>
-                  <Button
-                    tags={{name, isOpearting: isOperatingMeal, favorite: true}}
-                    label="meal-detail"
-                    variant={
-                      isOperatingMeal
-                        ? 'favoriteOpenPlace'
-                        : 'favoriteClosedPlace'
-                    }
-                    py="10px"
-                    px="0px"
-                    onPress={() => setSelectedMeal(name)}>
-                    <HStack position="relative" padding={0}>
-                      <Center width="34%" marginBottom={0} bg="transparent">
-                        <Text variant="favoritePlaceNameBig" textAlign="center">
-                          {name === '대학원기숙사' ? '대학원\n기숙사' : name}
-                        </Text>
-                        {isOperatingMeal ? (
-                          <Text
-                            variant="favoritePlaceTime"
-                            textAlign="center"
-                            marginTop={1}>
-                            ~{checkStatus[name].nextTime}
-                          </Text>
-                        ) : (
-                          <Box height="0px" />
-                        )}
-                      </Center>
-                      {todaysMenu !== null &&
-                      name !== null &&
-                      todaysMenu[name] !== undefined ? (
-                        <Center width="66%" padding={0}>
-                          {showFavoriteMenu(name)}
-                        </Center>
-                      ) : (
-                        <Text
-                          width="65%"
-                          variant="favoritePlaceTime"
-                          textAlign="center"
-                          margin="auto">
-                          운영 정보 없음
-                        </Text>
-                      )}
-                    </HStack>
-                  </Button>
-                </Center>
-              );
+              return <FavoritedMeal name={name} key={name} />;
             })}
         </Center>
         <Center marginTop={0} width="85%" alignSelf="center">
@@ -490,39 +570,7 @@ export default function Meal({mealData}: Props) {
                   width="100%"
                   marginLeft="-2.5%">
                   {subnonFavoriteListInfoArray.map(name => {
-                    const isOperatingMeal = isOperating(name);
-                    return (
-                      <AspectRatio
-                        key={name}
-                        width="30%"
-                        ratio={1}
-                        mx="2.5%"
-                        marginBottom="5%">
-                        <Button
-                          label="meal-detail"
-                          tags={{
-                            name,
-                            isOpearting: isOperatingMeal,
-                            favorite: false,
-                          }}
-                          onPress={() => setSelectedMeal(name)}
-                          width="100%"
-                          margin={0}
-                          variant="place"
-                          padding={0}
-                          key={name}>
-                          <Text
-                            textAlign="center"
-                            variant={
-                              isOperatingMeal
-                                ? 'normalOpenPlaceSmall'
-                                : 'normalClosedPlaceSmall'
-                            }>
-                            {name === '대학원기숙사' ? '대학원\n기숙사' : name}
-                          </Text>
-                        </Button>
-                      </AspectRatio>
-                    );
+                    return <NotFavoriteMeal name={name} key={name} />;
                   })}
                 </HStack>
               );
@@ -532,10 +580,7 @@ export default function Meal({mealData}: Props) {
         {selectedMeal !== null ? (
           <Modal // modal 구현
             isOpen={selectedMeal !== null}
-            onClose={() => {
-              setSelectedMeal(null);
-              setSelectedDateOffset(0);
-            }}>
+            onClose={hadnleModalClose}>
             <Modal.Content
               paddingTop="8px"
               px="12px"
@@ -550,14 +595,11 @@ export default function Meal({mealData}: Props) {
                     </Text>
                     <Button
                       label="meal-toggle-favorite"
-                      tags={{
-                        name: selectedMeal,
-                        isFavorite: favoriteList.includes(selectedMeal),
-                      }}
+                      tags={toggleFavoriteMealTag}
                       bgColor="transparent"
                       left={-6}
                       top={-1}
-                      onPress={() => editFavoriteList(String(selectedMeal))}>
+                      onPress={handleFavoriteButton}>
                       {favoriteList.includes(selectedMeal) ? (
                         <FilledStarIcon />
                       ) : (
@@ -577,12 +619,13 @@ export default function Meal({mealData}: Props) {
                     selectedDateOffset === -2 ? null : (
                       <Button
                         position="absolute"
-                        left="44px"
+                        left="39px"
+                        w="30px"
+                        h="30px"
+                        padding="0"
                         label={'prevDate'}
-                        backgroundColor="transparent"
-                        onPress={() => {
-                          setSelectedDateOffset(selectedDateOffset - 1);
-                        }}>
+                        variant="changeMenuDateButton"
+                        onPress={handleYesterdayButton}>
                         <YesterdayIcon />
                       </Button>
                     )}
@@ -596,12 +639,13 @@ export default function Meal({mealData}: Props) {
                     selectedDateOffset === 2 ? null : (
                       <Button
                         position="absolute"
-                        right="44px"
+                        right="39px"
+                        w="30px"
+                        h="30px"
+                        padding="0"
                         label={'nextDate'}
-                        backgroundColor="transparent"
-                        onPress={() => {
-                          setSelectedDateOffset(selectedDateOffset + 1);
-                        }}>
+                        variant="changeMenuDateButton"
+                        onPress={handleTomorrowButton}>
                         <TomorrowIcon />
                       </Button>
                     )}

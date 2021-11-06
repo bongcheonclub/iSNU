@@ -27,12 +27,21 @@ export type Cafeteria = {
   holiday: string;
 };
 
+export type RefinedMenu = {
+  [name: string]: {
+    breakfast: ({menuName: string; price: string} | null)[] | string;
+    lunch: ({menuName: string; price: string} | null)[] | string;
+    dinner: ({menuName: string; price: string} | null)[] | string;
+    contact: string;
+  };
+};
+
 export type MealData = {
-  day0Menu: Menu;
-  dayAfter1Menu: Menu;
-  dayAfter2Menu: Menu;
-  dayBefore1Menu: Menu;
-  dayBefore2Menu: Menu;
+  day0Menu: RefinedMenu;
+  dayAfter1Menu: RefinedMenu;
+  dayAfter2Menu: RefinedMenu;
+  dayBefore1Menu: RefinedMenu;
+  dayBefore2Menu: RefinedMenu;
   cafeteria: {
     [key: string]: Cafeteria;
   };
@@ -68,6 +77,7 @@ export function processMealData(
   }
   const favoriteList = favoriteMeals ?? ['학생회관'];
   const {year, month, date, koreanDay, day} = getTodaysDate();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   function fetchMenu(menuListRes: AxiosResponse<any>) {
     // 식단 정보 가져오는 함수
     const html = menuListRes.data;

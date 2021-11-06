@@ -5,7 +5,7 @@ function refineMenuName(rawText: string) {
     .split(/\+|&|\*/)
     .map((item: string) => item.trim());
   const refinedMenuNameArray: string[] = [];
-  splitedText.forEach((item, idx) => {
+  splitedText.forEach(item => {
     const lastIndex = refinedMenuNameArray.length - 1;
     if (lastIndex === -1) {
       refinedMenuNameArray.push(item);
@@ -23,31 +23,11 @@ function refineMenuName(rawText: string) {
   return refinedMenuNameArray.join('').trim();
 }
 
-export function refineMenuRawText(mealName: string, text: string) {
-  // const passList = ["라운지오"]
-  const notDefaultList = [
-    '자하연',
-    '예술계',
-    '소담마루',
-    '두레미담',
-    '공간',
-    '301동',
-    '220동',
-    '대학원기숙사',
-  ];
-
-  if (text.includes('휴관') || text.includes('휴점') || text.includes('폐점')) {
-    return '휴무/휴점';
-  }
-
-  const indexOfNotDefaultList = notDefaultList.indexOf(mealName);
-  if (indexOfNotDefaultList > -1) {
-    return RefineFetchedMenuOf[notDefaultList[indexOfNotDefaultList]](text);
-  } else {
-    return RefineFetchedMenuOf.default(text);
-  }
-}
-const RefineFetchedMenuOf: {[key: string]: any} = {
+const RefineFetchedMenuOf: {
+  [key: string]: (
+    text: string,
+  ) => ({menuName: string; price: string} | null)[] | string | null;
+} = {
   default: function (text: string) {
     return text
       .replace(/.파업/, '※')
@@ -64,13 +44,12 @@ const RefineFetchedMenuOf: {[key: string]: any} = {
           menuAndPrice[0].includes('※') ||
           menuAndPrice[0].includes('운영시간')
         ) {
-          return;
+          return null;
         }
-        const [menuName, price] = [
-          refineMenuName(menuAndPrice[0]),
-          menuAndPrice[1] + '00원',
-        ];
-        return [menuName, price];
+        const menuName = refineMenuName(menuAndPrice[0]);
+        const price = menuAndPrice[1] + '00원';
+
+        return {menuName, price};
       });
   },
   자하연: function (text: string) {
@@ -87,13 +66,13 @@ const RefineFetchedMenuOf: {[key: string]: any} = {
       })
       .map((menuAndPrice: string[]) => {
         if (menuAndPrice.length !== 2) {
-          return;
+          return null;
         }
         const [menuName, price] = [
           refineMenuName(menuAndPrice[0]),
           menuAndPrice[1] + '00원',
         ];
-        return [menuName, price];
+        return {menuName, price};
       });
   },
   예술계: function (text: string) {
@@ -109,13 +88,13 @@ const RefineFetchedMenuOf: {[key: string]: any} = {
       })
       .map((menuAndPrice: string[]) => {
         if (menuAndPrice.length !== 2) {
-          return;
+          return null;
         }
         const [menuName, price] = [
           refineMenuName(menuAndPrice[0]),
           menuAndPrice[1] + '00원',
         ];
-        return [menuName, price];
+        return {menuName, price};
       });
   },
   '220동': function (text: string) {
@@ -136,7 +115,7 @@ const RefineFetchedMenuOf: {[key: string]: any} = {
           menuAndPrice.length !== 2 &&
           !menuAndPrice[0].includes('플러스메뉴')
         ) {
-          return;
+          return null;
         }
         const [menuName, price] = menuAndPrice[0].includes('플러스메뉴')
           ? [
@@ -144,7 +123,7 @@ const RefineFetchedMenuOf: {[key: string]: any} = {
               menuAndPrice[2] + '00원',
             ]
           : [refineMenuName(menuAndPrice[0]), menuAndPrice[1] + '00원'];
-        return [menuName, price];
+        return {menuName, price};
       });
   },
   감골: function (text: string) {
@@ -165,13 +144,13 @@ const RefineFetchedMenuOf: {[key: string]: any} = {
       })
       .map((menuAndPrice: string[]) => {
         if (menuAndPrice.length !== 2) {
-          return;
+          return null;
         }
         const [menuName, price] = [
           refineMenuName(menuAndPrice[0]),
           menuAndPrice[1] + '00원',
         ];
-        return [menuName, price];
+        return {menuName, price};
       });
   },
   대학원기숙사: function (text: string) {
@@ -201,7 +180,7 @@ const RefineFetchedMenuOf: {[key: string]: any} = {
       .map(({parsedString, price}) => {
         const menuName = refineMenuName(parsedString);
 
-        return [menuName, price];
+        return {menuName, price};
       });
   },
   소담마루: function (text: string) {
@@ -254,3 +233,28 @@ const RefineFetchedMenuOf: {[key: string]: any} = {
       .split('*')[0];
   },
 };
+
+export function refineMenuRawText(mealName: string, text: string) {
+  // const passList = ["라운지오"]
+  const notDefaultList = [
+    '자하연',
+    '예술계',
+    '소담마루',
+    '두레미담',
+    '공간',
+    '301동',
+    '220동',
+    '대학원기숙사',
+  ];
+
+  if (text.includes('휴관') || text.includes('휴점') || text.includes('폐점')) {
+    return '휴무/휴점';
+  }
+
+  const indexOfNotDefaultList = notDefaultList.indexOf(mealName);
+  if (indexOfNotDefaultList > -1) {
+    return RefineFetchedMenuOf[notDefaultList[indexOfNotDefaultList]](text);
+  } else {
+    return RefineFetchedMenuOf.default(text);
+  }
+}
