@@ -1,7 +1,7 @@
 import React from 'react';
 import {compareAsc, getDay, parse as parseTime} from 'date-fns';
 import Grid from '../components/Grid';
-import {now} from '../helpers/getNow';
+import {getNow} from '../helpers/getNow';
 
 type Props = {
   marts: MartData[];
@@ -19,6 +19,8 @@ export type MartData = {
 };
 
 function checkOperating(mart: MartData): boolean {
+  const now = getNow();
+
   const {weekday, saturday, holiday} = mart;
 
   const operatingTime = (() => {

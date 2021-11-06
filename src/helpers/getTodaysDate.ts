@@ -1,11 +1,12 @@
 import {getDate, getDay, getMonth, getYear} from 'date-fns';
-import {now} from './getNow';
+import {getNow} from './getNow';
 
 export function getTodaysDate() {
-  const month = getMonth(now) + 1;
-  const date = getDate(now);
-  const day = getDay(now);
-  const year = getYear(now);
+  const nowDate = getNow();
+  const month = getMonth(nowDate) + 1;
+  const date = getDate(nowDate);
+  const day = getDay(nowDate);
+  const year = getYear(nowDate);
   const koreanDay = (() => {
     if (day === 0) {
       return '일';
