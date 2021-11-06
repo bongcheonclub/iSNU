@@ -256,7 +256,7 @@ export default function Meal({mealData}: Props) {
       checkStatus[cafeteriaName].nextTime,
     ];
     if (status === 'breakfast' || status === 'lunch' || status === 'dinner') {
-      const string = todaysMenu[cafeteriaName][status];
+      const textFormMenu = todaysMenu[cafeteriaName][status];
 
       if (cafeteriaName.includes('두레미담')) {
         return (
@@ -269,7 +269,7 @@ export default function Meal({mealData}: Props) {
       if (cafeteriaName.includes('소담마루')) {
         return (
           <Text textAlign="center" width="100%" variant="favoritePlaceTime">
-            {string}
+            {textFormMenu}
           </Text>
         );
       }
@@ -284,7 +284,7 @@ export default function Meal({mealData}: Props) {
       if (cafeteriaName.includes('301')) {
         return (
           <Text textAlign="center" width="100%" fontSize="md">
-            {(string as string)
+            {(textFormMenu as string)
               .split('00원')
               .join('00원\n')
               .split('소반')
@@ -300,13 +300,13 @@ export default function Meal({mealData}: Props) {
         );
       }
       if (
-        (string as string).includes('휴관') ||
-        (string as string).includes('휴점') ||
-        (string as string).includes('폐점')
+        (textFormMenu as string).includes('휴관') ||
+        (textFormMenu as string).includes('휴점') ||
+        (textFormMenu as string).includes('폐점')
       ) {
         return (
           <Text textAlign="center" width="100%" variant="favoritePlaceTime">
-            {string}
+            {textFormMenu}
           </Text>
         );
       }
@@ -335,15 +335,15 @@ export default function Meal({mealData}: Props) {
         );
       });
     } else {
-      const string = todaysMenu[cafeteriaName].lunch;
+      const textFormMenu = todaysMenu[cafeteriaName].lunch;
       if (
-        (string as string).includes('휴점') ||
-        (string as string).includes('폐점') ||
-        (string as string).includes('폐관')
+        (textFormMenu as string).includes('휴점') ||
+        (textFormMenu as string).includes('폐점') ||
+        (textFormMenu as string).includes('폐관')
       ) {
         return (
           <Text variant="favoritePlaceTime" textAlign="center">
-            {string}
+            {textFormMenu}
           </Text>
         );
       } else {
