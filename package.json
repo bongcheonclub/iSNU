@@ -2,6 +2,7 @@
   "name": "isnu",
   "version": "2.0.0",
   "private": true,
+  "main": "index.ts",
   "scripts": {
     "android": "react-native run-android",
     "ios": "react-native run-ios",
@@ -62,6 +63,7 @@
     "lint-staged": "^11.1.2",
     "metro-react-native-babel-preset": "^0.66.0",
     "prettier": "^2.4.0",
+    "react-native-bundle-visualizer": "^3.0.0",
     "react-native-codegen": "^0.0.7",
     "react-native-svg-transformer": "^0.14.3",
     "react-test-renderer": "17.0.2",
