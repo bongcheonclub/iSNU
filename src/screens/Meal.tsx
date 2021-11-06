@@ -209,7 +209,7 @@ export default function Meal({mealData}: Props) {
       );
     }
 
-    return contents.map((item, idx) => {
+    return contents.map(item => {
       if (item === undefined || item === null) {
         return null;
       }
@@ -218,7 +218,7 @@ export default function Meal({mealData}: Props) {
           alignItems="center"
           marginTop="6px"
           marginBottom="6px"
-          key={idx}>
+          key={item.menuName}>
           <Text textAlign="center" width="70%" variant="modalSubContent">
             {item.menuName}
           </Text>
@@ -315,7 +315,7 @@ export default function Meal({mealData}: Props) {
         return <Text textAlign="center">{contents}</Text>;
       }
 
-      return contents.map((item, idx) => {
+      return contents.map(item => {
         if (item === undefined || item === null) {
           return null;
         }
@@ -324,7 +324,7 @@ export default function Meal({mealData}: Props) {
             alignItems="center"
             marginTop="6px"
             marginBottom="6px"
-            key={idx}>
+            key={item.menuName}>
             <Text textAlign="center" width="60%" variant="favoriteMenuName">
               {item.menuName}
             </Text>
