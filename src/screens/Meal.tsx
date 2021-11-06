@@ -701,7 +701,6 @@ export default function Meal({mealData}: Props) {
                           점심
                         </Text>
                         <>
-                          {console.log(checkStatus[selectedMeal])}
                           {checkStatus[selectedMeal].operatingInfo
                             ?.beforeLunch ? (
                             <Text textAlign="center" variant="modalMenuTime">
