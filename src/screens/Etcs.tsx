@@ -6,12 +6,15 @@ import {
   Divider,
   HStack,
   Box,
+  Row,
 } from 'native-base';
 import Button from '../components/WrappedButton';
 import Text from '../components/Text';
 import React, {useCallback, useState} from 'react';
 import {Linking} from 'react-native';
 import {colors} from '../ui/colors';
+import OutlinkIcon from '../icons/outlink-gray.svg';
+import ExternalIcon from '../icons/external.svg';
 
 export default function Etcs() {
   const [focusedEtc, setFocusedEtc] = useState<'Post' | 'Book' | 'Bank' | null>(
@@ -439,7 +442,17 @@ export default function Etcs() {
               width="85%"
               height="72px"
               variant="normalPlace">
-              <Text variant="normalOpenPlaceBig">은행</Text>
+              <Center flexDirection="row">
+                <Row
+                  height="100%"
+                  width="100%"
+                  alignItems="center"
+                  justifyContent="space-between"
+                  px="30px">
+                  <Text variant="normalOpenPlaceBig">은행</Text>
+                  <OutlinkIcon />
+                </Row>
+              </Center>
             </Button>
           </Center>
           <Center marginTop="15px">
@@ -450,7 +463,17 @@ export default function Etcs() {
               width="85%"
               height="72px"
               variant="normalPlace">
-              <Text variant="normalOpenPlaceBig">우체국</Text>
+              <Center flexDirection="row">
+                <Row
+                  height="100%"
+                  width="100%"
+                  alignItems="center"
+                  justifyContent="space-between"
+                  px="30px">
+                  <Text variant="normalOpenPlaceBig">우체국</Text>
+                  <OutlinkIcon />
+                </Row>
+              </Center>
             </Button>
           </Center>
           <Center marginTop="15px">
@@ -461,7 +484,17 @@ export default function Etcs() {
               width="85%"
               height="72px"
               variant="normalPlace">
-              <Text variant="normalOpenPlaceBig">교보문고</Text>
+              <Center flexDirection="row">
+                <Row
+                  height="100%"
+                  width="100%"
+                  alignItems="center"
+                  justifyContent="space-between"
+                  px="30px">
+                  <Text variant="normalOpenPlaceBig">교보문고</Text>
+                  <OutlinkIcon />
+                </Row>
+              </Center>
             </Button>
           </Center>
           <Center marginTop="15px">
@@ -472,7 +505,17 @@ export default function Etcs() {
               width="85%"
               height="72px"
               variant="normalPlace">
-              <Text variant="normalOpenPlaceBig">도서관</Text>
+              <Center flexDirection="row">
+                <Row
+                  height="100%"
+                  width="100%"
+                  alignItems="center"
+                  justifyContent="space-between"
+                  px="30px">
+                  <Text variant="normalOpenPlaceBig">도서관</Text>
+                  <ExternalIcon />
+                </Row>
+              </Center>
             </Button>
           </Center>
           <Center marginTop="15px">
@@ -483,7 +526,17 @@ export default function Etcs() {
               width="85%"
               height="72px"
               variant="normalPlace">
-              <Text variant="normalOpenPlaceBig">보건진료소</Text>
+              <Center flexDirection="row">
+                <Row
+                  height="100%"
+                  width="100%"
+                  alignItems="center"
+                  justifyContent="space-between"
+                  px="30px">
+                  <Text variant="normalOpenPlaceBig">보건진료소</Text>
+                  <ExternalIcon />
+                </Row>
+              </Center>
             </Button>
           </Center>
           <Center marginTop="15px">
@@ -494,7 +547,17 @@ export default function Etcs() {
               width="85%"
               height="72px"
               variant="normalPlace">
-              <Text variant="normalOpenPlaceBig">기숙사 편의시설</Text>
+              <Center flexDirection="row">
+                <Row
+                  height="100%"
+                  width="100%"
+                  alignItems="center"
+                  justifyContent="space-between"
+                  px="30px">
+                  <Text variant="normalOpenPlaceBig">기숙사 편의시설</Text>
+                  <ExternalIcon />
+                </Row>
+              </Center>
             </Button>
           </Center>
         </VStack>
