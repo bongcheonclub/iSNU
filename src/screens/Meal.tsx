@@ -27,11 +27,13 @@ import {MealData, RefinedMenu} from '../InitializeData/ProcessMealData';
 import Text from '../components/Text';
 import {theme} from '../ui/theme';
 import Button from '../components/WrappedButton';
-import {now} from '../helpers/getNow';
+import {getNow} from '../helpers/getNow';
 
 type Props = {
   mealData: MealData;
 };
+
+const now = getNow();
 
 function checkOperating(
   cafeteriaName: string,

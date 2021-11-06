@@ -1,7 +1,7 @@
 import axios from 'axios';
 import {addDays, getDate, getMonth, getYear} from 'date-fns';
 import {getItem} from '../helpers/localStorage';
-import {now} from '../helpers/getNow';
+import {getNow} from '../helpers/getNow';
 
 export async function fetchLocalStoreageData() {
   // AsyncStorage.clear(); // 개발용 코드
@@ -34,7 +34,7 @@ export async function fetchLocalStoreageData() {
 export async function fetchCrawlData() {
   const DATE_OFFSETS = [-2, -1, 0, 1, 2];
   function getDateMenuURL(offset: number): string {
-    const date = addDays(now, offset);
+    const date = addDays(getNow(), offset);
     const url = `https://snuco.snu.ac.kr/ko/foodmenu?field_menu_date_value_1%5Bvalue%5D%5Bdate%5D=&field_menu_date_value%5Bvalue%5D%5Bdate%5D=${
       getMonth(date) + 1
     }%2F${getDate(date)}%2F${getYear(date)}`;

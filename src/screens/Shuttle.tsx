@@ -2,7 +2,7 @@ import {find} from 'lodash';
 import React from 'react';
 import {compareAsc, getDay, parse as parseTime} from 'date-fns';
 import List from '../components/List';
-import {now} from '../helpers/getNow';
+import {getNow} from '../helpers/getNow';
 
 type Props = {
   initialFavoriteNames: string[];
@@ -161,7 +161,7 @@ function checkOperating(shuttle: ShuttleType): {
   operating: ShuttleType['operatings'][number] | null;
 } {
   const {operatings} = shuttle;
-  const day = getDay(now);
+  const day = getDay(getNow);
 
   if (!shuttle.name.includes('심야') && (day === 0 || day === 6)) {
     return {isOperating: false, operating: null};
@@ -175,11 +175,11 @@ function checkOperating(shuttle: ShuttleType): {
     const startAt = parseTime(
       startAtString === '24:00' ? '23:59' : startAtString,
       'HH:mm',
-      now,
+      getNow,
     );
-    const endedAt = parseTime(endedAtString, 'HH:mm', now);
+    const endedAt = parseTime(endedAtString, 'HH:mm', getNow);
 
-    if (compareAsc(startAt, now) < 0 && compareAsc(now, endedAt) < 0) {
+    if (compareAsc(startAt, getNow) < 0 && compareAsc(getNow, endedAt) < 0) {
       return true;
     } else {
       return false;
