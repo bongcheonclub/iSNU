@@ -20,5 +20,4 @@ export const convertToKoreanDay = (day: 0 | 1 | 2 | 3 | 4 | 5 | 6) => {
   if (day === 6) {
     return '토';
   }
-  throw Error('이럴리없다.');
 };
