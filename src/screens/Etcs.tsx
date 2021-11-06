@@ -431,69 +431,69 @@ export default function Etcs() {
       ) : null}
       <ScrollView bgColor={colors.white}>
         <VStack>
-          <Center marginTop={2.5} marginBottom={2.5}>
+          <Center marginTop="15px">
             <Button
               label="etcs-bank"
               onPress={focusToBank}
               rounded="10px"
               width="85%"
               height="72px"
-              variant="place">
+              variant="normalPlace">
               <Text variant="normalOpenPlaceBig">은행</Text>
             </Button>
           </Center>
-          <Center marginTop={2.5} marginBottom={2.5}>
+          <Center marginTop="15px">
             <Button
               label="etcs-post-office"
               onPress={focusToPost}
               rounded="10px"
               width="85%"
               height="72px"
-              variant="place">
+              variant="normalPlace">
               <Text variant="normalOpenPlaceBig">우체국</Text>
             </Button>
           </Center>
-          <Center marginTop={2.5} marginBottom={2.5}>
+          <Center marginTop="15px">
             <Button
               label="etcs-bookstore"
               onPress={focusToBook}
               rounded="10px"
               width="85%"
               height="72px"
-              variant="place">
+              variant="normalPlace">
               <Text variant="normalOpenPlaceBig">교보문고</Text>
             </Button>
           </Center>
-          <Center marginTop={2.5} marginBottom={2.5}>
+          <Center marginTop="15px">
             <Button
               label="etcs-library"
               onPress={linkToLibrary}
               rounded="10px"
               width="85%"
               height="72px"
-              variant="place">
+              variant="normalPlace">
               <Text variant="normalOpenPlaceBig">도서관</Text>
             </Button>
           </Center>
-          <Center marginTop={2.5} marginBottom={2.5}>
+          <Center marginTop="15px">
             <Button
               label="etcs-public-health"
               onPress={linkToPublicHealth}
               rounded="10px"
               width="85%"
               height="72px"
-              variant="place">
+              variant="normalPlace">
               <Text variant="normalOpenPlaceBig">보건진료소</Text>
             </Button>
           </Center>
-          <Center marginTop={2.5} marginBottom={2.5}>
+          <Center marginTop="15px">
             <Button
               label="etcs-dormitory"
               onPress={linkToDormitory}
               rounded="10px"
               width="85%"
               height="72px"
-              variant="place">
+              variant="normalPlace">
               <Text variant="normalOpenPlaceBig">기숙사 편의시설</Text>
             </Button>
           </Center>

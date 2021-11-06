@@ -203,9 +203,11 @@ export default function Meal({mealData}: Props) {
     const contents = menus[selectedDateOffset][cafeteriaName][whichMenu];
     if (typeof contents === 'string') {
       return (
-        <Text textAlign="center" width="100%" variant="modalSubContent">
-          {contents}
-        </Text>
+        <HStack alignItems="center" marginTop="6px" marginBottom="6px">
+          <Text textAlign="center" width="100%" variant="modalSubContent">
+            {contents}
+          </Text>
+        </HStack>
       );
     }
 
@@ -268,7 +270,7 @@ export default function Meal({mealData}: Props) {
 
       if (cafeteriaName.includes('소담마루')) {
         return (
-          <Text textAlign="center" width="100%" variant="favoritePlaceTime">
+          <Text textAlign="center" width="100%" variant="favoriteClosedInfo">
             {textFormMenu}
           </Text>
         );
@@ -283,7 +285,7 @@ export default function Meal({mealData}: Props) {
       }
       if (cafeteriaName.includes('301')) {
         return (
-          <Text textAlign="center" width="100%" fontSize="md">
+          <Text textAlign="center" width="100%" variant="favoriteMenuName">
             {(textFormMenu as string)
               .split('00원')
               .join('00원\n')
@@ -305,14 +307,18 @@ export default function Meal({mealData}: Props) {
         (textFormMenu as string).includes('폐점')
       ) {
         return (
-          <Text textAlign="center" width="100%" variant="favoritePlaceTime">
+          <Text textAlign="center" width="100%" variant="favoriteClosedInfo">
             {textFormMenu}
           </Text>
         );
       }
       const contents = todaysMenu[cafeteriaName][status];
       if (typeof contents === 'string') {
-        return <Text textAlign="center">{contents}</Text>;
+        return (
+          <Text textAlign="center" width="100%" variant="favoriteClosedInfo">
+            {contents}
+          </Text>
+        );
       }
 
       return contents.map(item => {
@@ -342,25 +348,25 @@ export default function Meal({mealData}: Props) {
         (textFormMenu as string).includes('폐관')
       ) {
         return (
-          <Text variant="favoritePlaceTime" textAlign="center">
+          <Text variant="favoriteClosedInfo" textAlign="center">
             {textFormMenu}
           </Text>
         );
       } else {
         if (cafeteriaName.includes('301')) {
           return (
-            <Text variant="favoritePlaceTime" textAlign="center">
+            <Text variant="favoriteMenuName" textAlign="center">
               교직원 식당만 운영{'\n'}11:30-13:10
             </Text>
           );
         }
         if (nextTime === '추후') {
-          <Text variant="favoritePlaceTime" textAlign="center">
+          <Text variant="favoriteClosedInfo" textAlign="center">
             운영 정보 없음
           </Text>;
         } else {
           return (
-            <Text variant="favoritePlaceTime" textAlign="center">
+            <Text variant="favoriteClosedInfo" textAlign="center">
               {nextTime} 운영 예정
             </Text>
           );
@@ -400,22 +406,25 @@ export default function Meal({mealData}: Props) {
     return (
       <Center
         width="85%"
-        minHeight="60px"
         position="relative"
         marginBottom="15px"
         key={props.name}>
         <Button
           tags={favoritedMealButtonTags}
           label="meal-detail"
-          variant={
-            isOperatingMeal ? 'favoriteOpenPlace' : 'favoriteClosedPlace'
-          }
+          variant="favoritePlace"
           py="10px"
           px="0px"
           onPress={handleSelectedMeal}>
           <HStack position="relative" padding={0}>
             <Center width="34%" marginBottom={0} bg="transparent">
-              <Text variant="favoritePlaceNameBig" textAlign="center">
+              <Text
+                variant={
+                  isOperatingMeal
+                    ? 'favoriteOpenPlaceNameBig'
+                    : 'favoriteClosedPlaceNameBig'
+                }
+                textAlign="center">
                 {props.name === '대학원기숙사' ? '대학원\n기숙사' : props.name}
               </Text>
               {isOperatingMeal ? (
@@ -438,7 +447,7 @@ export default function Meal({mealData}: Props) {
             ) : (
               <Text
                 width="65%"
-                variant="favoritePlaceTime"
+                variant="favoriteClosedInfo"
                 textAlign="center"
                 margin="auto">
                 운영 정보 없음
@@ -476,7 +485,7 @@ export default function Meal({mealData}: Props) {
           onPress={handleSelectedMeal}
           width="100%"
           margin={0}
-          variant="place"
+          variant="normalPlace"
           padding={0}
           key={props.name}>
           <Text
@@ -521,7 +530,7 @@ export default function Meal({mealData}: Props) {
   return (
     <VStack>
       <ScrollView bgColor={theme.colors.white} height="100%">
-        <Center marginTop={2.5}>
+        <Center marginTop="15px">
           {favoriteList
             .sort((a, b) => {
               return Number(isOperating(b)) - Number(isOperating(a));
@@ -638,7 +647,7 @@ export default function Meal({mealData}: Props) {
                   bounces={false}>
                   {menu[selectedMeal].breakfast.length > 1 ? (
                     <>
-                      <HStack>
+                      <HStack alignItems="center">
                         <VStack width="25%" justifyContent="center">
                           <Text textAlign="center" variant="modalSubContent">
                             아침

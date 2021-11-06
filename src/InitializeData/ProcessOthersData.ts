@@ -197,7 +197,7 @@ export function processCafeData(res: AxiosResponse<any>) {
         case 'Pascucci':
           return '파스쿠찌';
         case '투썸플레이스':
-          return '투썸';
+          return '투썸 플레이스';
         case '카페이야기':
           return '카페 이야기';
         case '라운지스낵':

@@ -96,25 +96,25 @@ const FocusedModal = <T extends AvailableItem>({
         </Box>
         <VStack px="12px">
           <HStack width="100%">
-            <Text width="40%" variant="modalSubInfo" textAlign="center" />
-            <Text width="30%" variant="modalSubInfo" textAlign="center">
+            <Text width="30%" variant="modalSubInfo" textAlign="center" />
+            <Text width="50%" variant="modalSubInfo" textAlign="center">
               배차간격
             </Text>
-            <Text width="30%" variant="modalSubInfo" textAlign="center">
+            <Text width="20%" variant="modalSubInfo" textAlign="center">
               대수
             </Text>
           </HStack>
           {item.operatings.map(operating => (
             <Box key={operating.time}>
-              <Divider my={2} bg="black" width="100%" marginY="14px" />
-              <HStack key={operating.time} width="100%">
-                <Text width="40%" variant="modalSubContent" textAlign="center">
+              <Divider my={3} bg="black" width="100%" marginY="14px" />
+              <HStack key={operating.time} width="100%" alignItems="center">
+                <Text width="30%" variant="modalSubContent" textAlign="center">
                   {operating.time}
                 </Text>
-                <Text width="30%" variant="modalSubContent" textAlign="center">
+                <Text width="50%" variant="modalSubContent" textAlign="center">
                   {operating.interval}
                 </Text>
-                <Text width="30%" variant="modalSubContent" textAlign="center">
+                <Text width="20%" variant="modalSubContent" textAlign="center">
                   {operating.numbers}
                 </Text>
               </HStack>
@@ -214,20 +214,14 @@ const List = <T extends AvailableItem>(props: Props<T>) => {
       setFocusedItem(item.name);
     }, [item.name]);
     return (
-      <Center marginY={2.5}>
+      <Center marginTop="15px">
         <Button
           label={`${itemType}-click-button`}
           tags={tags}
           width="100%"
           height="72px"
           paddingLeft="15px"
-          variant={
-            favoriteRate
-              ? isOperating
-                ? 'favoriteOpenPlace'
-                : 'favoriteClosedPlace'
-              : 'place'
-          }
+          variant={favoriteRate ? 'favoritePlace' : 'normalPlace'}
           onPress={onPress}>
           <Center flexDirection="row">
             <Row height="100%" width="100%" alignItems="center">
@@ -235,14 +229,19 @@ const List = <T extends AvailableItem>(props: Props<T>) => {
                 width="64%"
                 variant={
                   favoriteRate > 0
-                    ? 'favoritePlaceNameBig'
+                    ? isOperating
+                      ? 'favoriteOpenPlaceNameBig'
+                      : 'favoriteClosedPlaceNameBig'
                     : isOperating
                     ? 'normalOpenPlaceBig'
                     : 'normalClosedPlaceBig'
                 }>
                 {name}
               </Text>
-              <Text textAlign="center" width="36%" variant="favoritePlaceTime">
+              <Text
+                textAlign="center"
+                width="36%"
+                variant={interval ? 'favoriteMenuName' : 'favoriteClosedInfo'}>
                 {interval ? `배차간격: ${interval}` : '미운행중'}
               </Text>
             </Row>

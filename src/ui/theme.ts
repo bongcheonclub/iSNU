@@ -50,58 +50,82 @@ export const theme = extendTheme({
       variants: {
         pageTitle: {
           color: 'blue.200',
-          fontSize: '50px',
+          fontSize: '40px',
           fontWeight: '500',
         },
-        favoritePlaceNameBig: {
+        favoriteOpenPlaceNameBig: {
           // For Meal, Bus
-          color: 'brown.300',
-          fontSize: '22px',
-          fontWeight: '500',
-        },
-        favoritePlaceNameSmall: {
-          // For Cafe, Mart
           color: 'brown.300',
           fontSize: '20px',
           fontWeight: '500',
         },
+        favoriteOpenPlaceNameSmall: {
+          // For Cafe, Mart
+          color: 'brown.300',
+          fontSize: '15px',
+          fontWeight: '500',
+        },
+        favoriteClosedPlaceNameBig: {
+          // For Meal, Bus
+          color: 'brown.300',
+          fontSize: '20px',
+          fontWeight: '500',
+          opacity: '40',
+        },
+        favoriteClosedPlaceNameSmall: {
+          // For Cafe, Mart
+          color: 'brown.300',
+          fontSize: '15px',
+          fontWeight: '500',
+          opacity: '40',
+        },
         favoritePlaceTime: {
           color: 'gray.600',
-          fontSize: '15px',
+          fontSize: '13px',
           fontWeight: '400',
         },
         favoriteMenuName: {
           color: 'brown.500',
-          fontSize: '15px',
+          fontSize: '13px',
           fontWeight: '400',
         },
         favoriteMenuPrice: {
           color: 'brown.400',
-          fontSize: '15px',
+          fontSize: '13px',
+          fontWeight: '400',
+        },
+        favoriteClosedInfo: {
+          color: 'gray.600',
+          fontSize: '13px',
           fontWeight: '400',
         },
         normalOpenPlaceBig: {
           // For Bus, Etc
           color: 'gray.700',
-          fontSize: '22px',
+          fontSize: '20px',
           fontWeight: '400',
         },
         normalOpenPlaceSmall: {
           // For Else
           color: 'gray.700',
-          fontSize: '20px',
+          fontSize: '15px',
           fontWeight: '400',
         },
         normalClosedPlaceBig: {
           // For Bus
           color: 'gray.400',
-          fontSize: '22px',
+          fontSize: '20px',
           fontWeight: '400',
         },
         normalClosedPlaceSmall: {
           // For Else
           color: 'gray.400',
-          fontSize: '20px',
+          fontSize: '15px',
+          fontWeight: '400',
+        },
+        normalPlaceTime: {
+          color: 'gray.600',
+          fontSize: '13px',
           fontWeight: '400',
         },
         modalTitle: {
@@ -121,22 +145,17 @@ export const theme = extendTheme({
         },
         modalSubInfo: {
           color: 'gray.500',
-          fontSize: '15px',
+          fontSize: '13px',
           fontWeight: '400',
         },
         modalSubContent: {
           color: 'gray.800',
-          fontSize: '18px',
+          fontSize: '13px',
           fontWeight: '400',
         },
         modalMenuTime: {
           color: 'gray.500',
           fontSize: '10px',
-          fontWeight: '400',
-        },
-        modalMenuPrice: {
-          color: 'gray.800',
-          fontSize: '13px',
           fontWeight: '400',
         },
         submitButton: {
@@ -157,7 +176,7 @@ export const theme = extendTheme({
     },
     Button: {
       variants: {
-        favoriteOpenPlace: {
+        favoritePlace: {
           bg: 'brown.100',
           borderColor: 'brown.200',
           borderWidth: '1px',
@@ -166,16 +185,7 @@ export const theme = extendTheme({
             bg: 'brown.200',
           },
         },
-        favoriteClosedPlace: {
-          bg: 'gray.200',
-          borderColor: 'gray.300',
-          borderWidth: '1px',
-          rounded: '10px',
-          _pressed: {
-            bg: 'gray.300',
-          },
-        },
-        place: {
+        normalPlace: {
           bg: 'gray.100',
           borderColor: 'gray.300',
           borderWidth: '1px',
