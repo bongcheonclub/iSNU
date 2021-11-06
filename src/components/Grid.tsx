@@ -212,17 +212,13 @@ const Grid = <T extends AvailableItem>(props: Props<T>) => {
         width="30%"
         padding={2}
         onPress={onPress}
-        variant={
-          favoriteRate > 0
-            ? isOperating
-              ? 'favoriteOpenPlace'
-              : 'favoriteClosedPlace'
-            : 'place'
-        }>
+        variant={favoriteRate > 0 ? 'favoritePlace' : 'normalPlace'}>
         <Text
           variant={
             favoriteRate > 0
-              ? 'favoritePlaceNameSmall'
+              ? isOperating
+                ? 'favoriteOpenPlaceNameSmall'
+                : 'favoriteClosedPlaceNameSmall'
               : isOperating
               ? 'normalOpenPlaceSmall'
               : 'normalClosedPlaceSmall'
@@ -247,7 +243,7 @@ const Grid = <T extends AvailableItem>(props: Props<T>) => {
       {sortedItems ? (
         <Box>
           <ScrollView bgColor={colors.white}>
-            <VStack width="85%" marginTop={2.5} marginLeft="7.5%">
+            <VStack width="85%" marginTop="15px" marginLeft="7.5%">
               {chain(sortedItems)
                 .chunk(3)
                 .map(itemsInARow =>
