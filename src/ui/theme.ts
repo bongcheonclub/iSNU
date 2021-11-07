@@ -2,16 +2,16 @@ import {extendTheme} from 'native-base';
 
 export const theme = extendTheme({
   fontConfig: {
-    NotoSansKR: {
-      300: 'NotoSansKR-Regular',
-      400: 'NotoSansKR-Medium',
-      500: 'NotoSansKR-Bold',
+    NotoSansCJKkr: {
+      300: 'NotoSansCJKkr-Regular',
+      400: 'NotoSansCJKkr-Medium',
+      500: 'NotoSansCJKkr-Bold',
     },
   },
   fonts: {
-    heading: 'NotoSansKR',
-    body: 'NotoSansKR',
-    mono: 'NotoSansKR',
+    heading: 'NotoSansCJKkr',
+    body: 'NotoSansCJKkr',
+    mono: 'NotoSansCJKkr',
   },
 
   colors: {
