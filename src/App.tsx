@@ -60,7 +60,7 @@ export default function App() {
                     borderBottomWidth: Platform.OS === 'android' ? 1 : 0,
                   },
                   tabBarLabelStyle: {
-                    fontFamily: 'NotoSansKR-Medium',
+                    fontFamily: 'NotoSansCJKkr-Medium',
                     top: Platform.OS === 'android' ? 1 : -3,
                     // paddingBottom: 5,
                   },
