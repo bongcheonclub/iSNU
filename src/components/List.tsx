@@ -256,7 +256,7 @@ const List = <T extends AvailableItem>(props: Props<T>) => {
       {sortedItems ? (
         <Box>
           <ScrollView bgColor={colors.white}>
-            <VStack width="85%" marginLeft="7.5%">
+            <VStack width="85%" marginLeft="7.5%" paddingBottom="15px">
               {chain(sortedItems)
                 .map(item => {
                   return <ItemButton key={item.name} item={item} />;

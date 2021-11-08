@@ -14,7 +14,7 @@ import React, {useCallback, useState} from 'react';
 import {Linking} from 'react-native';
 import {colors} from '../ui/colors';
 import OutlinkIcon from '../icons/outlink-gray.svg';
-import ExternalIcon from '../icons/external.svg';
+import ExternalIcon from '../icons/external-gray.svg';
 
 export default function Etcs() {
   const [focusedEtc, setFocusedEtc] = useState<'Post' | 'Book' | 'Bank' | null>(
