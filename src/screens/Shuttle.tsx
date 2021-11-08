@@ -160,8 +160,9 @@ function checkOperating(shuttle: ShuttleType): {
   isOperating: boolean;
   operating: ShuttleType['operatings'][number] | null;
 } {
+  const now = getNow();
   const {operatings} = shuttle;
-  const day = getDay(getNow);
+  const day = getDay(now);
 
   if (!shuttle.name.includes('심야') && (day === 0 || day === 6)) {
     return {isOperating: false, operating: null};
@@ -175,11 +176,11 @@ function checkOperating(shuttle: ShuttleType): {
     const startAt = parseTime(
       startAtString === '24:00' ? '23:59' : startAtString,
       'HH:mm',
-      getNow,
+      now,
     );
-    const endedAt = parseTime(endedAtString, 'HH:mm', getNow);
+    const endedAt = parseTime(endedAtString, 'HH:mm', now);
 
-    if (compareAsc(startAt, getNow) < 0 && compareAsc(getNow, endedAt) < 0) {
+    if (compareAsc(startAt, now) < 0 && compareAsc(now, endedAt) < 0) {
       return true;
     } else {
       return false;
