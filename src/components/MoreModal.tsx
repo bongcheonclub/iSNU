@@ -9,6 +9,8 @@ import KebabIcon from '../icons/kebab.svg';
 import PressedKebabIcon from '../icons/kebab-pressed.svg';
 import OutlinkIcon from '../icons/outlink.svg';
 import PressedOutlinkIcon from '../icons/outlink-pressed.svg';
+import ExternalIcon from '../icons/external.svg';
+import PressedExternalIcon from '../icons/external-pressed.svg';
 import BackIcon from '../icons/back.svg';
 import PressedBackIcon from '../icons/back-pressed.svg';
 import {theme} from '../ui/theme';
@@ -236,7 +238,7 @@ export default function MoreModal() {
                           }>
                           개발자들 보러 가기
                         </Text>
-                        {isPressed ? <PressedOutlinkIcon /> : <OutlinkIcon />}
+                        {isPressed ? <PressedExternalIcon /> : <ExternalIcon />}
                       </Center>
                     );
                   }}
