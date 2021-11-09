@@ -7,7 +7,7 @@ export type LocalStorage = {
   favoriteMarts: string[];
   favoriteShuttles: string[];
   favoriteMeals: string[];
-  cachedResponses: {
+  newCachedResponses: {
     date: string;
     data: Awaited<ReturnType<typeof fetchCrawlData>>;
   };
