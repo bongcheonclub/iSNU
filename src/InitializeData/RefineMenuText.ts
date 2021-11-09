@@ -31,7 +31,8 @@ const RefineFetchedMenuOf: {
   default: function (text: string) {
     return text
       .replace(/.파업/, '※')
-      .replaceAll(' (', '(')
+      .split(' (')
+      .join('(')
       .split('00원')
       .map((item: string) => {
         return item
@@ -191,7 +192,8 @@ const RefineFetchedMenuOf: {
     return text
       .trim()
       .split('※')[0]
-      .replaceAll('&amp;', '&')
+      .split('&amp;')
+      .join('&')
       .replace('&lt;', '<')
       .replace('&gt;', '>')
       .split('00원')
