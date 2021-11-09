@@ -17,7 +17,7 @@ export async function fetchLocalStoreageData() {
     getItem('favoriteMarts'),
     getItem('favoriteShuttles'),
     getItem('favoriteMeals'),
-    getItem('cachedResponses'),
+    getItem('newCachedResponses'),
     getItem('wasViewedNotice'),
   ]);
 
