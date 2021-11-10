@@ -25,7 +25,7 @@ export async function initializeData() {
       }
     }
     const fetchedData = await fetchCrawlData();
-    await setItem('cachedResponses', {
+    await setItem('newCachedResponses', {
       data: fetchedData,
       date: nowDate,
     });
