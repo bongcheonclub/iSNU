@@ -11,7 +11,6 @@ export type Menu = {
     breakfast: string;
     lunch: string;
     dinner: string;
-    contact: string;
   };
 };
 
@@ -32,16 +31,15 @@ export type RefinedMenu = {
     breakfast: ({menuName: string; price: string} | null)[] | string;
     lunch: ({menuName: string; price: string} | null)[] | string;
     dinner: ({menuName: string; price: string} | null)[] | string;
-    contact: string;
   };
 };
 
 export type MealData = {
+  dayBefore2Menu: RefinedMenu;
+  dayBefore1Menu: RefinedMenu;
   day0Menu: RefinedMenu;
   dayAfter1Menu: RefinedMenu;
   dayAfter2Menu: RefinedMenu;
-  dayBefore1Menu: RefinedMenu;
-  dayBefore2Menu: RefinedMenu;
   cafeteria: {
     [key: string]: Cafeteria;
   };
@@ -102,7 +100,7 @@ export function processMealData(
         const lunch = trTexts[5];
         const dinner = trTexts[7];
         const rawName = nameAndContact.split(/\(|\)/)[0];
-        const contact = nameAndContact.split(/\(|\)/)[1];
+        // const contact = nameAndContact.split(/\(|\)/)[1];
         const name =
           rawName.trim() === '3식당'
             ? rawName.trim()
@@ -110,7 +108,7 @@ export function processMealData(
             ? '공간'
             : rawName.trim().replace('식당', '');
 
-        data[name] = {breakfast, lunch, dinner, contact};
+        data[name] = {breakfast, lunch, dinner};
       })
       .value();
 
@@ -257,13 +255,11 @@ export function processMealData(
     //   day !== 6 ? data[2][day + 1] + data[3][day + 1] + data[4][day + 1] : '';
     // const tomorrowDinner =
     //   day !== 6 ? data[5][day + 1] + data[6][day + 1] + data[7][day + 1] : '';
-    const contact = 'unknown';
     const day0OurhomeMenu: Menu = {
       대학원기숙사: {
         breakfast: todayBreakfast,
         lunch: todayLunch,
         dinner: todayDinner,
-        contact,
       },
     };
     // const day1OurhomeMenu: Menu = {

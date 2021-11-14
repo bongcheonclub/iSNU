@@ -26,7 +26,7 @@ function refineMenuName(rawText: string) {
 const RefineFetchedMenuOf: {
   [key: string]: (
     text: string,
-  ) => ({menuName: string; price: string} | null)[] | string | null;
+  ) => ({menuName: string; price: string} | null)[] | string;
 } = {
   default: function (text: string) {
     return text
@@ -158,7 +158,7 @@ const RefineFetchedMenuOf: {
   대학원기숙사: function (text: string) {
     const matchedStrings = text.match(/[A-Z]|\(\d,\d\d\d원\)/gi);
     if (!matchedStrings) {
-      return null;
+      return '';
     }
     return matchedStrings
       .map((priceSymbol, priceIndex) => {
