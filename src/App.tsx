@@ -51,8 +51,8 @@ export default function App() {
                   tabBarActiveTintColor: '#0085FF',
                   tabBarInactiveTintColor: '#636363',
                   tabBarStyle: {
-                    paddingTop: Platform.OS === 'android' ? 13 : 2,
-                    paddingBottom: 0,
+                    paddingTop: Platform.OS === 'android' ? 2 : 2,
+                    paddingBottom: Platform.OS === 'android' ? 3 : 0,
                     height: Platform.OS === 'android' ? 62 : 52,
                     borderTopColor: '#DCDCDC',
                     borderTopWidth: 1,
@@ -61,7 +61,7 @@ export default function App() {
                   },
                   tabBarLabelStyle: {
                     fontFamily: 'NotoSansCJKkr-Medium',
-                    top: Platform.OS === 'android' ? 1 : -3,
+                    top: Platform.OS === 'android' ? -3 : -3,
                     // paddingBottom: 5,
                   },
                   tabBarIconStyle: {
