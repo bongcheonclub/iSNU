@@ -286,10 +286,16 @@ const SHUTTLES: ShuttleType[] = [
         partition: '02:00까지 운행',
       },
       {
-        time: '02:00~23:59',
+        time: '02:00~18:00',
         interval: null,
         numbers: null,
-        partition: '자정부터 운행',
+        partition: '운행 종료',
+      },
+      {
+        time: '18:00~23:59',
+        interval: null,
+        numbers: null,
+        partition: '자정부터 운행 예정',
       },
     ],
   },
