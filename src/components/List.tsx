@@ -8,6 +8,7 @@ import {
   Modal,
   Divider,
   Row,
+  Column,
 } from 'native-base';
 import React, {useCallback, useMemo, useState} from 'react';
 import FilledStarIcon from '../icons/filled-star.svg';
@@ -36,6 +37,7 @@ type ItemWithFlag<T> = T & {
   isOperating: boolean;
   interval: string | null;
   favoriteRate: number;
+  partition: string | null;
 };
 
 const FocusedModal = <T extends AvailableItem>({
@@ -104,22 +106,33 @@ const FocusedModal = <T extends AvailableItem>({
               대수
             </Text>
           </HStack>
-          {item.operatings.map(operating => (
-            <Box key={operating.time}>
-              <Divider my={3} bg="black" width="100%" marginY="14px" />
-              <HStack key={operating.time} width="100%" alignItems="center">
-                <Text width="30%" variant="modalSubContent" textAlign="center">
-                  {operating.time}
-                </Text>
-                <Text width="50%" variant="modalSubContent" textAlign="center">
-                  {operating.interval}
-                </Text>
-                <Text width="20%" variant="modalSubContent" textAlign="center">
-                  {operating.numbers}
-                </Text>
-              </HStack>
-            </Box>
-          ))}
+          {item.operatings.map(operating =>
+            operating.interval ? (
+              <Box key={operating.time}>
+                <Divider my={3} bg="black" width="100%" marginY="14px" />
+                <HStack key={operating.time} width="100%" alignItems="center">
+                  <Text
+                    width="30%"
+                    variant="modalSubContent"
+                    textAlign="center">
+                    {operating.time}
+                  </Text>
+                  <Text
+                    width="50%"
+                    variant="modalSubContent"
+                    textAlign="center">
+                    {operating.interval}
+                  </Text>
+                  <Text
+                    width="20%"
+                    variant="modalSubContent"
+                    textAlign="center">
+                    {operating.numbers}
+                  </Text>
+                </HStack>
+              </Box>
+            ) : null,
+          )}
         </VStack>
         <Text marginBottom="2px" />
       </Modal.Content>
@@ -151,6 +164,7 @@ const List = <T extends AvailableItem>(props: Props<T>) => {
             isOperating,
             favoriteRate,
             interval: operating?.interval ?? null,
+            partition: operating?.partition ?? null,
           };
         })
         .sortBy(({isOperating, favoriteRate}) => {
@@ -200,7 +214,7 @@ const List = <T extends AvailableItem>(props: Props<T>) => {
   const handleCloseFocusedModal = useCallback(() => setFocusedItem(null), []);
 
   const ItemButton = ({item}: {item: ItemWithFlag<T>}) => {
-    const {name, isOperating, favoriteRate, interval} = item;
+    const {name, isOperating, favoriteRate, interval, partition} = item;
     const tags = useMemo(
       () => ({
         itemType,
@@ -219,30 +233,37 @@ const List = <T extends AvailableItem>(props: Props<T>) => {
           label={`${itemType}-click-button`}
           tags={tags}
           width="100%"
-          height="72px"
-          paddingLeft="15px"
+          height={isOperating ? '80px' : '72px'}
+          paddingLeft="20px"
           variant={favoriteRate ? 'favoritePlace' : 'normalPlace'}
           onPress={onPress}>
           <Center flexDirection="row">
             <Row height="100%" width="100%" alignItems="center">
-              <Text
-                width="64%"
-                variant={
-                  favoriteRate > 0
-                    ? isOperating
-                      ? 'favoriteOpenPlaceNameBig'
-                      : 'favoriteClosedPlaceNameBig'
-                    : isOperating
-                    ? 'normalOpenPlaceBig'
-                    : 'normalClosedPlaceBig'
-                }>
-                {name}
-              </Text>
+              <Column width="64%" alignItems="flex-start">
+                <Text
+                  width="100%"
+                  variant={
+                    favoriteRate > 0
+                      ? isOperating
+                        ? 'favoriteOpenPlaceNameBig'
+                        : 'favoriteClosedPlaceNameBig'
+                      : isOperating
+                      ? 'normalOpenPlaceBig'
+                      : 'normalClosedPlaceBig'
+                  }>
+                  {name}
+                </Text>
+                {isOperating ? (
+                  <Text variant="favoritePlaceTime" marginTop="4px">
+                    {partition}
+                  </Text>
+                ) : null}
+              </Column>
               <Text
                 textAlign="center"
                 width="36%"
                 variant={interval ? 'favoriteMenuName' : 'favoriteClosedInfo'}>
-                {interval ? `배차간격: ${interval}` : '미운행중'}
+                {interval ? `배차간격: ${interval}` : partition ?? '운행 종료'}
               </Text>
             </Row>
           </Center>
