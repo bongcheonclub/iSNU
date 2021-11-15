@@ -355,7 +355,7 @@ export default function Meal({mealData}: Props) {
       } else {
         if (cafeteriaName.includes('301')) {
           return (
-            <Text variant="favoriteMenuName" textAlign="center">
+            <Text variant="favoriteClosedInfo" textAlign="center">
               교직원 식당만 운영{'\n'}11:30-13:10
             </Text>
           );
