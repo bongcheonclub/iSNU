@@ -57,6 +57,7 @@ const RefineFetchedMenuOf: {
   자하연: function (text: string) {
     return text
       .replace(/.파업/, '※')
+      .replace(/\( ?3층/, '※')
       .split('※')[0]
       .split('00원')
       .map((item: string) => {
