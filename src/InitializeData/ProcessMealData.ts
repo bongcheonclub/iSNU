@@ -5,6 +5,7 @@ import {chain, keyBy, mapValues} from 'lodash';
 import {Node, parse} from 'node-html-parser';
 import {setItem} from '../helpers/localStorage';
 import {refineMenuRawText} from './RefineMenuText';
+import {isVacation, processVacationMeal} from './ProcessVacation';
 
 export type Menu = {
   [name: string]: {
@@ -202,6 +203,17 @@ export function processMealData(
     const nonFavoriteList = refinedMealList.filter(
       mealName => !favoriteList.includes(mealName),
     );
+
+    if (isVacation() === true) {
+      mapValues(
+        processedData,
+        function (eachCafeteria: Cafeteria, name: string) {
+          return processVacationMeal(eachCafeteria, name);
+        },
+      );
+
+      // processedData = processVacationMeal(processedData);
+    }
 
     return {
       cafeteria: processedData,
