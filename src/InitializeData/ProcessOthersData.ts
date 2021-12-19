@@ -221,7 +221,7 @@ export function processCafeData(res: AxiosResponse<any>) {
     }))
     .value();
 
-  if (isVacation() === true) {
+  if (isVacation()) {
     return refinedCafes.map(eachCafe => processVacationCafe(eachCafe));
   }
 
