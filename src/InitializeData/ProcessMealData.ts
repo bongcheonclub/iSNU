@@ -204,7 +204,7 @@ export function processMealData(
       mealName => !favoriteList.includes(mealName),
     );
 
-    if (isVacation() === true) {
+    if (isVacation()) {
       mapValues(
         processedData,
         function (eachCafeteria: Cafeteria, name: string) {
