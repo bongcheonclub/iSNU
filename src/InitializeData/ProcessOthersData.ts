@@ -1,6 +1,7 @@
 import {chain} from 'lodash';
 import {parse} from 'node-html-parser';
 import {AxiosResponse} from 'axios';
+import {isVacation, processVacationCafe} from './ProcessVacation';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function processMartData(res: AxiosResponse<any>) {
@@ -219,6 +220,10 @@ export function processCafeData(res: AxiosResponse<any>) {
       name: refineName(cafe.name),
     }))
     .value();
+
+  if (isVacation() === true) {
+    return refinedCafes.map(eachCafe => processVacationCafe(eachCafe));
+  }
 
   return refinedCafes;
 }
