@@ -51,7 +51,9 @@ function checkOperating(cafe: CafeData): boolean {
 
   if (operatingTime.includes('-') || operatingTime.includes('~')) {
     const spliter = /-|~/;
-    const [startAtString, endedAtString] = operatingTime.split(spliter);
+    const [startAtString, endedAtString] = operatingTime
+      .split('(')[0]
+      .split(spliter);
 
     const startAt = parseTime(
       startAtString === '24:00' ? '23:59' : startAtString,
