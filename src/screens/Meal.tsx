@@ -645,7 +645,9 @@ export default function Meal({mealData}: Props) {
                   marginRight={3}
                   maxHeight="420px"
                   bounces={false}>
-                  {menu[selectedMeal].breakfast.length > 1 ? (
+                  {menu[selectedMeal].breakfast.length > 1 ||
+                  (selectedMeal === '대학원기숙사' &&
+                    menu[selectedMeal].breakfast.length > 0) ? (
                     <>
                       <HStack alignItems="center">
                         <VStack width="25%" justifyContent="center">
@@ -683,7 +685,9 @@ export default function Meal({mealData}: Props) {
                     <></>
                   )}
 
-                  {menu[selectedMeal].lunch.length > 1 ? (
+                  {menu[selectedMeal].lunch.length > 1 ||
+                  (selectedMeal === '대학원기숙사' &&
+                    menu[selectedMeal].lunch.length > 0) ? (
                     <HStack>
                       <VStack width="25%" justifyContent="center">
                         <Text textAlign="center" variant="modalSubContent">
@@ -711,7 +715,9 @@ export default function Meal({mealData}: Props) {
                   ) : (
                     <></>
                   )}
-                  {menu[selectedMeal].dinner.length > 1 ? (
+                  {menu[selectedMeal].dinner.length > 1 ||
+                  (selectedMeal === '대학원기숙사' &&
+                    menu[selectedMeal].dinner.length > 0) ? (
                     <>
                       <Divider
                         my={2}
