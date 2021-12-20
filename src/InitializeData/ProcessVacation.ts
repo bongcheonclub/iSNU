@@ -38,22 +38,13 @@ export const processVacationCafe = (data: {
   holiday: string;
 }) => {
   if (data.name === '느티나무 음대점') {
-    console.log('음대');
-    console.log(data.weekday);
     data.weekday = '08:30-17:30 (학기중 08:30-18:00)';
-    console.log(data.weekday);
   }
   if (data.name === '느티나무 도서관점') {
-    console.log('도서관');
-    console.log(data.weekday);
     data.weekday = '08:30-17:30 (학기중 08:30-18:30)';
-    console.log(data.weekday);
   }
   if (data.name === '느티나무 동원관점') {
-    console.log('동원관');
-    console.log(data.weekday);
     data.weekday = '08:30-17:30 (학기중 08:30-18:00)';
-    console.log(data.weekday);
   }
   return data;
 };
