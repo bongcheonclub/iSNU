@@ -19,9 +19,8 @@ export type CafeData = {
   holiday: string;
 };
 
-const now = getNow();
-
 function checkOperating(cafe: CafeData): boolean {
+  const now = getNow();
   const {weekday, saturday, holiday} = cafe;
 
   const operatingTime = (() => {
