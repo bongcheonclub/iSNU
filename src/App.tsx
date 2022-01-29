@@ -1,7 +1,7 @@
 import {NavigationContainer} from '@react-navigation/native';
 import {Box, Flex, NativeBaseProvider, HStack, StatusBar} from 'native-base';
-import React, {useEffect, useState} from 'react';
-import {Dimensions, Platform} from 'react-native';
+import React, {useEffect, useRef, useState} from 'react';
+import {AppState, Dimensions, Platform} from 'react-native';
 import Cafe from './screens/Cafe';
 import Etcs from './screens/Etcs';
 import Mart from './screens/Mart';
@@ -26,6 +26,7 @@ const Tab = createBottomTabNavigator();
 
 export default function App() {
   const windowWidth = Dimensions.get('window').width;
+  const appState = useRef(AppState.currentState);
   const [data, setData] = useState<Awaited<
     ReturnType<typeof initializeData>
   > | null>(null);
@@ -36,6 +37,22 @@ export default function App() {
       SplashScreen.hide();
     });
   }, []);
+
+  useEffect(() => {
+    const subscription = AppState.addEventListener('change', nextAppState => {
+      if (nextAppState === 'active') {
+        console.log('connect');
+        initializeData().then(updatedData => {
+          setData(updatedData);
+        });
+      }
+      appState.current = nextAppState;
+    });
+    return () => {
+      subscription.remove();
+    };
+  }, []);
+
   return (
     <NativeBaseProvider theme={theme}>
       <Box width="100%" height="100%" safeArea backgroundColor="white">

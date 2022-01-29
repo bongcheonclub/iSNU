@@ -34,8 +34,6 @@ type Props = {
   mealData: MealData;
 };
 
-const now = getNow();
-
 function checkOperating(
   cafeteriaName: string,
   cafeteria: MealData['cafeteria'],
@@ -50,6 +48,7 @@ function checkOperating(
         time: string;
       }>,
     ] {
+  const now = getNow();
   const spliter = cafeteriaName.includes('감골') ? '~' : '-';
   const today = (() => {
     switch (
@@ -146,7 +145,7 @@ export default function Meal({mealData}: Props) {
     initialNonFavoriteList,
   );
 
-  const selectedDate = addDays(now, selectedDateOffset);
+  const selectedDate = addDays(getNow(), selectedDateOffset);
 
   function getDisplayDate(specificDate: Date): string {
     const m = getMonth(specificDate) + 1;
