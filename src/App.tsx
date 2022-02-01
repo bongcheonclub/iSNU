@@ -41,7 +41,6 @@ export default function App() {
   useEffect(() => {
     const subscription = AppState.addEventListener('change', nextAppState => {
       if (nextAppState === 'active') {
-        console.log('connect');
         initializeData().then(updatedData => {
           setData(updatedData);
         });
