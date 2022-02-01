@@ -25,7 +25,7 @@ function checkOperating(mart: MartData): boolean {
   const {weekday, saturday, holiday} = mart;
 
   const operatingTime = (() => {
-    const day = getTodaysDate().day;
+    const day = getTodaysDate().isHoliday ? 0 : getTodaysDate().day;
     switch (day) {
       case 0: // sunday
         return holiday;

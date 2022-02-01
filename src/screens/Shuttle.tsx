@@ -763,7 +763,7 @@ function checkOperating(shuttle: ShuttleType):
   | {isOperating: false; operating: ShuttleType['operatings'][number] | null} {
   const now = getNow();
   const {operatings} = shuttle;
-  const day = getTodaysDate().day;
+  const day = getTodaysDate().isHoliday ? 0 : getTodaysDate().day;
 
   if (!shuttle.name.includes('심야') && (day === 0 || day === 6)) {
     return {isOperating: false, operating: null};

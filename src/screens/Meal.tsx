@@ -29,6 +29,7 @@ import {theme} from '../ui/theme';
 import Button from '../components/WrappedButton';
 import {getNow} from '../helpers/getNow';
 import {convertToKoreanDay} from '../helpers/convertToKoreanDay';
+import {getIsHoliday} from '../helpers/isHoliday';
 
 type Props = {
   mealData: MealData;
@@ -52,7 +53,7 @@ function checkOperating(
   const spliter = cafeteriaName.includes('감골') ? '~' : '-';
   const today = (() => {
     switch (
-      getDay(selectedDate) // day
+      getIsHoliday(selectedDate) ? 0 : getDay(selectedDate) // day
     ) {
       case 0: // sunday
         return 'holiday';
@@ -145,7 +146,10 @@ export default function Meal({mealData}: Props) {
     initialNonFavoriteList,
   );
 
-  const selectedDate = addDays(getNow(), selectedDateOffset);
+  const selectedDate = useMemo(
+    () => addDays(getNow(), selectedDateOffset),
+    [selectedDateOffset],
+  );
 
   function getDisplayDate(specificDate: Date): string {
     const m = getMonth(specificDate) + 1;
@@ -155,7 +159,10 @@ export default function Meal({mealData}: Props) {
     const displayDateText = `${m}월 ${d}일 (${koreanDay})`;
     return displayDateText;
   }
-  const displayDate = getDisplayDate(selectedDate);
+  const displayDate = useMemo(
+    () => getDisplayDate(selectedDate),
+    [selectedDate],
+  );
 
   const menus: {[key: number]: RefinedMenu} = {
     [-2]: dayBefore2Menu,
@@ -248,13 +255,31 @@ export default function Meal({mealData}: Props) {
     .keyBy('name')
     .value();
 
+  const checkTodayStatus = chain(mealList)
+    .map(cafeteriaName => {
+      const [status, nextTime, operatingInfo] = checkOperating(
+        cafeteriaName,
+        cafeteria,
+        getNow(),
+      );
+
+      return {
+        name: cafeteriaName,
+        status,
+        nextTime,
+        operatingInfo: operatingInfo !== undefined ? operatingInfo : null, // 소담마루, 301 등 현재 운영 상태 비정상인 곳 에러 넘기기
+      };
+    })
+    .keyBy('name')
+    .value();
+
   function showFavoriteMenu(cafeteriaName: string) {
-    if (checkStatus === null || todaysMenu === null) {
+    if (checkTodayStatus === null || todaysMenu === null) {
       return <Text>Loading</Text>;
     }
     const [status, nextTime] = [
-      checkStatus[cafeteriaName].status,
-      checkStatus[cafeteriaName].nextTime,
+      checkTodayStatus[cafeteriaName].status,
+      checkTodayStatus[cafeteriaName].nextTime,
     ];
     if (status === 'breakfast' || status === 'lunch' || status === 'dinner') {
       const textFormMenu = todaysMenu[cafeteriaName][status];
@@ -389,8 +414,23 @@ export default function Meal({mealData}: Props) {
     }
   }
 
+  function isOperatingForFavorites(name: string) {
+    if (checkTodayStatus === null || todaysMenu[name] === undefined) {
+      return false;
+    }
+    if (
+      checkTodayStatus[name].status === 'breakfast' ||
+      checkTodayStatus[name].status === 'lunch' ||
+      checkTodayStatus[name].status === 'dinner'
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   const FavoritedMeal = function (props: {name: string}) {
-    const isOperatingMeal = isOperating(props.name);
+    const isOperatingMeal = isOperatingForFavorites(props.name);
     const handleSelectedMeal = useCallback(
       () => setSelectedMeal(props.name),
       [props.name],
