@@ -153,7 +153,7 @@ export default function MoreModal() {
   const linkToDevelopers = useCallback(
     () =>
       Linking.openURL(
-        'https://wobby.notion.site/wobby/We-Work-as-a-Hobby-9c6a1081ecbf4885902962c0998bfd2c',
+        'https://bongcheon-club.notion.site/We-Work-as-a-Hobby-9c6a1081ecbf4885902962c0998bfd2c',
       ),
     [],
   );
