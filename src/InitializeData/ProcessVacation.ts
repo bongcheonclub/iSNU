@@ -7,7 +7,7 @@ export const isVacation = () => {
   const vacationStart = new Date(2021, 11, 22); // month는 0부터 시작함
   const winterTermEnd = new Date(2022, 0, 26); // month는 0부터 시작함
   const vacationEnd = new Date(2022, 2, 1); // month는 0부터 시작함
-  if (compareAsc(vacationStart, now) < 0 && compareAsc(now, vacationEnd) < 0) {
+  if (compareAsc(vacationStart, now) <= 0 && compareAsc(now, vacationEnd) < 0) {
     if (
       compareAsc(winterTermEnd, now) < 0 &&
       compareAsc(now, vacationEnd) < 0
