@@ -50,9 +50,9 @@ const RefineFetchedMenuOf: {
         }
         const menuName = refineMenuName(menuAndPrice[0]);
         const price = menuAndPrice[1] + '00원';
-        console.log(menuName);
 
-        return {menuName, price};
+        const result = menuName.trim() === '' ? null : {menuName, price};
+        return result;
       });
   },
   자하연: function (text: string) {
@@ -76,7 +76,8 @@ const RefineFetchedMenuOf: {
           refineMenuName(menuAndPrice[0]),
           menuAndPrice[1] + '00원',
         ];
-        return {menuName, price};
+        const result = menuName.trim() === '' ? null : {menuName, price};
+        return result;
       });
   },
   예술계: function (text: string) {
@@ -98,7 +99,8 @@ const RefineFetchedMenuOf: {
           refineMenuName(menuAndPrice[0]),
           menuAndPrice[1] + '00원',
         ];
-        return {menuName, price};
+        const result = menuName.trim() === '' ? null : {menuName, price};
+        return result;
       });
   },
   '220동': function (text: string) {
@@ -127,7 +129,8 @@ const RefineFetchedMenuOf: {
               menuAndPrice[2] + '00원',
             ]
           : [refineMenuName(menuAndPrice[0]), menuAndPrice[1] + '00원'];
-        return {menuName, price};
+        const result = menuName.trim() === '' ? null : {menuName, price};
+        return result;
       });
   },
   감골: function (text: string) {
@@ -154,7 +157,8 @@ const RefineFetchedMenuOf: {
           refineMenuName(menuAndPrice[0]),
           menuAndPrice[1] + '00원',
         ];
-        return {menuName, price};
+        const result = menuName.trim() === '' ? null : {menuName, price};
+        return result;
       });
   },
   대학원기숙사: function (text: string) {
@@ -184,7 +188,8 @@ const RefineFetchedMenuOf: {
       .map(({parsedString, price}) => {
         const menuName = refineMenuName(parsedString);
 
-        return {menuName, price};
+        const result = menuName.trim() === '' ? null : {menuName, price};
+        return result;
       });
   },
   소담마루: function (text: string) {
@@ -252,7 +257,12 @@ export function refineMenuRawText(mealName: string, text: string) {
     '대학원기숙사',
   ];
 
-  if (text.includes('휴관') || text.includes('휴점') || text.includes('폐점')) {
+  if (
+    text.includes('휴관') ||
+    text.includes('휴점') ||
+    text.includes('폐점') ||
+    text.includes('미운영')
+  ) {
     return '휴무/휴점';
   }
 
