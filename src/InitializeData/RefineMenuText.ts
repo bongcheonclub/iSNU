@@ -50,6 +50,7 @@ const RefineFetchedMenuOf: {
         }
         const menuName = refineMenuName(menuAndPrice[0]);
         const price = menuAndPrice[1] + '00원';
+        console.log(menuName);
 
         return {menuName, price};
       });

@@ -16,22 +16,24 @@ export function getTodaysDate() {
     '01-01', // 신정
     '03-01', // 삼일절
     '05-05', // 어린이날
-    '06-06', // 어린이날
+    '06-06', // 현충일
     '08-15', // 광복절
     '10-03', // 개천절
     '10-09', // 한글날
-    '12-25', // 한글날
+    '12-25', // 크리스마스
   ];
   const nowDate = getNow();
+  const year = getYear(nowDate);
   const month = getMonth(nowDate) + 1;
   const date = getDate(nowDate);
+  const dateString = `${year}-${month < 10 ? '0' + month : month}-${
+    date < 10 ? '0' + date : date
+  }`;
   const isHoliday = !!holidayList.find(
     today =>
-      today === nowDate.toISOString().slice(5, 10) ||
-      today === nowDate.toISOString().slice(0, 10),
+      today === dateString.slice(5, 10) || today === dateString.slice(0, 10),
   );
   const day = isHoliday ? 0 : getDay(nowDate);
-  const year = getYear(nowDate);
   const koreanDay = convertToKoreanDay(getDay(nowDate));
   return {year, month, date, koreanDay, day};
 }

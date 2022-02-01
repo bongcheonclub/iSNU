@@ -1,9 +1,10 @@
 import {find} from 'lodash';
 import React from 'react';
-import {compareAsc, getDay, parse as parseTime} from 'date-fns';
+import {compareAsc, parse as parseTime} from 'date-fns';
 import List from '../components/List';
 import {getNow} from '../helpers/getNow';
 import {isVacation} from '../InitializeData/ProcessVacation';
+import {getTodaysDate} from '../helpers/getTodaysDate';
 
 type Props = {
   initialFavoriteNames: string[];
@@ -762,7 +763,7 @@ function checkOperating(shuttle: ShuttleType):
   | {isOperating: false; operating: ShuttleType['operatings'][number] | null} {
   const now = getNow();
   const {operatings} = shuttle;
-  const day = getDay(now);
+  const day = getTodaysDate().day;
 
   if (!shuttle.name.includes('심야') && (day === 0 || day === 6)) {
     return {isOperating: false, operating: null};
