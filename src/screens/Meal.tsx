@@ -63,9 +63,31 @@ function checkOperating(
         return 'weekday';
     }
   })();
+  const tomorrow = (() => {
+    const tomorrowDate = addDays(selectedDate, 1);
+    switch (
+      getIsHoliday(tomorrowDate) ? 0 : getDay(tomorrowDate) // day
+    ) {
+      case 0: // sunday
+        return 'holiday';
+      case 6: // saturday
+        return 'saturday';
+      default:
+        return 'weekday';
+    }
+  })();
+
   const rawData = cafeteria[cafeteriaName][today];
+  const tomorrowStartTime = cafeteria[cafeteriaName][tomorrow]
+    .split(' ')
+    .filter(item => item[0] !== '(' && item[-1] !== ')' && item.includes('0'))
+    .join(spliter)
+    .split(spliter)[0];
+
   if (rawData === '휴관' || rawData === '휴점 중' || rawData === '') {
-    return ['end', '추후'];
+    const nextTime =
+      tomorrowStartTime !== '' ? '내일 ' + tomorrowStartTime : '추후';
+    return ['end', nextTime];
   }
   const times = rawData
     .split(' ')
@@ -109,7 +131,7 @@ function checkOperating(
       const [startAtString, endedAtString] = [times[idx], times[idx + 1]];
       const startAt = parseTime(startAtString, 'HH:mm', now);
       const endedAt = parseTime(endedAtString, 'HH:mm', now);
-      if (compareAsc(startAt, now) < 0 && compareAsc(now, endedAt) < 0) {
+      if (compareAsc(startAt, now) <= 0 && compareAsc(now, endedAt) < 0) {
         return true;
       }
     }) ?? 'end';
@@ -117,7 +139,9 @@ function checkOperating(
   const indexOfResult = results.indexOf(result);
 
   if (indexOfResult === -1) {
-    return [result, '내일 ' + times[1], operatingInfo];
+    const nextTime =
+      tomorrowStartTime !== '' ? '내일 ' + tomorrowStartTime : '추후';
+    return [result, nextTime, operatingInfo];
   } else {
     return [result, times[indexOfResult + 1], operatingInfo];
   }
@@ -281,6 +305,28 @@ export default function Meal({mealData}: Props) {
       checkTodayStatus[cafeteriaName].status,
       checkTodayStatus[cafeteriaName].nextTime,
     ];
+
+    if (todaysMenu[cafeteriaName] === undefined) {
+      if (menus[1][cafeteriaName] === undefined) {
+        return (
+          <Text variant="favoriteClosedInfo" textAlign="center">
+            추후 운영 예정
+          </Text>
+        );
+      } else if (nextTime !== '추후') {
+        return (
+          <Text variant="favoriteClosedInfo" textAlign="center">
+            {nextTime} 운영 예정
+          </Text>
+        );
+      }
+      return (
+        <Text variant="favoriteClosedInfo" textAlign="center">
+          추후 운영 예정
+        </Text>
+      );
+    }
+
     if (status === 'breakfast' || status === 'lunch' || status === 'dinner') {
       const textFormMenu = todaysMenu[cafeteriaName][status];
 
@@ -326,13 +372,24 @@ export default function Meal({mealData}: Props) {
         );
       }
       if (
+        (textFormMenu as string).includes('휴무') ||
         (textFormMenu as string).includes('휴관') ||
         (textFormMenu as string).includes('휴점') ||
-        (textFormMenu as string).includes('폐점')
+        (textFormMenu as string).includes('폐점') ||
+        (textFormMenu as string).includes('미운영')
       ) {
         return (
           <Text textAlign="center" width="100%" variant="favoriteClosedInfo">
             {textFormMenu}
+          </Text>
+        );
+      } else if (
+        typeof textFormMenu === 'string' &&
+        (textFormMenu as string).trim() === ''
+      ) {
+        return (
+          <Text textAlign="center" width="100%" variant="favoriteClosedInfo">
+            {'메뉴 정보 없음'}
           </Text>
         );
       }
@@ -367,10 +424,19 @@ export default function Meal({mealData}: Props) {
     } else {
       const textFormMenu = todaysMenu[cafeteriaName].lunch;
       if (
+        (textFormMenu as string).includes('휴무') ||
         (textFormMenu as string).includes('휴점') ||
         (textFormMenu as string).includes('폐점') ||
-        (textFormMenu as string).includes('폐관')
+        (textFormMenu as string).includes('폐관') ||
+        (textFormMenu as string).includes('미운영')
       ) {
+        if (nextTime !== '추후') {
+          return (
+            <Text variant="favoriteClosedInfo" textAlign="center">
+              {nextTime} 운영 예정
+            </Text>
+          );
+        }
         return (
           <Text variant="favoriteClosedInfo" textAlign="center">
             {textFormMenu}
@@ -385,9 +451,11 @@ export default function Meal({mealData}: Props) {
           );
         }
         if (nextTime === '추후') {
-          <Text variant="favoriteClosedInfo" textAlign="center">
-            운영 정보 없음
-          </Text>;
+          return (
+            <Text variant="favoriteClosedInfo" textAlign="center">
+              운영 종료
+            </Text>
+          );
         } else {
           return (
             <Text variant="favoriteClosedInfo" textAlign="center">
@@ -396,21 +464,6 @@ export default function Meal({mealData}: Props) {
           );
         }
       }
-    }
-  }
-
-  function isOperating(name: string) {
-    if (checkStatus === null || todaysMenu[name] === undefined) {
-      return false;
-    }
-    if (
-      checkStatus[name].status === 'breakfast' ||
-      checkStatus[name].status === 'lunch' ||
-      checkStatus[name].status === 'dinner'
-    ) {
-      return true;
-    } else {
-      return false;
     }
   }
 
@@ -471,7 +524,7 @@ export default function Meal({mealData}: Props) {
                   variant="favoritePlaceTime"
                   textAlign="center"
                   marginTop={1}>
-                  ~{checkStatus[props.name].nextTime}
+                  ~{checkTodayStatus[props.name].nextTime}
                 </Text>
               ) : (
                 <Box height="0px" />
@@ -484,13 +537,18 @@ export default function Meal({mealData}: Props) {
                 {showFavoriteMenu(props.name)}
               </Center>
             ) : (
-              <Text
-                width="65%"
-                variant="favoriteClosedInfo"
-                textAlign="center"
-                margin="auto">
-                운영 정보 없음
-              </Text>
+              // <Text
+              //   width="65%"
+              //   variant="favoriteClosedInfo"
+              //   textAlign="center"
+              //   margin="auto">
+              //   {console.log(checkTodayStatus[props.name])}
+              //   {`${checkTodayStatus[props.name].nextTime} 운영 예정asdf`}
+              //   {/* 운영ㄴㄴ */}
+              // </Text>
+              <Center width="66%" padding={0}>
+                {showFavoriteMenu(props.name)}
+              </Center>
             )}
           </HStack>
         </Button>
@@ -499,7 +557,7 @@ export default function Meal({mealData}: Props) {
   };
 
   const NotFavoriteMeal = function (props: {name: string}) {
-    const isOperatingMeal = isOperating(props.name);
+    const isOperatingMeal = isOperatingForFavorites(props.name);
     const notFavoriteMealTags = useMemo(() => {
       return {
         name: props.name,
@@ -572,7 +630,10 @@ export default function Meal({mealData}: Props) {
         <Center marginTop="15px">
           {favoriteList
             .sort((a, b) => {
-              return Number(isOperating(b)) - Number(isOperating(a));
+              return (
+                Number(isOperatingForFavorites(b)) -
+                Number(isOperatingForFavorites(a))
+              );
             })
             .map(name => {
               return <FavoritedMeal name={name} key={name} />;
@@ -582,7 +643,10 @@ export default function Meal({mealData}: Props) {
           <VStack width="100%">
             {chunk(
               nonFavoriteList.sort((a, b) => {
-                return Number(isOperating(b)) - Number(isOperating(a));
+                return (
+                  Number(isOperatingForFavorites(b)) -
+                  Number(isOperatingForFavorites(a))
+                );
               }),
               3,
             ).map(subnonFavoriteListInfoArray => {
