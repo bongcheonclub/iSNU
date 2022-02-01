@@ -1,7 +1,8 @@
 import React from 'react';
-import {compareAsc, getDay, parse as parseTime} from 'date-fns';
+import {compareAsc, parse as parseTime} from 'date-fns';
 import Grid from '../components/Grid';
 import {getNow} from '../helpers/getNow';
+import {getTodaysDate} from '../helpers/getTodaysDate';
 
 type Props = {
   cafes: CafeData[];
@@ -24,7 +25,7 @@ function checkOperating(cafe: CafeData): boolean {
   const {weekday, saturday, holiday} = cafe;
 
   const operatingTime = (() => {
-    const day = getDay(now);
+    const day = getTodaysDate().day;
     switch (day) {
       case 0: // sunday
         return holiday;
