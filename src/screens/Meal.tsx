@@ -183,6 +183,7 @@ export default function Meal({mealData}: Props) {
     const displayDateText = `${m}월 ${d}일 (${koreanDay})`;
     return displayDateText;
   }
+
   const displayDate = useMemo(
     () => getDisplayDate(selectedDate),
     [selectedDate],
@@ -205,7 +206,6 @@ export default function Meal({mealData}: Props) {
       if (mealList === null) {
         return null;
       }
-
       const tempItem = await AsyncStorage.getItem('favoriteMeals');
       const storedFavoriteMealList =
         tempItem === undefined || tempItem === null ? [] : JSON.parse(tempItem);
@@ -226,7 +226,7 @@ export default function Meal({mealData}: Props) {
     [mealList],
   );
 
-  function showMenu(
+  function showMenuInModal(
     cafeteriaName: string,
     whichMenu: 'breakfast' | 'lunch' | 'dinner',
   ) {
@@ -261,6 +261,7 @@ export default function Meal({mealData}: Props) {
       );
     });
   }
+
   const checkStatus = chain(mealList)
     .map(cafeteriaName => {
       const [status, nextTime, operatingInfo] = checkOperating(
@@ -268,7 +269,6 @@ export default function Meal({mealData}: Props) {
         cafeteria,
         selectedDate,
       );
-
       return {
         name: cafeteriaName,
         status,
@@ -307,30 +307,28 @@ export default function Meal({mealData}: Props) {
     ];
 
     if (todaysMenu[cafeteriaName] === undefined) {
-      if (menus[1][cafeteriaName] === undefined) {
+      if (menus[1][cafeteriaName] === undefined || nextTime === '추후') {
         return (
           <Text variant="favoriteClosedInfo" textAlign="center">
             추후 운영 예정
           </Text>
         );
-      } else if (nextTime !== '추후') {
+      } else {
         return (
           <Text variant="favoriteClosedInfo" textAlign="center">
             {nextTime} 운영 예정
           </Text>
         );
       }
-      return (
-        <Text variant="favoriteClosedInfo" textAlign="center">
-          추후 운영 예정
-        </Text>
-      );
     }
 
     if (status === 'breakfast' || status === 'lunch' || status === 'dinner') {
       const textFormMenu = todaysMenu[cafeteriaName][status];
 
-      if (cafeteriaName.includes('두레미담')) {
+      if (
+        cafeteriaName.includes('두레미담') ||
+        cafeteriaName.includes('공간')
+      ) {
         return (
           <Text textAlign="center" width="100%" variant="favoriteMenuName">
             메뉴 정보 보기
@@ -346,13 +344,6 @@ export default function Meal({mealData}: Props) {
         );
       }
 
-      if (cafeteriaName.includes('공간')) {
-        return (
-          <Text textAlign="center" width="100%" variant="favoriteMenuName">
-            메뉴 정보 보기
-          </Text>
-        );
-      }
       if (cafeteriaName.includes('301')) {
         return (
           <Text textAlign="center" width="100%" variant="favoriteMenuName">
@@ -371,6 +362,7 @@ export default function Meal({mealData}: Props) {
           </Text>
         );
       }
+
       if (
         (textFormMenu as string).includes('휴무') ||
         (textFormMenu as string).includes('휴관') ||
@@ -389,7 +381,7 @@ export default function Meal({mealData}: Props) {
       ) {
         return (
           <Text textAlign="center" width="100%" variant="favoriteClosedInfo">
-            {'메뉴 정보 없음'}
+            메뉴 정보 없음
           </Text>
         );
       }
@@ -467,7 +459,7 @@ export default function Meal({mealData}: Props) {
     }
   }
 
-  function isOperatingForFavorites(name: string) {
+  function isOperatingNow(name: string) {
     if (checkTodayStatus === null || todaysMenu[name] === undefined) {
       return false;
     }
@@ -483,7 +475,7 @@ export default function Meal({mealData}: Props) {
   }
 
   const FavoritedMeal = function (props: {name: string}) {
-    const isOperatingMeal = isOperatingForFavorites(props.name);
+    const isOperatingMeal = isOperatingNow(props.name);
     const handleSelectedMeal = useCallback(
       () => setSelectedMeal(props.name),
       [props.name],
@@ -526,26 +518,9 @@ export default function Meal({mealData}: Props) {
                   marginTop={1}>
                   ~{checkTodayStatus[props.name].nextTime}
                 </Text>
-              ) : (
-                <Box height="0px" />
-              )}
+              ) : null}
             </Center>
-            {todaysMenu !== null &&
-            props.name !== null &&
-            todaysMenu[props.name] !== undefined ? (
-              <Center width="66%" padding={0}>
-                {showFavoriteMenu(props.name)}
-              </Center>
-            ) : (
-              // <Text
-              //   width="65%"
-              //   variant="favoriteClosedInfo"
-              //   textAlign="center"
-              //   margin="auto">
-              //   {console.log(checkTodayStatus[props.name])}
-              //   {`${checkTodayStatus[props.name].nextTime} 운영 예정asdf`}
-              //   {/* 운영ㄴㄴ */}
-              // </Text>
+            {todaysMenu !== null && props.name !== null && (
               <Center width="66%" padding={0}>
                 {showFavoriteMenu(props.name)}
               </Center>
@@ -557,7 +532,7 @@ export default function Meal({mealData}: Props) {
   };
 
   const NotFavoriteMeal = function (props: {name: string}) {
-    const isOperatingMeal = isOperatingForFavorites(props.name);
+    const isOperatingMeal = isOperatingNow(props.name);
     const notFavoriteMealTags = useMemo(() => {
       return {
         name: props.name,
@@ -630,10 +605,7 @@ export default function Meal({mealData}: Props) {
         <Center marginTop="15px">
           {favoriteList
             .sort((a, b) => {
-              return (
-                Number(isOperatingForFavorites(b)) -
-                Number(isOperatingForFavorites(a))
-              );
+              return Number(isOperatingNow(b)) - Number(isOperatingNow(a));
             })
             .map(name => {
               return <FavoritedMeal name={name} key={name} />;
@@ -643,10 +615,7 @@ export default function Meal({mealData}: Props) {
           <VStack width="100%">
             {chunk(
               nonFavoriteList.sort((a, b) => {
-                return (
-                  Number(isOperatingForFavorites(b)) -
-                  Number(isOperatingForFavorites(a))
-                );
+                return Number(isOperatingNow(b)) - Number(isOperatingNow(a));
               }),
               3,
             ).map(subnonFavoriteListInfoArray => {
@@ -664,7 +633,7 @@ export default function Meal({mealData}: Props) {
             })}
           </VStack>
         </Center>
-        {selectedMeal !== null ? (
+        {selectedMeal && (
           <Modal // modal 구현
             isOpen={selectedMeal !== null}
             onClose={hadnleModalClose}>
@@ -674,74 +643,70 @@ export default function Meal({mealData}: Props) {
               paddingBottom="12px"
               width="90%">
               <Modal.CloseButton />
-              {selectedMeal !== null ? (
-                <Box margin={6} marginBottom={1}>
-                  <HStack left={-15} top={-15}>
-                    <Text marginBottom={1} variant="modalTitle">
-                      {selectedMeal}
-                    </Text>
-                    <Button
-                      label="meal-toggle-favorite"
-                      tags={toggleFavoriteMealTag}
-                      bgColor="transparent"
-                      left={-6}
-                      top={-1}
-                      onPress={handleFavoriteButton}>
-                      {favoriteList.includes(selectedMeal) ? (
-                        <FilledStarIcon />
-                      ) : (
-                        <UnfilledStarIcon />
-                      )}
-                    </Button>
-                  </HStack>
-                  <Text variant="modalSubInfo" left={-15} top={-20}>
-                    {cafeteria[selectedMeal].location}
+              <Box margin={6} marginBottom={1}>
+                <HStack left={-15} top={-15}>
+                  <Text marginBottom={1} variant="modalTitle">
+                    {selectedMeal}
                   </Text>
-                  <HStack
-                    w="100%"
-                    alignItems="center"
-                    justifyContent="center"
-                    marginY={2}>
-                    {selectedMeal.includes('대학원') ||
-                    selectedDateOffset === -2 ? null : (
-                      <Button
-                        position="absolute"
-                        left="39px"
-                        w="30px"
-                        h="30px"
-                        padding="0"
-                        label={'prevDate'}
-                        variant="changeMenuDateButton"
-                        onPress={handleYesterdayButton}>
-                        <YesterdayIcon />
-                      </Button>
+                  <Button
+                    label="meal-toggle-favorite"
+                    tags={toggleFavoriteMealTag}
+                    bgColor="transparent"
+                    left={-6}
+                    top={-1}
+                    onPress={handleFavoriteButton}>
+                    {favoriteList.includes(selectedMeal) ? (
+                      <FilledStarIcon />
+                    ) : (
+                      <UnfilledStarIcon />
                     )}
-                    <Text
-                      variant="modalToday"
-                      textAlign="center"
-                      position="absolute">
-                      {displayDate}
-                    </Text>
-                    {selectedMeal.includes('대학원') ||
-                    selectedDateOffset === 2 ? null : (
-                      <Button
-                        position="absolute"
-                        right="39px"
-                        w="30px"
-                        h="30px"
-                        padding="0"
-                        label={'nextDate'}
-                        variant="changeMenuDateButton"
-                        onPress={handleTomorrowButton}>
-                        <TomorrowIcon />
-                      </Button>
-                    )}
-                  </HStack>
-                </Box>
-              ) : (
-                <></>
-              )}
-              {selectedMeal !== null && menu[selectedMeal] !== undefined ? (
+                  </Button>
+                </HStack>
+                <Text variant="modalSubInfo" left={-15} top={-20}>
+                  {cafeteria[selectedMeal].location}
+                </Text>
+                <HStack
+                  w="100%"
+                  alignItems="center"
+                  justifyContent="center"
+                  marginY={2}>
+                  {selectedMeal.includes('대학원') ||
+                  selectedDateOffset === -2 ? null : (
+                    <Button
+                      position="absolute"
+                      left="39px"
+                      w="30px"
+                      h="30px"
+                      padding="0"
+                      label={'prevDate'}
+                      variant="changeMenuDateButton"
+                      onPress={handleYesterdayButton}>
+                      <YesterdayIcon />
+                    </Button>
+                  )}
+                  <Text
+                    variant="modalToday"
+                    textAlign="center"
+                    position="absolute">
+                    {displayDate}
+                  </Text>
+                  {selectedMeal.includes('대학원') ||
+                  selectedDateOffset === 2 ? null : (
+                    <Button
+                      position="absolute"
+                      right="39px"
+                      w="30px"
+                      h="30px"
+                      padding="0"
+                      label={'nextDate'}
+                      variant="changeMenuDateButton"
+                      onPress={handleTomorrowButton}>
+                      <TomorrowIcon />
+                    </Button>
+                  )}
+                </HStack>
+              </Box>
+              {menu[selectedMeal] !== undefined ? (
                 <ScrollView
                   margin={5}
                   marginLeft={3}
@@ -757,23 +722,19 @@ export default function Meal({mealData}: Props) {
                           <Text textAlign="center" variant="modalSubContent">
                             아침
                           </Text>
-                          <>
-                            {checkStatus[selectedMeal].operatingInfo
-                              ?.beforeBreakfast ? (
-                              <Text textAlign="center" variant="modalMenuTime">
-                                {checkStatus[selectedMeal].operatingInfo
-                                  ?.beforeBreakfast.time +
-                                  '~' +
-                                  checkStatus[selectedMeal].operatingInfo
-                                    ?.breakfast.time}
-                              </Text>
-                            ) : (
-                              <></>
-                            )}
-                          </>
+                          {checkStatus[selectedMeal].operatingInfo
+                            ?.beforeBreakfast && (
+                            <Text textAlign="center" variant="modalMenuTime">
+                              {checkStatus[selectedMeal].operatingInfo
+                                ?.beforeBreakfast.time +
+                                '~' +
+                                checkStatus[selectedMeal].operatingInfo
+                                  ?.breakfast.time}
+                            </Text>
+                          )}
                         </VStack>
                         <VStack width="75%">
-                          {showMenu(selectedMeal, 'breakfast')}
+                          {showMenuInModal(selectedMeal, 'breakfast')}
                         </VStack>
                       </HStack>
                       <Divider
@@ -784,9 +745,7 @@ export default function Meal({mealData}: Props) {
                         marginBottom={5}
                       />
                     </>
-                  ) : (
-                    <></>
-                  )}
+                  ) : null}
 
                   {menu[selectedMeal].lunch.length > 1 ||
                   (selectedMeal === '대학원기숙사' &&
@@ -796,28 +755,22 @@ export default function Meal({mealData}: Props) {
                         <Text textAlign="center" variant="modalSubContent">
                           점심
                         </Text>
-                        <>
-                          {checkStatus[selectedMeal].operatingInfo
-                            ?.beforeLunch ? (
-                            <Text textAlign="center" variant="modalMenuTime">
-                              {checkStatus[selectedMeal].operatingInfo
-                                ?.beforeLunch.time +
-                                '~' +
-                                checkStatus[selectedMeal].operatingInfo?.lunch
-                                  .time}
-                            </Text>
-                          ) : (
-                            <></>
-                          )}
-                        </>
+                        {checkStatus[selectedMeal].operatingInfo
+                          ?.beforeLunch && (
+                          <Text textAlign="center" variant="modalMenuTime">
+                            {checkStatus[selectedMeal].operatingInfo
+                              ?.beforeLunch.time +
+                              '~' +
+                              checkStatus[selectedMeal].operatingInfo?.lunch
+                                .time}
+                          </Text>
+                        )}
                       </VStack>
                       <VStack width="75%">
-                        {showMenu(selectedMeal, 'lunch')}
+                        {showMenuInModal(selectedMeal, 'lunch')}
                       </VStack>
                     </HStack>
-                  ) : (
-                    <></>
-                  )}
+                  ) : null}
                   {menu[selectedMeal].dinner.length > 1 ||
                   (selectedMeal === '대학원기숙사' &&
                     menu[selectedMeal].dinner.length > 0) ? (
@@ -834,29 +787,23 @@ export default function Meal({mealData}: Props) {
                           <Text textAlign="center" variant="modalSubContent">
                             저녁
                           </Text>
-                          <>
-                            {checkStatus[selectedMeal].operatingInfo
-                              ?.beforeDinner ? (
-                              <Text textAlign="center" variant="modalMenuTime">
-                                {checkStatus[selectedMeal].operatingInfo
-                                  ?.beforeDinner.time +
-                                  '~' +
-                                  checkStatus[selectedMeal].operatingInfo
-                                    ?.dinner.time}
-                              </Text>
-                            ) : (
-                              <></>
-                            )}
-                          </>
+                          {checkStatus[selectedMeal].operatingInfo
+                            ?.beforeDinner && (
+                            <Text textAlign="center" variant="modalMenuTime">
+                              {checkStatus[selectedMeal].operatingInfo
+                                ?.beforeDinner.time +
+                                '~' +
+                                checkStatus[selectedMeal].operatingInfo?.dinner
+                                  .time}
+                            </Text>
+                          )}
                         </VStack>
                         <VStack width="75%">
-                          {showMenu(selectedMeal, 'dinner')}
+                          {showMenuInModal(selectedMeal, 'dinner')}
                         </VStack>
                       </HStack>
                     </>
-                  ) : (
-                    <></>
-                  )}
+                  ) : null}
                 </ScrollView>
               ) : (
                 <Text
@@ -869,8 +816,6 @@ export default function Meal({mealData}: Props) {
               )}
             </Modal.Content>
           </Modal>
-        ) : (
-          <></>
         )}
       </ScrollView>
     </VStack>
