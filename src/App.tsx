@@ -1,7 +1,14 @@
 import {NavigationContainer} from '@react-navigation/native';
-import {Box, Flex, NativeBaseProvider, HStack, StatusBar} from 'native-base';
+import {
+  Box,
+  Flex,
+  NativeBaseProvider,
+  HStack,
+  StatusBar,
+  Modal,
+} from 'native-base';
 import React, {useEffect, useRef, useState} from 'react';
-import {AppState, Dimensions, Platform} from 'react-native';
+import {AppState, Dimensions, Platform, ActivityIndicator} from 'react-native';
 import Cafe from './screens/Cafe';
 import Etcs from './screens/Etcs';
 import Mart from './screens/Mart';
@@ -31,6 +38,8 @@ export default function App() {
     ReturnType<typeof initializeData>
   > | null>(null);
   const [nowDate, setNowDate] = useState<Date>(new Date());
+  const [showActivityIndicator, setShowActivityIndicator] =
+    useState<boolean>(false);
 
   useEffect(() => {
     initializeData().then(initializedData => {
@@ -38,15 +47,17 @@ export default function App() {
       SplashScreen.hide();
     });
     AppState.addEventListener('change', nextAppState => {
-      if (nextAppState === 'active') {
+      if (
+        nextAppState === 'active' &&
+        (appState.current === 'background' || appState.current === 'inactive')
+      ) {
+        setShowActivityIndicator(true);
         initializeData()
           .then(updatedData => {
             setData(updatedData);
-            return new Date();
+            setNowDate(new Date());
           })
-          .then(date => {
-            setNowDate(date);
-          });
+          .then(() => setShowActivityIndicator(false));
       }
       appState.current = nextAppState;
       console.log(nextAppState);
@@ -57,7 +68,13 @@ export default function App() {
     <NativeBaseProvider theme={theme}>
       <Box width="100%" height="100%" safeArea backgroundColor="white">
         <StatusBar barStyle="dark-content" />
-
+        {showActivityIndicator && (
+          <Modal isOpen overlayVisible={false}>
+            <Modal.Content bg="rgba(255,255,255,0)">
+              <ActivityIndicator size="large" color="#000000" />
+            </Modal.Content>
+          </Modal>
+        )}
         {data ? (
           <>
             <NavigationContainer>
