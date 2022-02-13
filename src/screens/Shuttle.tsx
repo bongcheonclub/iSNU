@@ -2,12 +2,12 @@ import {find} from 'lodash';
 import React from 'react';
 import {compareAsc, parse as parseTime} from 'date-fns';
 import List from '../components/List';
-import {getNow} from '../helpers/getNow';
 import {isVacation} from '../InitializeData/ProcessVacation';
 import {getTodaysDate} from '../helpers/getTodaysDate';
 
 type Props = {
   initialFavoriteNames: string[];
+  nowDate: Date;
 };
 
 export type ShuttleType = {
@@ -755,13 +755,15 @@ const SHUTTLES_AFTER_VACATION: ShuttleType[] = [
   },
 ];
 
-function checkOperating(shuttle: ShuttleType):
+function checkOperating(
+  shuttle: ShuttleType,
+  nowDate: Date,
+):
   | {
       isOperating: true;
       operating: ShuttleType['operatings'][number];
     }
   | {isOperating: false; operating: ShuttleType['operatings'][number] | null} {
-  const now = getNow();
   const {operatings} = shuttle;
   const day = getTodaysDate().isHoliday ? 0 : getTodaysDate().day;
 
@@ -772,7 +774,7 @@ function checkOperating(shuttle: ShuttleType):
     // 00:00 ~ 02:00 심야셔틀이 운행 안하는 요일은 일요일, 월요일 새벽
     // 다음날 심야셔틀이 운행 안하는 요일은 토요일, 일요일
     if (
-      compareAsc(now, parseTime('02:00', 'HH:mm', now)) < 0 &&
+      compareAsc(nowDate, parseTime('02:00', 'HH:mm', nowDate)) < 0 &&
       (day === 0 || day === 1)
     ) {
       return {isOperating: false, operating: null};
@@ -786,11 +788,11 @@ function checkOperating(shuttle: ShuttleType):
     const startAt = parseTime(
       startAtString === '24:00' ? '23:59' : startAtString,
       'HH:mm',
-      now,
+      nowDate,
     );
-    const endedAt = parseTime(endedAtString, 'HH:mm', now);
+    const endedAt = parseTime(endedAtString, 'HH:mm', nowDate);
 
-    if (compareAsc(startAt, now) <= 0 && compareAsc(now, endedAt) < 0) {
+    if (compareAsc(startAt, nowDate) <= 0 && compareAsc(nowDate, endedAt) < 0) {
       return true;
     } else {
       return false;
@@ -804,13 +806,14 @@ function checkOperating(shuttle: ShuttleType):
   }
 }
 
-export default function Shuttle({initialFavoriteNames}: Props) {
+export default function Shuttle({initialFavoriteNames, nowDate}: Props) {
   if (isVacation() === true) {
     return (
       <List
         itemType="shuttle"
         items={SHUTTLES_VACATION}
         checkOperating={checkOperating}
+        nowDate={nowDate}
         initialFavoriteNames={initialFavoriteNames}
         favoriteStorageKey={'favoriteShuttles'}
       />
@@ -821,6 +824,7 @@ export default function Shuttle({initialFavoriteNames}: Props) {
         itemType="shuttle"
         items={SHUTTLES}
         checkOperating={checkOperating}
+        nowDate={nowDate}
         initialFavoriteNames={initialFavoriteNames}
         favoriteStorageKey={'favoriteShuttles'}
       />
@@ -831,6 +835,7 @@ export default function Shuttle({initialFavoriteNames}: Props) {
         itemType="shuttle"
         items={SHUTTLES_AFTER_VACATION}
         checkOperating={checkOperating}
+        nowDate={nowDate}
         initialFavoriteNames={initialFavoriteNames}
         favoriteStorageKey={'favoriteShuttles'}
       />

@@ -27,18 +27,19 @@ import {MealData, RefinedMenu} from '../InitializeData/ProcessMealData';
 import Text from '../components/Text';
 import {theme} from '../ui/theme';
 import Button from '../components/WrappedButton';
-import {getNow} from '../helpers/getNow';
 import {convertToKoreanDay} from '../helpers/convertToKoreanDay';
 import {getIsHoliday} from '../helpers/isHoliday';
 
 type Props = {
   mealData: MealData;
+  nowDate: Date;
 };
 
 function checkOperating(
   cafeteriaName: string,
   cafeteria: MealData['cafeteria'],
   selectedDate: Date,
+  nowDate: Date,
 ):
   | [string, string]
   | [
@@ -49,7 +50,6 @@ function checkOperating(
         time: string;
       }>,
     ] {
-  const now = getNow();
   const spliter = cafeteriaName.includes('감골') ? '~' : '-';
   const today = (() => {
     switch (
@@ -129,9 +129,12 @@ function checkOperating(
   const result =
     results.find((_, idx) => {
       const [startAtString, endedAtString] = [times[idx], times[idx + 1]];
-      const startAt = parseTime(startAtString, 'HH:mm', now);
-      const endedAt = parseTime(endedAtString, 'HH:mm', now);
-      if (compareAsc(startAt, now) <= 0 && compareAsc(now, endedAt) < 0) {
+      const startAt = parseTime(startAtString, 'HH:mm', nowDate);
+      const endedAt = parseTime(endedAtString, 'HH:mm', nowDate);
+      if (
+        compareAsc(startAt, nowDate) <= 0 &&
+        compareAsc(nowDate, endedAt) < 0
+      ) {
         return true;
       }
     }) ?? 'end';
@@ -147,7 +150,7 @@ function checkOperating(
   }
 }
 
-export default function Meal({mealData}: Props) {
+export default function Meal({mealData, nowDate}: Props) {
   const {
     dayBefore2Menu,
     dayBefore1Menu,
@@ -171,8 +174,8 @@ export default function Meal({mealData}: Props) {
   );
 
   const selectedDate = useMemo(
-    () => addDays(getNow(), selectedDateOffset),
-    [selectedDateOffset],
+    () => addDays(nowDate, selectedDateOffset),
+    [nowDate, selectedDateOffset],
   );
 
   function getDisplayDate(specificDate: Date): string {
@@ -268,6 +271,7 @@ export default function Meal({mealData}: Props) {
         cafeteriaName,
         cafeteria,
         selectedDate,
+        nowDate,
       );
       return {
         name: cafeteriaName,
@@ -284,7 +288,8 @@ export default function Meal({mealData}: Props) {
       const [status, nextTime, operatingInfo] = checkOperating(
         cafeteriaName,
         cafeteria,
-        getNow(),
+        nowDate,
+        nowDate,
       );
 
       return {

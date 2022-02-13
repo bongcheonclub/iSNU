@@ -30,26 +30,27 @@ export default function App() {
   const [data, setData] = useState<Awaited<
     ReturnType<typeof initializeData>
   > | null>(null);
+  const [nowDate, setNowDate] = useState<Date>(new Date());
 
   useEffect(() => {
     initializeData().then(initializedData => {
       setData(initializedData);
       SplashScreen.hide();
     });
-  }, []);
-
-  useEffect(() => {
-    const subscription = AppState.addEventListener('change', nextAppState => {
+    AppState.addEventListener('change', nextAppState => {
       if (nextAppState === 'active') {
-        initializeData().then(updatedData => {
-          setData(updatedData);
-        });
+        initializeData()
+          .then(updatedData => {
+            setData(updatedData);
+            return new Date();
+          })
+          .then(date => {
+            setNowDate(date);
+          });
       }
       appState.current = nextAppState;
+      console.log(nextAppState);
     });
-    return () => {
-      subscription.remove();
-    };
   }, []);
 
   return (
@@ -109,7 +110,11 @@ export default function App() {
                         <MoreModal />
                       </HStack>
                       <Box flex={1}>
-                        <Meal {...props} mealData={data.mealData} />
+                        <Meal
+                          {...props}
+                          mealData={data.mealData}
+                          nowDate={nowDate}
+                        />
                       </Box>
                     </Flex>
                   )}
@@ -141,6 +146,7 @@ export default function App() {
                           {...props}
                           cafes={data.cafeData}
                           initialFavoriteNames={data.favoriteCafes}
+                          nowDate={nowDate}
                         />
                       </Box>
                     </Flex>
@@ -172,6 +178,7 @@ export default function App() {
                           {...props}
                           marts={data.martData}
                           initialFavoriteNames={data.favoriteMarts}
+                          nowDate={nowDate}
                         />
                       </Box>
                     </Flex>
@@ -204,6 +211,7 @@ export default function App() {
                         <Shuttle
                           {...props}
                           initialFavoriteNames={data.favoriteShuttles}
+                          nowDate={nowDate}
                         />
                       </Box>
                     </Flex>

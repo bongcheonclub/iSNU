@@ -1,12 +1,12 @@
 import React from 'react';
 import {compareAsc, parse as parseTime} from 'date-fns';
 import Grid from '../components/Grid';
-import {getNow} from '../helpers/getNow';
 import {getTodaysDate} from '../helpers/getTodaysDate';
 
 type Props = {
   marts: MartData[];
   initialFavoriteNames: string[];
+  nowDate: Date;
 };
 
 export type MartData = {
@@ -19,8 +19,8 @@ export type MartData = {
   contact: string;
 };
 
-function checkOperating(mart: MartData): boolean {
-  const now = getNow();
+function checkOperating(mart: MartData, nowDate: Date): boolean {
+  const now = nowDate;
 
   const {weekday, saturday, holiday} = mart;
 
@@ -65,13 +65,14 @@ function checkOperating(mart: MartData): boolean {
   return true;
 }
 
-export default function Mart({marts, initialFavoriteNames}: Props) {
+export default function Mart({marts, initialFavoriteNames, nowDate}: Props) {
   return (
     marts && (
       <Grid
         itemType="mart"
         items={marts}
         checkOperating={checkOperating}
+        nowDate={nowDate}
         initialFavoriteNames={initialFavoriteNames}
         favoriteStorageKey={'favoriteMarts'}
       />

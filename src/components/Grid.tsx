@@ -17,9 +17,10 @@ type AvailableItem = CafeData | MartData;
 type Props<T> = {
   itemType: string;
   items: T[];
-  checkOperating: (item: T) => boolean;
+  checkOperating: (item: T, nowDate: Date) => boolean;
   initialFavoriteNames: string[];
   favoriteStorageKey: keyof LocalStorage;
+  nowDate: Date;
 };
 
 type ItemWithFlag<T> = T & {
@@ -139,6 +140,7 @@ const Grid = <T extends AvailableItem>(props: Props<T>) => {
     initialFavoriteNames,
     favoriteStorageKey,
     itemType,
+    nowDate,
   } = props;
   const [focusedName, setFocusedItem] = useState<string | null>(null);
   const [favoriteNames, setFavoriteNames] =
@@ -168,7 +170,7 @@ const Grid = <T extends AvailableItem>(props: Props<T>) => {
     () =>
       chain(items)
         .map(item => {
-          const isOperating = checkOperating(item);
+          const isOperating = checkOperating(item, nowDate);
           const favoriteRate =
             favoriteNames.findIndex(name => name === item.name) + 1;
           return {...item, isOperating, favoriteRate};
@@ -185,7 +187,7 @@ const Grid = <T extends AvailableItem>(props: Props<T>) => {
           }
         })
         .value(),
-    [checkOperating, favoriteNames, items],
+    [checkOperating, favoriteNames, items, nowDate],
   );
 
   const handleCloseFocusedModal = useCallback(() => setFocusedItem(null), []);
