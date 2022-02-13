@@ -1,12 +1,12 @@
 import React from 'react';
 import {compareAsc, parse as parseTime} from 'date-fns';
 import Grid from '../components/Grid';
-import {getNow} from '../helpers/getNow';
 import {getTodaysDate} from '../helpers/getTodaysDate';
 
 type Props = {
   cafes: CafeData[];
   initialFavoriteNames: string[];
+  nowDate: Date;
 };
 
 export type CafeData = {
@@ -20,8 +20,8 @@ export type CafeData = {
   holiday: string;
 };
 
-function checkOperating(cafe: CafeData): boolean {
-  const now = getNow();
+function checkOperating(cafe: CafeData, nowDate: Date): boolean {
+  const now = nowDate;
   const {weekday, saturday, holiday} = cafe;
 
   const operatingTime = (() => {
@@ -72,12 +72,13 @@ function checkOperating(cafe: CafeData): boolean {
   return true;
 }
 
-export default function Cafe({cafes, initialFavoriteNames}: Props) {
+export default function Cafe({cafes, initialFavoriteNames, nowDate}: Props) {
   return (
     <Grid
       itemType="cafe"
       items={cafes}
       checkOperating={checkOperating}
+      nowDate={nowDate}
       initialFavoriteNames={initialFavoriteNames}
       favoriteStorageKey={'favoriteCafes'}
     />

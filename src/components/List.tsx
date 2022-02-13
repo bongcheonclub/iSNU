@@ -25,12 +25,16 @@ type AvailableItem = ShuttleType;
 type Props<T extends AvailableItem> = {
   itemType: string;
   items: T[];
-  checkOperating: (item: T) => {
+  checkOperating: (
+    item: T,
+    nowDate: Date,
+  ) => {
     isOperating: boolean;
     operating: T['operatings'][number] | null;
   };
   initialFavoriteNames: string[];
   favoriteStorageKey: keyof LocalStorage;
+  nowDate: Date;
 };
 
 type ItemWithFlag<T> = T & {
@@ -147,6 +151,7 @@ const List = <T extends AvailableItem>(props: Props<T>) => {
     initialFavoriteNames,
     favoriteStorageKey,
     itemType,
+    nowDate,
   } = props;
   const [focusedName, setFocusedItem] = useState<string | null>(null);
   const [favoriteNames, setFavoriteNames] =
@@ -156,7 +161,7 @@ const List = <T extends AvailableItem>(props: Props<T>) => {
     () =>
       chain(items)
         .map(item => {
-          const {isOperating, operating} = checkOperating(item);
+          const {isOperating, operating} = checkOperating(item, nowDate);
           const favoriteRate =
             favoriteNames.findIndex(name => name === item.name) + 1;
           return {
@@ -180,7 +185,7 @@ const List = <T extends AvailableItem>(props: Props<T>) => {
         })
         .value(),
 
-    [checkOperating, favoriteNames, items],
+    [checkOperating, favoriteNames, items, nowDate],
   );
 
   const focusedItem = useMemo(
