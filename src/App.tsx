@@ -1,14 +1,7 @@
 import {NavigationContainer} from '@react-navigation/native';
-import {
-  Box,
-  Flex,
-  NativeBaseProvider,
-  HStack,
-  StatusBar,
-  Modal,
-} from 'native-base';
+import {Box, Flex, NativeBaseProvider, HStack, StatusBar} from 'native-base';
 import React, {useEffect, useRef, useState} from 'react';
-import {AppState, Dimensions, Platform, ActivityIndicator} from 'react-native';
+import {AppState, Dimensions, Platform} from 'react-native';
 import Cafe from './screens/Cafe';
 import Etcs from './screens/Etcs';
 import Mart from './screens/Mart';
@@ -28,6 +21,7 @@ import Text from './components/Text';
 
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import FirstAlert from './components/FirstAlert';
+import IndicatorModal from './ui/IndicatorModal';
 
 const Tab = createBottomTabNavigator();
 
@@ -68,13 +62,7 @@ export default function App() {
     <NativeBaseProvider theme={theme}>
       <Box width="100%" height="100%" safeArea backgroundColor="white">
         <StatusBar barStyle="dark-content" />
-        {showActivityIndicator && (
-          <Modal isOpen overlayVisible={false}>
-            <Modal.Content bg="rgba(255,255,255,0)">
-              <ActivityIndicator size="large" color="#000000" />
-            </Modal.Content>
-          </Modal>
-        )}
+        {showActivityIndicator && <IndicatorModal />}
         {data ? (
           <>
             <NavigationContainer>
