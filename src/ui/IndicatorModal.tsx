@@ -1,42 +1,21 @@
-import {Modal as NBModal} from 'native-base';
-import React, {useMemo} from 'react';
-import {
-  ActivityIndicator,
-  Modal,
-  Platform,
-  StyleProp,
-  ViewStyle,
-} from 'react-native';
+import {Modal as NBModal, Text} from 'native-base';
+import React from 'react';
+import {ActivityIndicator} from 'react-native';
 
 const IndicatorModal: React.FC = () => {
-  const androidModalStyle: StyleProp<ViewStyle> = useMemo(
-    () => ({
-      width: '100%',
-      height: '100%',
-      justifyContent: 'center',
-      alignItems: 'center',
-    }),
-    [],
-  );
-  if (Platform.OS === 'android') {
-    return (
-      <Modal
-        animationType="none"
-        transparent={true}
-        visible={true}
-        style={androidModalStyle}>
+  return (
+    <NBModal isOpen overlayVisible={true}>
+      <NBModal.Content
+        bg="rgba(255,255,255,1)"
+        w="280px"
+        h="120px"
+        alignItems="center"
+        justifyContent="space-evenly">
+        <Text fontSize="md">정보를 불러오고 있습니다</Text>
         <ActivityIndicator size="large" color="#000000" />
-      </Modal>
-    );
-  } else {
-    return (
-      <NBModal isOpen overlayVisible={false}>
-        <NBModal.Content bg="rgba(255,255,255,0)">
-          <ActivityIndicator size="large" color="#000000" />
-        </NBModal.Content>
-      </NBModal>
-    );
-  }
+      </NBModal.Content>
+    </NBModal>
+  );
 };
 
 export default IndicatorModal;
