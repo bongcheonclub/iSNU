@@ -22,6 +22,7 @@ import Text from './components/Text';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import FirstAlert from './components/FirstAlert';
 import IndicatorModal from './ui/IndicatorModal';
+import {getNow} from './helpers/getNow';
 
 const Tab = createBottomTabNavigator();
 
@@ -31,7 +32,7 @@ export default function App() {
   const [data, setData] = useState<Awaited<
     ReturnType<typeof initializeData>
   > | null>(null);
-  const [nowDate, setNowDate] = useState<Date>(new Date());
+  const [nowDate, setNowDate] = useState<Date>(getNow());
   const [showActivityIndicator, setShowActivityIndicator] =
     useState<boolean>(false);
 
@@ -49,7 +50,7 @@ export default function App() {
         initializeData()
           .then(updatedData => {
             setData(updatedData);
-            setNowDate(new Date());
+            setNowDate(getNow());
           })
           .then(() => setShowActivityIndicator(false));
       }
