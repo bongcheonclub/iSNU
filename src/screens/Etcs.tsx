@@ -243,27 +243,6 @@ export default function Etcs() {
                     <Text
                       width="80%"
                       variant="modalSubContent"
-                      textAlign="center">
-                      44-1동 공대 신양학술정보관 1층
-                    </Text>
-                  </HStack>
-                  <Divider
-                    my={2}
-                    bg="black"
-                    width="100%"
-                    marginTop="14px"
-                    marginBottom="14px"
-                  />
-                  <HStack width="100%">
-                    <Text
-                      width="20%"
-                      variant="modalSubContent"
-                      textAlign="center">
-                      신한
-                    </Text>
-                    <Text
-                      width="80%"
-                      variant="modalSubContent"
                       textAlign="center"
                       marginBottom="20px">
                       941동 연구공원 백학어린이집 1층
