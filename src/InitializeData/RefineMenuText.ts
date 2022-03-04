@@ -33,7 +33,7 @@ const RefineFetchedMenuOf: {
       .replace(/.파업/, '※')
       .split(' (')
       .join('(')
-      .split('00원')
+      .split(/00원? /) // 작업중
       .map((item: string) => {
         return item
           .trim()
@@ -60,7 +60,7 @@ const RefineFetchedMenuOf: {
       .replace(/.파업/, '※')
       .replace(/\( ?3층/, '※')
       .split('※')[0]
-      .split('00원')
+      .split(/00원? /)
       .map((item: string) => {
         return item
           .trim()
@@ -83,7 +83,7 @@ const RefineFetchedMenuOf: {
   예술계: function (text: string) {
     return text
       .split('▶')[0]
-      .split('00원')
+      .split(/00원? /)
       .map((item: string) => {
         return item
           .trim()
@@ -106,7 +106,7 @@ const RefineFetchedMenuOf: {
   '220동': function (text: string) {
     return text
       .split('※')[0]
-      .split('00원')
+      .split(/00원? /)
       .map((item: string) => {
         return item
           .trim()
@@ -136,7 +136,7 @@ const RefineFetchedMenuOf: {
   감골: function (text: string) {
     return text
       .split('※')[0]
-      .split('00원')
+      .split(/00원? /)
       .map((item: string) => {
         return item
           .trim()
@@ -203,7 +203,7 @@ const RefineFetchedMenuOf: {
       .join('&')
       .replace('&lt;', '<')
       .replace('&gt;', '>')
-      .split('00원')
+      .split(/00원/)
       .join('00원\n')
       .split(' ')
       .join('\n');
@@ -212,7 +212,7 @@ const RefineFetchedMenuOf: {
     return text
       .trim()
       .split('※')[0]
-      .split('00원')
+      .split(/00원/)
       .join('00원\n')
       .split(/ *&amp; */)
       .join('&\n')
