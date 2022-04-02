@@ -133,34 +133,6 @@ const RefineFetchedMenuOf: {
         return result;
       });
   },
-  감골: function (text: string) {
-    return text
-      .split('※')[0]
-      .split(/00원? /)
-      .map((item: string) => {
-        return item
-          .trim()
-          .split(/ *&amp; */)
-
-          .join('&\n')
-          .split('&lt;')
-          .join('<')
-          .split('&gt;')
-          .join('>')
-          .split(' ');
-      })
-      .map((menuAndPrice: string[]) => {
-        if (menuAndPrice.length !== 2) {
-          return null;
-        }
-        const [menuName, price] = [
-          refineMenuName(menuAndPrice[0]),
-          menuAndPrice[1] + '00원',
-        ];
-        const result = menuName.trim() === '' ? null : {menuName, price};
-        return result;
-      });
-  },
   대학원기숙사: function (text: string) {
     const matchedStrings = text.match(/[A-Z]|\(\d,\d\d\d원\)/gi);
     if (!matchedStrings) {
@@ -191,6 +163,17 @@ const RefineFetchedMenuOf: {
         const result = menuName.trim() === '' ? null : {menuName, price};
         return result;
       });
+  },
+  감골: function (text: string) {
+    return text
+      .trim()
+      .split('※')[0]
+      .split('&amp;')
+      .join('&')
+      .replace('&lt;', '<')
+      .replace('&gt;', '>')
+      .split(/00원/)
+      .join('00원\n\n');
   },
   소담마루: function (text: string) {
     return text;
@@ -255,6 +238,7 @@ export function refineMenuRawText(mealName: string, text: string) {
     '301동',
     '220동',
     '대학원기숙사',
+    '감골',
   ];
 
   if (

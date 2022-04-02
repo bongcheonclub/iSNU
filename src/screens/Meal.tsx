@@ -50,7 +50,8 @@ function checkOperating(
         time: string;
       }>,
     ] {
-  const spliter = cafeteriaName.includes('감골') ? '~' : '-';
+  // const spliter = cafeteriaName.includes('감골') ? '~' : '-';
+  const spliter = '-';
   const today = (() => {
     switch (
       getIsHoliday(selectedDate) ? 0 : getDay(selectedDate) // day
@@ -444,6 +445,13 @@ export default function Meal({mealData, nowDate}: Props) {
           return (
             <Text variant="favoriteClosedInfo" textAlign="center">
               교직원 식당만 운영{'\n'}11:30-13:10
+            </Text>
+          );
+        }
+        if (cafeteriaName.includes('감골')) {
+          return (
+            <Text variant="favoriteClosedInfo" textAlign="center">
+              채식뷔페만 운영{'\n'}11:30-13:30
             </Text>
           );
         }
