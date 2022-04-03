@@ -79,7 +79,13 @@ import com.android.build.OutputFile
 
 project.ext.react = [
 		entryFile: "index.ts",
-    enableHermes: false,  // clean and rebuild if changing
+    enableHermes: true,  // clean and rebuild if changing
+  	devDisabledInAppDev: true,
+  	devDisabledInAppTest: true,
+		devDisabledInRelease: true,
+		bundleInAppDev: true,
+		bundleInAppTest: true,
+		bundleInRelease: true,
 ]
 
 apply from: "../../node_modules/react-native/react.gradle"
@@ -125,13 +131,16 @@ android {
     ndkVersion rootProject.ext.ndkVersion
 
     compileSdkVersion rootProject.ext.compileSdkVersion
-
+		compileOptions {
+				sourceCompatibility 1.8
+				targetCompatibility 1.8
+		}
     defaultConfig {
         applicationId "com.snuinfo"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 21601
-        versionName "2.1.6"
+        versionCode 21701
+        versionName "2.1.7"
     }
     splits {
         abi {
