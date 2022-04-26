@@ -111,7 +111,6 @@ const RefineFetchedMenuOf: {
         return item
           .trim()
           .split(/ *&amp; */)
-
           .join('&')
           .replace(/ *[/*|/&|/+] */, '+')
           .split(' ');
@@ -170,8 +169,10 @@ const RefineFetchedMenuOf: {
       .split('※')[0]
       .split('&amp;')
       .join('&')
-      .replace('&lt;', '<')
-      .replace('&gt;', '>')
+      .split('&lt;')
+      .join('<')
+      .split('&gt;')
+      .join('>')
       .split(/00원/)
       .join('00원\n\n');
   },
@@ -184,12 +185,13 @@ const RefineFetchedMenuOf: {
       .split('※')[0]
       .split('&amp;')
       .join('&')
-      .replace('&lt;', '<')
-      .replace('&gt;', '>')
-      .split(/00원/)
+      .split('&lt;')
+      .join('<')
+      .split('&gt;')
+      .join('>')
+      .split(/00원 /)
       .join('00원\n')
-      .split(' ')
-      .join('\n');
+      .split(/<주문식 ?메뉴/)[0];
   },
   공간: function (text: string) {
     return text
@@ -213,10 +215,11 @@ const RefineFetchedMenuOf: {
   '301동': function (text: string) {
     return text
       .trim()
-      .split('00원')
+      .split('▷')
+      .join('\n▷')
+      .split('★')[0]
+      .split(/00원/)
       .join('00원\n')
-      .split('소반')
-      .join('\n소반')
       .split(/ *&amp; */)
       .join('&')
       .split('&lt;')
