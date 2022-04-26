@@ -29,6 +29,7 @@ import {theme} from '../ui/theme';
 import Button from '../components/WrappedButton';
 import {convertToKoreanDay} from '../helpers/convertToKoreanDay';
 import {getIsHoliday} from '../helpers/isHoliday';
+import {refineMenuRawText} from '../InitializeData/RefineMenuText';
 
 type Props = {
   mealData: MealData;
@@ -332,9 +333,16 @@ export default function Meal({mealData, nowDate}: Props) {
       const textFormMenu = todaysMenu[cafeteriaName][status];
 
       if (
-        cafeteriaName.includes('두레미담') ||
-        cafeteriaName.includes('공간')
+        cafeteriaName.includes('두레미담') &&
+        typeof textFormMenu === 'string'
       ) {
+        return (
+          <Text textAlign="center" width="100%" variant="favoriteMenuName">
+            {refineMenuRawText('두레미담', textFormMenu)}
+          </Text>
+        );
+      }
+      if (cafeteriaName.includes('공간')) {
         return (
           <Text textAlign="center" width="100%" variant="favoriteMenuName">
             메뉴 정보 보기
