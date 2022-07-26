@@ -139,7 +139,7 @@ android {
         applicationId "com.snuinfo"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 21111
+        versionCode 21904
         versionName "2.1.11"
     }
     splits {
