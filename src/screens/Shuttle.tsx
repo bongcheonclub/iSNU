@@ -603,7 +603,7 @@ const SHUTTLES_AFTER_VACATION: ShuttleType[] = [
       },
       {
         time: '08:00~09:00',
-        interval: '10',
+        interval: '10분',
         numbers: '2대',
         partition: '9:00까지 운행',
       },
