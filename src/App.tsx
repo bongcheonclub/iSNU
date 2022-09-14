@@ -20,13 +20,15 @@ import MoreModal from './components/MoreModal';
 import Text from './components/Text';
 
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+// eslint-disable-next-line import/default
+import CodePush from 'react-native-code-push';
 import FirstAlert from './components/FirstAlert';
 import IndicatorModal from './ui/IndicatorModal';
 import {getNow} from './helpers/getNow';
 
 const Tab = createBottomTabNavigator();
 
-export default function App() {
+function App() {
   const windowWidth = Dimensions.get('window').width;
   const appState = useRef(AppState.currentState);
   const [data, setData] = useState<Awaited<
@@ -259,3 +261,16 @@ export default function App() {
     </NativeBaseProvider>
   );
 }
+
+const codePushOptions = {
+  checkFrequency: CodePush.CheckFrequency.ON_APP_START,
+  updateDialog: {
+    title: 'iSNU 업데이트 안내',
+    optionalUpdateMessage: '지금 업데이트 하시겠습니까?',
+    optionalInstallButtonLabel: '업데이트',
+    optionalIgnoreButtonLabel: '아니요.',
+  },
+  installMode: CodePush.InstallMode.IMMEDIATE,
+};
+
+export default CodePush(codePushOptions)(App);
