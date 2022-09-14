@@ -60,3 +60,5 @@ android/gradle.properties
 
 # CocoaPods
 /ios/Pods/
+build-ios*/
+build-android*/
