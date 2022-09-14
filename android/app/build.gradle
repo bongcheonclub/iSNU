@@ -139,7 +139,7 @@ android {
         applicationId "com.snuinfo"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 21905
+        versionCode 21906
         versionName "2.1.12"
         resValue 'string', "CODE_PUSH_APK_BUILD_TIME", String.format("\"%d\"", System.currentTimeMillis())
     }

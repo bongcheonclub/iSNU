@@ -22,7 +22,6 @@ import Text from './components/Text';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 // eslint-disable-next-line import/default
 import CodePush from 'react-native-code-push';
-import FirstAlert from './components/FirstAlert';
 import IndicatorModal from './ui/IndicatorModal';
 import {getNow} from './helpers/getNow';
 
@@ -254,7 +253,6 @@ function App() {
                 </Tab.Screen>
               </Tab.Navigator>
             </NavigationContainer>
-            <FirstAlert wasViewedNotice={data.wasViewedNotice} />
           </>
         ) : null}
       </Box>
