@@ -1,7 +1,7 @@
 import {NavigationContainer} from '@react-navigation/native';
 import {Box, Flex, NativeBaseProvider, HStack, StatusBar} from 'native-base';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
-import {AppState, Dimensions, Platform} from 'react-native';
+import {Alert, AppState, Dimensions, Platform} from 'react-native';
 import Cafe from './screens/Cafe';
 import Etcs from './screens/Etcs';
 import Mart from './screens/Mart';
@@ -39,10 +39,17 @@ function App() {
     useState<boolean>(false);
 
   useEffect(() => {
-    initializeData().then(initializedData => {
-      setData(initializedData);
-      SplashScreen.hide();
-    });
+    initializeData()
+      .then(initializedData => {
+        setData(initializedData);
+        SplashScreen.hide();
+      })
+      .catch(() => {
+        Alert.alert(
+          '오류 안내',
+          '데이터를 불러오는데 실패했습니다. 잠시 후 다시 시도해주세요.',
+        );
+      });
     AppState.addEventListener('change', nextAppState => {
       if (
         nextAppState === 'active' &&
@@ -54,7 +61,13 @@ function App() {
             setData(updatedData);
             setNowDate(getNow());
           })
-          .then(() => setShowActivityIndicator(false));
+          .then(() => setShowActivityIndicator(false))
+          .catch(() => {
+            Alert.alert(
+              '오류 안내',
+              '데이터를 불러오는데 실패했습니다. 잠시 후 다시 시도해주세요.',
+            );
+          });
       }
       appState.current = nextAppState;
       console.log(nextAppState);
