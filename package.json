@@ -1,8 +1,8 @@
 {
-  "name": "isnu",
+  "name": "snuinfoapp",
   "version": "2.1.12",
   "private": true,
-  "main": "index.ts",
+  "main": "index.js",
   "scripts": {
     "android": "react-native run-android",
     "ios": "react-native run-ios",
@@ -10,7 +10,9 @@
     "test": "jest",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "prepare": "husky install",
-    "postinstall": "cd ios && pod install"
+    "postinstall": "cd ios && pod install",
+    "deploy:ios": "rm -rf ./build-ios ./build-ios-sourcemap && mkdir build-ios-sourcemap && appcenter codepush release-react -a dojunggeun/isnu-ios -d Production -m --output-dir ./build-ios --sourcemap-output-dir ./build-ios-sourcemap",
+    "deploy:android": "rm -rf ./build-android ./build-android-sourcemap && mkdir build-android-sourcemap && appcenter codepush release-react -a dojunggeun/isnu-aos -d Production -m --output-dir ./build-android  --sourcemap-output-dir ./build-android-sourcemap"
   },
   "dependencies": {
     "@amplitude/react-native": "^2.5.0",
