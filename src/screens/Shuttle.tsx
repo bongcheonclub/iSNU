@@ -437,10 +437,22 @@ const SHUTTLES_VACATION: ShuttleType[] = [
     name: '설입 → 윗공대',
     operatings: [
       {
-        time: '00:00~23:59',
+        time: '00:00~08:00',
         interval: null,
         numbers: null,
-        partition: '운행 없음',
+        partition: '08:00 운행 예정',
+      },
+      {
+        time: '08:00~11:00',
+        interval: '12~15분',
+        numbers: '3대',
+        partition: '11:00까지 운행',
+      },
+      {
+        time: '11:00~23:59',
+        interval: null,
+        numbers: null,
+        partition: '운행 종료',
       },
     ],
   },
@@ -448,10 +460,22 @@ const SHUTTLES_VACATION: ShuttleType[] = [
     name: '낙성대 → 윗공대',
     operatings: [
       {
-        time: '00:00~23:59',
+        time: '00:00~08:30',
         interval: null,
         numbers: null,
-        partition: '운행 없음',
+        partition: '08:30 운행 예정',
+      },
+      {
+        time: '08:30~11:00',
+        interval: '9분',
+        numbers: '4대',
+        partition: '11:00까지 운행',
+      },
+      {
+        time: '11:00~23:59',
+        interval: null,
+        numbers: null,
+        partition: '운행 종료',
       },
     ],
   },
@@ -467,7 +491,7 @@ const SHUTTLES_VACATION: ShuttleType[] = [
       {
         time: '08:00~18:00',
         interval: '5~6분',
-        numbers: '3~4대',
+        numbers: '3~5대',
         partition: '18:00까지 운행',
       },
       {
@@ -529,10 +553,22 @@ const SHUTTLES_VACATION: ShuttleType[] = [
     name: '심야 셔틀',
     operatings: [
       {
-        time: '00:00~23:59',
+        time: '00:00~02:00',
+        interval: '30분',
+        numbers: '1대',
+        partition: '02:00까지 운행',
+      },
+      {
+        time: '02:00~18:00',
         interval: null,
         numbers: null,
-        partition: '운행 없음',
+        partition: '운행 종료',
+      },
+      {
+        time: '18:00~23:59',
+        interval: null,
+        numbers: null,
+        partition: '자정부터 운행 예정',
       },
     ],
   },
