@@ -1,6 +1,6 @@
 import {NavigationContainer} from '@react-navigation/native';
 import {Box, Flex, NativeBaseProvider, HStack, StatusBar} from 'native-base';
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {AppState, Dimensions, Platform} from 'react-native';
 import Cafe from './screens/Cafe';
 import Etcs from './screens/Etcs';
@@ -24,6 +24,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import CodePush from 'react-native-code-push';
 import IndicatorModal from './ui/IndicatorModal';
 import {getNow} from './helpers/getNow';
+import UpdateModal from './ui/UpdateModal';
 
 const Tab = createBottomTabNavigator();
 
@@ -60,11 +61,35 @@ function App() {
     });
   }, []);
 
+  const [updating, setUpdating] = useState(false);
+  const [updatePercentage, setUpdatePercentage] = useState(0);
+
+  const updateCodePush = useCallback(async () => {
+    const remotePackage = await CodePush.checkForUpdate();
+    if (!remotePackage) {
+      setUpdating(false);
+      return;
+    }
+    setUpdating(true);
+    const localPackage = await remotePackage.download(
+      ({totalBytes, receivedBytes}) => {
+        setUpdatePercentage(Math.floor((receivedBytes / totalBytes) * 100));
+      },
+    );
+    await localPackage.install(CodePush.InstallMode.IMMEDIATE);
+    setUpdating(false);
+  }, []);
+
+  useEffect(() => {
+    updateCodePush();
+  }, [updateCodePush]);
+
   return (
     <NativeBaseProvider theme={theme}>
       <Box width="100%" height="100%" safeArea backgroundColor="white">
         <StatusBar barStyle="dark-content" />
         {showActivityIndicator && <IndicatorModal />}
+        {updating && <UpdateModal percent={updatePercentage} />}
         {data ? (
           <>
             <NavigationContainer>
@@ -261,14 +286,7 @@ function App() {
 }
 
 const codePushOptions = {
-  checkFrequency: CodePush.CheckFrequency.ON_APP_START,
-  updateDialog: {
-    title: 'iSNU 업데이트 안내',
-    optionalUpdateMessage: '지금 업데이트 하시겠습니까?',
-    optionalInstallButtonLabel: '업데이트',
-    optionalIgnoreButtonLabel: '아니요.',
-  },
-  installMode: CodePush.InstallMode.IMMEDIATE,
+  checkFrequency: CodePush.CheckFrequency.MANUAL,
 };
 
 export default CodePush(codePushOptions)(App);
