@@ -1,6 +1,6 @@
 {
   "name": "isnu",
-  "version": "2.1.1",
+  "version": "2.1.12",
   "private": true,
   "main": "index.ts",
   "scripts": {

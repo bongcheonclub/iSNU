@@ -4,9 +4,9 @@ import {Cafeteria} from './ProcessMealData';
 
 export const isVacation = () => {
   const now = getNow();
-  const vacationStart = new Date(2021, 6, 22); // month는 0부터 시작함
-  const vacationTermEnd = new Date(2022, 8, 2); // month는 0부터 시작함
-  const vacationEnd = new Date(2022, 7, 31); // month는 0부터 시작함
+  const vacationStart = new Date('2022-12-22T00:00+09:00');
+  const vacationTermEnd = new Date('2023-01-25T23:59:59+09:00');
+  const vacationEnd = new Date('2023-03-01T00:00+09:00');
   if (compareAsc(vacationStart, now) <= 0 && compareAsc(now, vacationEnd) < 0) {
     if (
       compareAsc(vacationTermEnd, now) < 0 &&
