@@ -38,42 +38,6 @@ function App() {
   const [showActivityIndicator, setShowActivityIndicator] =
     useState<boolean>(false);
 
-  useEffect(() => {
-    initializeData()
-      .then(initializedData => {
-        setData(initializedData);
-        SplashScreen.hide();
-      })
-      .catch(() => {
-        Alert.alert(
-          '오류 안내',
-          '데이터를 불러오는데 실패했습니다. 잠시 후 다시 시도해주세요.',
-        );
-      });
-    AppState.addEventListener('change', nextAppState => {
-      if (
-        nextAppState === 'active' &&
-        (appState.current === 'background' || appState.current === 'inactive')
-      ) {
-        setShowActivityIndicator(true);
-        initializeData()
-          .then(updatedData => {
-            setData(updatedData);
-            setNowDate(getNow());
-          })
-          .then(() => setShowActivityIndicator(false))
-          .catch(() => {
-            Alert.alert(
-              '오류 안내',
-              '데이터를 불러오는데 실패했습니다. 잠시 후 다시 시도해주세요.',
-            );
-          });
-      }
-      appState.current = nextAppState;
-      console.log(nextAppState);
-    });
-  }, []);
-
   const [updating, setUpdating] = useState(false);
   const [updatePercentage, setUpdatePercentage] = useState(0);
 
@@ -92,6 +56,44 @@ function App() {
     await localPackage.install(CodePush.InstallMode.IMMEDIATE);
     setUpdating(false);
   }, []);
+
+  useEffect(() => {
+    initializeData()
+      .then(initializedData => {
+        setData(initializedData);
+        SplashScreen.hide();
+      })
+      .catch(() => {
+        Alert.alert(
+          '오류 안내',
+          '데이터를 불러오는데 실패했습니다. 잠시 후 다시 시도해주세요.',
+        );
+      });
+    AppState.addEventListener('change', nextAppState => {
+      if (
+        nextAppState === 'active' &&
+        (appState.current === 'background' || appState.current === 'inactive')
+      ) {
+        setShowActivityIndicator(true);
+        updateCodePush().then(() => {
+          initializeData()
+            .then(updatedData => {
+              setData(updatedData);
+              setNowDate(getNow());
+            })
+            .then(() => setShowActivityIndicator(false))
+            .catch(() => {
+              Alert.alert(
+                '오류 안내',
+                '데이터를 불러오는데 실패했습니다. 잠시 후 다시 시도해주세요.',
+              );
+            });
+        });
+      }
+      appState.current = nextAppState;
+      console.log(nextAppState);
+    });
+  }, [updateCodePush]);
 
   useEffect(() => {
     updateCodePush();
