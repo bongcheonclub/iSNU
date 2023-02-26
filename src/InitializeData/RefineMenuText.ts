@@ -228,6 +228,20 @@ const RefineFetchedMenuOf: {
       .join('>\n')
       .split('*')[0];
   },
+  '302동': function (text: string) {
+    return text
+      .trim()
+      .split('&lt;')
+      .join('<')
+      .split('&gt;')
+      .join('>')
+      .split(/ *&amp; */)
+      .join('&')
+      .split(/00원/)
+      .join('00원\n')
+      .split('※')
+      .join('\n※');
+  },
 };
 
 export function refineMenuRawText(mealName: string, text: string) {
@@ -239,6 +253,7 @@ export function refineMenuRawText(mealName: string, text: string) {
     '두레미담',
     '공간',
     '301동',
+    '302동',
     '220동',
     '대학원기숙사',
     '감골',
