@@ -321,8 +321,8 @@ const SHUTTLES_VACATION: ShuttleType[] = [
       },
       {
         time: '08:00~11:00',
-        interval: '3~4분',
-        numbers: '8대',
+        interval: '4~6분',
+        numbers: '9대',
         partition: '등교 ~18:00, 하교 ~19:00',
       },
       {
@@ -333,14 +333,14 @@ const SHUTTLES_VACATION: ShuttleType[] = [
       },
       {
         time: '15:00~18:00',
-        interval: '3~4분',
-        numbers: '8대',
+        interval: '3~5분',
+        numbers: '10대',
         partition: '등교 ~18:00, 하교 ~19:00',
       },
       {
         time: '18:00~19:00',
-        interval: '3~4분\n(하교셔틀만 운영)',
-        numbers: '8대',
+        interval: '3~5분\n(하교셔틀만 운영)',
+        numbers: '10대',
         partition: '하교 ~19:00',
       },
       {
@@ -380,7 +380,7 @@ const SHUTTLES_VACATION: ShuttleType[] = [
       },
       {
         time: '08:00~11:00',
-        interval: '6분',
+        interval: '6~7분',
         numbers: '3대',
         partition: '19:00까지 운행',
       },
@@ -420,13 +420,13 @@ const SHUTTLES_VACATION: ShuttleType[] = [
         partition: '08:00 운행 예정',
       },
       {
-        time: '08:00~11:00',
+        time: '08:00~10:00',
         interval: '15분',
         numbers: '3대',
-        partition: '11:00까지 운행',
+        partition: '10:00까지 운행',
       },
       {
-        time: '11:00~23:59',
+        time: '10:00~23:59',
         interval: null,
         numbers: null,
         partition: '운행 종료',
@@ -444,8 +444,8 @@ const SHUTTLES_VACATION: ShuttleType[] = [
       },
       {
         time: '08:00~11:00',
-        interval: '12~15분',
-        numbers: '3대',
+        interval: '9~11분',
+        numbers: '4대',
         partition: '11:00까지 운행',
       },
       {
@@ -491,7 +491,7 @@ const SHUTTLES_VACATION: ShuttleType[] = [
       {
         time: '08:00~18:00',
         interval: '5~6분',
-        numbers: '3~5대',
+        numbers: '3~4대',
         partition: '18:00까지 운행',
       },
       {
@@ -586,8 +586,8 @@ const SHUTTLES_AFTER_VACATION: ShuttleType[] = [
       },
       {
         time: '08:00~11:00',
-        interval: '5~6분',
-        numbers: '7대',
+        interval: '5~7분',
+        numbers: '8대',
         partition: '등교 ~18:00, 하교 ~19:00',
       },
       {
@@ -598,14 +598,14 @@ const SHUTTLES_AFTER_VACATION: ShuttleType[] = [
       },
       {
         time: '15:00~18:00',
-        interval: '5~6분',
-        numbers: '7대',
+        interval: '4~6분',
+        numbers: '9대',
         partition: '등교 ~18:00, 하교 ~19:00',
       },
       {
         time: '18:00~19:00',
-        interval: '5~6분\n(하교셔틀만 운영)',
-        numbers: '7대',
+        interval: '4~6분\n(하교셔틀만 운영)',
+        numbers: '9대',
         partition: '하교 ~19:00',
       },
       {
@@ -673,13 +673,13 @@ const SHUTTLES_AFTER_VACATION: ShuttleType[] = [
         partition: '08:00 운행 예정',
       },
       {
-        time: '08:00~11:00',
+        time: '08:00~10:00',
         interval: '15분',
         numbers: '3대',
-        partition: '11:00까지 운행',
+        partition: '10:00까지 운행',
       },
       {
-        time: '11:00~23:59',
+        time: '10:00~23:59',
         interval: null,
         numbers: null,
         partition: '운행 종료',
@@ -697,8 +697,8 @@ const SHUTTLES_AFTER_VACATION: ShuttleType[] = [
       },
       {
         time: '08:00~11:00',
-        interval: '12~15분',
-        numbers: '3대',
+        interval: '9~11분',
+        numbers: '4대',
         partition: '11:00까지 운행',
       },
       {
