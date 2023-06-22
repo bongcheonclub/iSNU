@@ -4,9 +4,9 @@ import {Cafeteria} from './ProcessMealData';
 
 export const isVacation = () => {
   const now = getNow();
-  const vacationStart = new Date('2022-12-22T00:00+09:00');
-  const vacationTermEnd = new Date('2023-01-25T23:59:59+09:00');
-  const vacationEnd = new Date('2023-03-01T00:00+09:00');
+  const vacationStart = new Date('2023-06-22T00:00+09:00');
+  const vacationTermEnd = new Date('2023-08-02T23:59:59+09:00');
+  const vacationEnd = new Date('2023-09-01T00:00+09:00');
   if (compareAsc(vacationStart, now) <= 0 && compareAsc(now, vacationEnd) < 0) {
     if (
       compareAsc(vacationTermEnd, now) < 0 &&
