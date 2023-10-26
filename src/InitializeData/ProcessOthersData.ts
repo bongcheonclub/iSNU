@@ -192,7 +192,7 @@ export function processCafeData(res: AxiosResponse<any>) {
   ];
 
   function refineName(name: string): string {
-    const trimmedName = name.trim();
+    const trimmedName = name.trim().replace('느티나무', '느티나무 ');
     const replacedName = (() => {
       switch (trimmedName) {
         case 'Pascucci':
@@ -212,7 +212,9 @@ export function processCafeData(res: AxiosResponse<any>) {
     return replacedName.trim();
   }
 
-  const allCafes = cafes.concat(defaultCafes);
+  const allCafes = cafes
+    .concat(defaultCafes)
+    .filter(cafe => cafe.weekday && cafe.saturday && cafe.holiday);
 
   const refinedCafes = chain(allCafes)
     .map(cafe => ({
@@ -224,6 +226,15 @@ export function processCafeData(res: AxiosResponse<any>) {
   if (isVacation() !== false) {
     return refinedCafes.map(eachCafe => processVacationCafe(eachCafe));
   }
+
+  console.log(
+    refinedCafes.map(eachCafe => ({
+      name: eachCafe.name,
+      weekday: eachCafe.weekday,
+      saturday: eachCafe.saturday,
+      holiday: eachCafe.holiday,
+    })),
+  );
 
   return refinedCafes;
 }
