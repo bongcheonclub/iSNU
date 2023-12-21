@@ -81,7 +81,7 @@ const SHUTTLES: ShuttleType[] = [
     ],
   },
   {
-    name: '녹두 ↔ 행정관',
+    name: '대학동 ↔ 행정관',
     operatings: [
       {
         time: '00:00~07:00',
@@ -364,7 +364,7 @@ const SHUTTLES_VACATION: ShuttleType[] = [
     ],
   },
   {
-    name: '녹두 ↔ 행정관',
+    name: '대학동 ↔ 행정관',
     operatings: [
       {
         time: '00:00~07:00',
@@ -629,7 +629,7 @@ const SHUTTLES_AFTER_VACATION: ShuttleType[] = [
     ],
   },
   {
-    name: '녹두 ↔ 행정관',
+    name: '대학동 ↔ 행정관',
     operatings: [
       {
         time: '00:00~08:00',
@@ -640,7 +640,7 @@ const SHUTTLES_AFTER_VACATION: ShuttleType[] = [
       {
         time: '08:00~10:00',
         interval: '10분',
-        numbers: '3대',
+        numbers: '2대',
         partition: '10:00까지 운행',
       },
       {
