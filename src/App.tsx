@@ -58,17 +58,19 @@ function App() {
   }, []);
 
   useEffect(() => {
-    initializeData()
-      .then(initializedData => {
-        setData(initializedData);
-        SplashScreen.hide();
-      })
-      .catch(() => {
-        Alert.alert(
-          '오류 안내',
-          '데이터를 불러오는데 실패했습니다. 잠시 후 다시 시도해주세요.',
-        );
-      });
+    updateCodePush().then(() => {
+      initializeData()
+        .then(initializedData => {
+          setData(initializedData);
+          SplashScreen.hide();
+        })
+        .catch(() => {
+          Alert.alert(
+            '오류 안내',
+            '데이터를 불러오는데 실패했습니다. 잠시 후 다시 시도해주세요.',
+          );
+        });
+    });
     AppState.addEventListener('change', nextAppState => {
       if (
         nextAppState === 'active' &&
