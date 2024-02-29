@@ -35,9 +35,9 @@ export async function fetchCrawlData() {
   const DATE_OFFSETS = [-2, -1, 0, 1, 2];
   function getDateMenuURL(offset: number): string {
     const date = addDays(getNow(), offset);
-    const url = `https://snuco.snu.ac.kr/ko/foodmenu?field_menu_date_value_1%5Bvalue%5D%5Bdate%5D=&field_menu_date_value%5Bvalue%5D%5Bdate%5D=${
+    const url = `https://snuco.snu.ac.kr/foodmenu/?date=${getYear(date)}-${
       getMonth(date) + 1
-    }%2F${getDate(date)}%2F${getYear(date)}`;
+    }-${getDate(date)}`;
     return url;
   }
   const menuUrlsWithOffset = DATE_OFFSETS.map(offset => ({
@@ -59,9 +59,9 @@ export async function fetchCrawlData() {
     ],
     ,
   ] = await Promise.all([
-    axios.get('https://snuco.snu.ac.kr/ko/node/21'),
-    axios.get('https://snuco.snu.ac.kr/ko/node/19'),
-    axios.get('https://snuco.snu.ac.kr/ko/node/20'),
+    axios.get('https://snuco.snu.ac.kr/%EC%B9%B4%ED%8E%98%EC%95%88%EB%82%B4'),
+    axios.get('https://snuco.snu.ac.kr/%ED%8E%B8%EC%9D%98%EC%A0%90'),
+    axios.get('https://snuco.snu.ac.kr/EC%8B%9D%EB%8B%B9%EC%95%88%EB%82%B4'),
     axios.get('https://snudorm.snu.ac.kr/food-schedule/'),
     await Promise.all(
       menuUrlsWithOffset.map(async ({url}) => {
