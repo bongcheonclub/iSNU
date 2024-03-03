@@ -12,7 +12,7 @@ import EtcsIcon from './icons/etc.svg';
 import MartIcon from './icons/mart.svg';
 import MealIcon from './icons/meal.svg';
 import ShuttleIcon from './icons/shuttle.svg';
-import SplashScreen from 'react-native-splash-screen';
+import BootSplash from 'react-native-bootsplash';
 import {theme} from './ui/theme';
 import {initializeData} from './InitializeData';
 import {Awaited} from './helpers/type';
@@ -62,9 +62,10 @@ function App() {
       initializeData()
         .then(initializedData => {
           setData(initializedData);
-          SplashScreen.hide();
+          BootSplash.hide({fade: true});
         })
-        .catch(() => {
+        .catch(error => {
+          console.error('Failed to initializeData', error);
           Alert.alert(
             '오류 안내',
             '데이터를 불러오는데 실패했습니다. 잠시 후 다시 시도해주세요.',
@@ -84,7 +85,8 @@ function App() {
               setNowDate(getNow());
             })
             .then(() => setShowActivityIndicator(false))
-            .catch(() => {
+            .catch(error => {
+              console.error('Failed to initializeData', error);
               Alert.alert(
                 '오류 안내',
                 '데이터를 불러오는데 실패했습니다. 잠시 후 다시 시도해주세요.',
