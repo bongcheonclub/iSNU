@@ -42,6 +42,11 @@ function App() {
   const [updatePercentage, setUpdatePercentage] = useState(0);
 
   const updateCodePush = useCallback(async () => {
+    if (__DEV__) {
+      setUpdating(false);
+      return;
+    }
+
     const remotePackage = await CodePush.checkForUpdate();
     if (!remotePackage) {
       setUpdating(false);
