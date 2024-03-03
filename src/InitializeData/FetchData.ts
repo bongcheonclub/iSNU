@@ -61,7 +61,7 @@ export async function fetchCrawlData() {
   ] = await Promise.all([
     axios.get('https://snuco.snu.ac.kr/%EC%B9%B4%ED%8E%98%EC%95%88%EB%82%B4'),
     axios.get('https://snuco.snu.ac.kr/%ED%8E%B8%EC%9D%98%EC%A0%90'),
-    axios.get('https://snuco.snu.ac.kr/EC%8B%9D%EB%8B%B9%EC%95%88%EB%82%B4'),
+    axios.get('https://snuco.snu.ac.kr/%EC%8B%9D%EB%8B%B9%EC%95%88%EB%82%B4'),
     axios.get('https://snudorm.snu.ac.kr/food-schedule/'),
     await Promise.all(
       menuUrlsWithOffset.map(async ({url}) => {

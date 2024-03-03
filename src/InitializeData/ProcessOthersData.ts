@@ -7,7 +7,7 @@ import {isVacation, processVacationCafe} from './ProcessVacation';
 export function processMartData(res: AxiosResponse<any>) {
   const html = res.data;
   const root = parse(html);
-  const marts = chain(root.querySelector('tbody').childNodes)
+  const marts = chain(Array.from(root.querySelector('thead').childNodes))
     .map(trNode => {
       const trTexts = chain(trNode.childNodes)
         .map(tdNode =>
@@ -30,6 +30,7 @@ export function processMartData(res: AxiosResponse<any>) {
         contact,
       };
     })
+    .slice(2)
     .value();
 
   const defaultMarts = [
@@ -114,7 +115,7 @@ export function processMartData(res: AxiosResponse<any>) {
 export function processCafeData(res: AxiosResponse<any>) {
   const html = res.data;
   const root = parse(html);
-  const cafes = chain(root.querySelector('tbody').childNodes)
+  const cafes = chain(Array.from(root.querySelector('thead').childNodes))
     .map(trNode => {
       const trTexts = chain(trNode.childNodes)
         .map(tdNode =>
@@ -124,6 +125,7 @@ export function processCafeData(res: AxiosResponse<any>) {
             .join(' '),
         )
         .filter(rows => rows.length > 0)
+        .slice(2)
         .value();
       const [
         nameWithContact,
