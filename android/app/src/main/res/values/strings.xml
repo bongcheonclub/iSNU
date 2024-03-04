@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">iSNU</string>
+    <string name="CodePushDeploymentKey" moduleConfig="true" translatable="false">U1ZZpH7DmL04ON-jhf0uhu0XueAPQ82JK-TCC</string>
 </resources>
