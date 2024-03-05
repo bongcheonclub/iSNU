@@ -247,7 +247,7 @@ const RefineFetchedMenuOf: {
 export function refineMenuRawText(mealName: string, text: string) {
   // const passList = ["라운지오"]
   const notDefaultList = [
-    '자하연',
+    // '자하연',
     '예술계',
     '소담마루',
     '두레미담',
@@ -267,6 +267,8 @@ export function refineMenuRawText(mealName: string, text: string) {
   ) {
     return '휴무/휴점';
   }
+
+  text = text.split('&nbsp;').join(' ');
 
   const indexOfNotDefaultList = notDefaultList.indexOf(mealName);
   if (indexOfNotDefaultList > -1) {

@@ -64,41 +64,47 @@ function App() {
   }, []);
 
   useEffect(() => {
-    updateCodePush().then(() => {
-      initializeData()
-        .then(initializedData => {
-          setData(initializedData);
-          hideSplash({fade: true});
-        })
-        .catch(error => {
-          console.error('Failed to initializeData', error);
+    updateCodePush()
+      .catch(e => {
+        if (!e.message.includes('429')) {
           Alert.alert(
             '오류 안내',
-            '데이터를 불러오는데 실패했습니다. 잠시 후 다시 시도해주세요.',
+            '업데이트 서버에 접속할 수 없습니다. 잠시 후 다시 시도해주세요.',
           );
-        });
-    });
+        }
+      })
+      .finally(() => {
+        initializeData()
+          .then(initializedData => {
+            setData(initializedData);
+          })
+          .catch(error => {
+            console.error('Failed to initializeData', error);
+          });
+      })
+      .finally(() => hideSplash({fade: true}));
     AppState.addEventListener('change', nextAppState => {
       if (
         nextAppState === 'active' &&
         (appState.current === 'background' || appState.current === 'inactive')
       ) {
         setShowActivityIndicator(true);
-        updateCodePush().then(() => {
-          initializeData()
-            .then(updatedData => {
-              setData(updatedData);
-              setNowDate(getNow());
-            })
-            .then(() => setShowActivityIndicator(false))
-            .catch(error => {
-              console.error('Failed to initializeData', error);
+        updateCodePush()
+          .catch(e => {
+            if (!e.message.includes('429')) {
               Alert.alert(
                 '오류 안내',
-                '데이터를 불러오는데 실패했습니다. 잠시 후 다시 시도해주세요.',
+                '업데이트 서버에 접속할 수 없습니다. 잠시 후 다시 시도해주세요.',
               );
-            });
-        });
+            }
+          })
+          .finally(() =>
+            initializeData().then(updatedData => {
+              setData(updatedData);
+              setNowDate(getNow());
+            }),
+          )
+          .finally(() => setShowActivityIndicator(false));
       }
       appState.current = nextAppState;
       console.log(nextAppState);
