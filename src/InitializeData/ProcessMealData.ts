@@ -192,7 +192,6 @@ export function processMealData(
     if (jahayeon) {
       jahayeon.name = '자하연 2층';
     }
-    console.log(data);
     const processedData = keyBy(data, 'name');
     const refinedMealList = data
       .filter(item => {
