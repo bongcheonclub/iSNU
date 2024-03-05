@@ -124,8 +124,13 @@ export function processMealData(
       .map(trNode => {
         const trTexts = chain(trNode.childNodes)
           .map(tdNode =>
-            tdNode.innerText
+            tdNode.childNodes
+              .map(item => {
+                return item.innerText;
+              })
+              .join(' ')
               .split(/\s|\t|\n/)
+              .map(text => text.replace(/(\d{2}:\d{2})(?=\d{2}:\d{2})/, '$1 '))
               .filter(item => item.length > 0)
               .join(' '),
           )
@@ -209,6 +214,7 @@ export function processMealData(
       })
       .concat('대학원기숙사');
     processedData['공간'].weekday = '11:00-14:30 15:30-18:30';
+    processedData['자하연 3층'].weekday = '11:30-14:30';
 
     const nonFavoriteList = refinedMealList.filter(
       mealName => !favoriteList.includes(mealName),
