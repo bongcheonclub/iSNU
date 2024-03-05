@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unstable-nested-components */
 import {NavigationContainer} from '@react-navigation/native';
 import {Box, Flex, NativeBaseProvider, HStack, StatusBar} from 'native-base';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
@@ -12,7 +13,7 @@ import EtcsIcon from './icons/etc.svg';
 import MartIcon from './icons/mart.svg';
 import MealIcon from './icons/meal.svg';
 import ShuttleIcon from './icons/shuttle.svg';
-import BootSplash from 'react-native-bootsplash';
+import {hide as hideSplash} from 'react-native-bootsplash';
 import {theme} from './ui/theme';
 import {initializeData} from './InitializeData';
 import {Awaited} from './helpers/type';
@@ -67,7 +68,7 @@ function App() {
       initializeData()
         .then(initializedData => {
           setData(initializedData);
-          BootSplash.hide({fade: true});
+          hideSplash({fade: true});
         })
         .catch(error => {
           console.error('Failed to initializeData', error);
