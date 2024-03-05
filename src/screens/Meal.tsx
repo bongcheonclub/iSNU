@@ -343,7 +343,7 @@ export default function Meal({mealData, nowDate}: Props) {
           </Text>
         );
       }
-      if (cafeteriaName.includes('공간')) {
+      if (cafeteriaName.includes('공간') || cafeteriaName.includes('220')) {
         return (
           <Text textAlign="center" width="100%" variant="favoriteMenuName">
             메뉴 정보 보기
@@ -363,17 +363,11 @@ export default function Meal({mealData, nowDate}: Props) {
         return (
           <Text textAlign="center" width="100%" variant="favoriteMenuName">
             {(textFormMenu as string)
-              .split('00원')
-              .join('00원\n')
-              .split('소반')
-              .join('\n소반')
-              .split(/ *&amp; */)
-
-              .join('&\n')
-              .split('&lt;')
-              .join('\n<')
-              .split('&gt;')
-              .join('>\n')}
+              .split('>')[1]
+              .split('<')[0]
+              .split('*')
+              .join('+')
+              .trim()}
           </Text>
         );
       }
@@ -403,8 +397,8 @@ export default function Meal({mealData, nowDate}: Props) {
       const contents = todaysMenu[cafeteriaName][status];
       if (typeof contents === 'string') {
         return (
-          <Text textAlign="center" width="100%" variant="favoriteClosedInfo">
-            {contents}
+          <Text textAlign="center" width="100%" variant="favoriteMenuName">
+            {contents.split('※')[0].trim()}
           </Text>
         );
       }
