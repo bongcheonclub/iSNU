@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unstable-nested-components */
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, {useCallback, useMemo, useState} from 'react';
 import {
@@ -452,14 +453,14 @@ export default function Meal({mealData, nowDate}: Props) {
         if (cafeteriaName.includes('301')) {
           return (
             <Text variant="favoriteClosedInfo" textAlign="center">
-              교직원 식당만 운영{'\n'}11:30-13:10
+              11:30-13:10 운영
             </Text>
           );
         }
         if (cafeteriaName.includes('감골')) {
           return (
             <Text variant="favoriteClosedInfo" textAlign="center">
-              채식뷔페만 운영{'\n'}11:30-13:30
+              폐점
             </Text>
           );
         }

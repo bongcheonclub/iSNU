@@ -27,10 +27,6 @@ export const processVacationMeal = (data: Cafeteria, name: string) => {
     data.holiday = '11:30-13:30 17:30-19:00';
     data.saturday = '휴관';
   }
-  if (name === '220동') {
-    // 방학중17:00-18:30, 금요일저녁 휴점(이건 메뉴 정보 없어서 자동 반영)
-    data.weekday = '11:00-13:30 17:00-18:30';
-  }
   return data;
 };
 

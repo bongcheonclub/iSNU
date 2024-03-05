@@ -105,32 +105,10 @@ const RefineFetchedMenuOf: {
   },
   '220동': function (text: string) {
     return text
-      .split('※')[0]
+      .split(']')
+      .join(']\n')
       .split(/00원? /)
-      .map((item: string) => {
-        return item
-          .trim()
-          .split(/ *&amp; */)
-          .join('&')
-          .replace(/ *[/*|/&|/+] */, '+')
-          .split(' ');
-      })
-      .map((menuAndPrice: string[]) => {
-        if (
-          menuAndPrice.length !== 2 &&
-          !menuAndPrice[0].includes('플러스메뉴')
-        ) {
-          return null;
-        }
-        const [menuName, price] = menuAndPrice[0].includes('플러스메뉴')
-          ? [
-              refineMenuName(menuAndPrice[0] + '\n' + menuAndPrice[1]),
-              menuAndPrice[2] + '00원',
-            ]
-          : [refineMenuName(menuAndPrice[0]), menuAndPrice[1] + '00원'];
-        const result = menuName.trim() === '' ? null : {menuName, price};
-        return result;
-      });
+      .join('00원\n');
   },
   대학원기숙사: function (text: string) {
     const matchedStrings = text.match(/[A-Z]|\(\d,\d\d\d원\)/gi);
@@ -213,20 +191,21 @@ const RefineFetchedMenuOf: {
       .join('<셋트메뉴>');
   },
   '301동': function (text: string) {
-    return text
-      .trim()
-      .split('▷')
-      .join('\n▷')
-      .split('★')[0]
-      .split(/00원/)
-      .join('00원\n')
-      .split(/ *&amp; */)
-      .join('&')
-      .split('&lt;')
-      .join('<')
-      .split('&gt;')
-      .join('>\n')
-      .split('*')[0];
+    return (
+      text
+        .trim()
+        // .split('▷')
+        // .join('\n▷')
+        // .split('★')[0]
+        .split(/00원/)
+        .join('00원\n')
+        .split(/ *&amp; */)
+        .join('&')
+        .split('&lt;')
+        .join('<')
+        .split('&gt;')
+        .join('>\n')
+    );
   },
   '302동': function (text: string) {
     return text
