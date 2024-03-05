@@ -228,14 +228,5 @@ export function processCafeData(res: AxiosResponse<any>) {
     return refinedCafes.map(eachCafe => processVacationCafe(eachCafe));
   }
 
-  console.log(
-    refinedCafes.map(eachCafe => ({
-      name: eachCafe.name,
-      weekday: eachCafe.weekday,
-      saturday: eachCafe.saturday,
-      holiday: eachCafe.holiday,
-    })),
-  );
-
   return refinedCafes;
 }
