@@ -125,7 +125,6 @@ export function processCafeData(res: AxiosResponse<any>) {
             .join(' '),
         )
         .filter(rows => rows.length > 0)
-        .slice(2)
         .value();
       const [
         nameWithContact,

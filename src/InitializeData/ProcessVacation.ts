@@ -6,7 +6,7 @@ export const isVacation = () => {
   const now = getNow();
   const vacationStart = new Date('2023-12-22T00:00+09:00');
   const vacationTermEnd = new Date('2024-01-25T23:59:59+09:00');
-  const vacationEnd = new Date('2025-03-01T00:00+09:00');
+  const vacationEnd = new Date('2024-03-01T00:00+09:00');
   if (compareAsc(vacationStart, now) <= 0 && compareAsc(now, vacationEnd) < 0) {
     if (
       compareAsc(vacationTermEnd, now) < 0 &&
