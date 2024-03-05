@@ -80,6 +80,12 @@ const RefineFetchedMenuOf: {
         return result;
       });
   },
+  '자하연 2층': function (text: string) {
+    return text.split(/00원/).join('00원\n').split('※').join('\n※');
+  },
+  '자하연 3층': function (text: string) {
+    return text.split(/00원/).join('00원\n').split('※').join('\n※');
+  },
   예술계: function (text: string) {
     return text
       .split('▶')[0]
@@ -226,7 +232,8 @@ const RefineFetchedMenuOf: {
 export function refineMenuRawText(mealName: string, text: string) {
   // const passList = ["라운지오"]
   const notDefaultList = [
-    // '자하연',
+    '자하연 2층',
+    '자하연 3층',
     '예술계',
     '소담마루',
     '두레미담',
@@ -247,7 +254,7 @@ export function refineMenuRawText(mealName: string, text: string) {
     return '휴무/휴점';
   }
 
-  text = text.split('&nbsp;').join(' ');
+  text = text.split('&nbsp;').join(' ').split('&amp;').join('&');
 
   const indexOfNotDefaultList = notDefaultList.indexOf(mealName);
   if (indexOfNotDefaultList > -1) {

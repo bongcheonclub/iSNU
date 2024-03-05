@@ -188,11 +188,22 @@ export function processMealData(
         return item;
       })
       .value();
+    const jahayeon = data.find(item => item.name === '자하연');
+    if (jahayeon) {
+      jahayeon.name = '자하연 2층';
+    }
+    console.log(data);
     const processedData = keyBy(data, 'name');
     const refinedMealList = data
       .filter(item => {
         // 학관 지하 등 필터링
-        return !item.name.includes(' ') && !item.name.includes('라운지오');
+        return (
+          !item.name.includes('라운지오') &&
+          !item.name.includes('지하') &&
+          !item.name.includes('4층 푸드코트') &&
+          !item.name.includes('301동 1층') &&
+          item.name !== '자하연'
+        );
       })
       .map(item => {
         return item.name;
