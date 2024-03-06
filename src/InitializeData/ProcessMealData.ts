@@ -121,6 +121,9 @@ export function processMealData(
     const html = mealListRes.data;
     const root = parse(html);
     const data: Cafeteria[] = chain(root.querySelector('tbody').childNodes)
+      .filter(trNode => {
+        return trNode.childNodes.length > 1;
+      })
       .map(trNode => {
         const trTexts = chain(trNode.childNodes)
           .map(tdNode =>
